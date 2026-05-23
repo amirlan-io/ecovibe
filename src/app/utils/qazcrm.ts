@@ -8,14 +8,6 @@ export const QAZCRM_SUBMIT_URL = "/api/qazcrm-lead";
 export interface QazCrmLeadPayload {
   name: string;
   phone: string;
-  serviceType: string;
-  area: number;
-  rooms: string;
-  additionalServices: string[];
-  date: string;
-  time: string;
-  budget: number;
-  description: string;
 }
 
 export async function parseQazCrmError(response: Response): Promise<string> {
@@ -35,26 +27,11 @@ export async function parseQazCrmError(response: Response): Promise<string> {
   return "Не удалось отправить заявку. Попробуйте ещё раз или свяжитесь с нами по телефону.";
 }
 
-/** Тело запроса к QazCRM (спецификация публичной формы) */
+/** Только поля, которые QazCRM гарантированно принимает */
 function toApiBody(payload: QazCrmLeadPayload) {
-  const dealAmount = Math.round(payload.budget);
-
   return {
     name: payload.name,
     phone: payload.phone,
-    service_type: payload.serviceType,
-    area: payload.area,
-    rooms: payload.rooms,
-    additional_services: payload.additionalServices,
-    appointment_date: payload.date,
-    appointment_time: payload.time,
-    deal_amount: dealAmount,
-    amount: dealAmount,
-    description: payload.description,
-    custom_fields: {
-      rooms: payload.rooms,
-      additional_services: payload.additionalServices,
-    },
     standard_name: payload.name,
     standard_phone: payload.phone,
   };
