@@ -134,14 +134,30 @@ export function BookingCalculator() {
 
     const cleaningType = NAMES[state.service];
     const extrasLabels = buildSelectedExtrasLabels(state);
-    const extrasPart =
-      extrasLabels.length > 0 ? `, Допы: ${extrasLabels.join(", ")}` : "";
-    const orderShortInfo = `(${cleaningType}, ${state.area}м²${extrasPart}, Итог: ${Math.round(total)}₸)`;
+    const extrasText = extrasLabels.join(", ");
+    const orderParts = [
+      cleaningType,
+      `${state.area}м²`,
+      ...(extrasText ? [extrasText] : []),
+      `Итог: ${Math.round(total)}₸`,
+    ];
+    const orderShortInfo = `(${orderParts.join(", ")})`;
     const finalName = `${state.name.trim()} ${orderShortInfo}`;
+    const phone = phoneForSubmit(state.phone);
 
     const payload: QazCrmLeadPayload = {
       name: finalName,
-      phone: phoneForSubmit(state.phone),
+      phone,
+      standard_name: finalName,
+      standard_phone: phone,
+      client_phone: phone,
+      cleaning_type: cleaningType,
+      area: state.area,
+      address: state.address.trim(),
+      date_time: `${state.date} ${state.time}`.trim(),
+      extras: extrasText,
+      calculated_price: Math.round(total),
+      status: "confirmed",
     };
 
     setIsSubmitting(true);

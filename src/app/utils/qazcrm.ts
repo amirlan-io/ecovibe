@@ -5,9 +5,20 @@ export const QAZCRM_FORM_URL = `https://crm.tennet.kz/api/public/forms/${QAZCRM_
 /** Прокси на том же домене — обход CORS в браузере */
 export const QAZCRM_SUBMIT_URL = "/api/qazcrm-lead";
 
+/** Поля для QazCRM и Make / Google Sheets (snake_case) */
 export interface QazCrmLeadPayload {
   name: string;
   phone: string;
+  standard_name: string;
+  standard_phone: string;
+  client_phone: string;
+  cleaning_type: string;
+  area: number;
+  address: string;
+  date_time: string;
+  extras: string;
+  calculated_price: number;
+  status: string;
 }
 
 export async function parseQazCrmError(response: Response): Promise<string> {
@@ -27,16 +38,6 @@ export async function parseQazCrmError(response: Response): Promise<string> {
   return "Не удалось отправить заявку. Попробуйте ещё раз или свяжитесь с нами по телефону.";
 }
 
-/** Только поля, которые QazCRM гарантированно принимает */
-function toApiBody(payload: QazCrmLeadPayload) {
-  return {
-    name: payload.name,
-    phone: payload.phone,
-    standard_name: payload.name,
-    standard_phone: payload.phone,
-  };
-}
-
 export async function submitLeadToQazCrm(payload: QazCrmLeadPayload) {
   let response: Response;
 
@@ -44,7 +45,7 @@ export async function submitLeadToQazCrm(payload: QazCrmLeadPayload) {
     response = await fetch(QAZCRM_SUBMIT_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(toApiBody(payload)),
+      body: JSON.stringify(payload),
     });
   } catch {
     throw new Error(
