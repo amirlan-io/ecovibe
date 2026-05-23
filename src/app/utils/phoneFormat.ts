@@ -30,6 +30,12 @@ export function formatPhoneNumber(value: string): string {
   return `+7 ${digits.substring(1, 4)} ${digits.substring(4, 7)} ${digits.substring(7, 9)} ${digits.substring(9)}`;
 }
 
+/** Полный казахстанский номер: 11 цифр с кодом страны 7 */
+export function isPhoneComplete(value: string): boolean {
+  const digits = value.replace(/\D/g, "");
+  return digits.length >= 11;
+}
+
 /** Номер для API: те же цифры, что ввёл пользователь, без искажения маской */
 export function phoneForSubmit(value: string): string {
   const digits = value.replace(/\D/g, "");

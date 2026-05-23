@@ -13,7 +13,22 @@ export interface MakeSheetsLeadPayload {
   current_step: number;
 }
 
+export function isMakeSheetsPayloadValid(
+  payload: MakeSheetsLeadPayload,
+): boolean {
+  const phoneDigits = payload.client_phone.replace(/\D/g, "");
+  return (
+    Boolean(payload.address.trim()) &&
+    phoneDigits.length >= 11 &&
+    Boolean(payload.client_phone.trim())
+  );
+}
+
 export async function submitLeadToMakeSheets(payload: MakeSheetsLeadPayload) {
+  if (!isMakeSheetsPayloadValid(payload)) {
+    throw new Error("Неполные данные для записи в таблицу.");
+  }
+
   let response: Response;
 
   try {

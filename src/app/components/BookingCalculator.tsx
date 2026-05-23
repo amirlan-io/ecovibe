@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { CheckCircle2, Loader2, Send } from "lucide-react";
 import { toast } from "sonner";
-import { formatPhoneNumber, phoneForSubmit } from "../utils/phoneFormat";
+import {
+  formatPhoneNumber,
+  isPhoneComplete,
+  phoneForSubmit,
+} from "../utils/phoneFormat";
 import { submitLeadToMakeSheets } from "../utils/makeWebhook";
 import { submitLeadToQazCrm } from "../utils/qazcrm";
 import { Checkbox } from "./ui/checkbox";
@@ -133,11 +137,25 @@ export function BookingCalculator() {
     e.preventDefault();
     if (isSubmitting) return;
 
+    const address = state.address.trim();
+    const phoneRaw = state.phone.trim();
+
+    if (!state.name.trim() || !phoneRaw || !address || !state.date || !state.time) {
+      toast.error("Заполните все обязательные поля перед отправкой.");
+      return;
+    }
+
+    if (!isPhoneComplete(phoneRaw)) {
+      toast.error("Укажите полный номер телефона.");
+      return;
+    }
+
     const cleaningType = NAMES[state.service];
     const extrasLabels = buildSelectedExtrasLabels(state);
     const extrasText = extrasLabels.join(", ");
-    const phone = phoneForSubmit(state.phone);
+    const phone = phoneForSubmit(phoneRaw);
     const crmName = `${state.name.trim()} (${cleaningType}, ${state.area}м², Допы: ${extrasText}, Итог: ${Math.round(total)}₸)`;
+    const canSendToMake = Boolean(address && phoneRaw && isPhoneComplete(phoneRaw));
 
     setIsSubmitting(true);
 
@@ -151,13 +169,17 @@ export function BookingCalculator() {
       }
     };
 
-    const sendToMake = async () => {
+    const sendToMake = async (): Promise<boolean | null> => {
+      if (!canSendToMake) {
+        return null;
+      }
+
       try {
         await submitLeadToMakeSheets({
           client_phone: phone,
           cleaning_type: cleaningType,
           area: state.area,
-          address: state.address.trim(),
+          address,
           date_time: `${state.date} ${state.time}`.trim(),
           extras: extrasText,
           calculated_price: Math.round(total),
@@ -173,9 +195,9 @@ export function BookingCalculator() {
 
     const [crmOk, makeOk] = await Promise.all([sendToCrm(), sendToMake()]);
 
-    if (crmOk || makeOk) {
+    if (crmOk || makeOk === true) {
       setIsSuccess(true);
-      if (!crmOk || !makeOk) {
+      if (!crmOk || makeOk === false) {
         toast.warning(
           "Заявка принята, но один из каналов недоступен. Мы всё равно свяжемся с вами.",
         );
