@@ -1,0 +1,271 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.calc{padding:1.5rem 0;max-width:640px}
+.step-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.section{margin-bottom:1.5rem}
+.service-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.service-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:12px 14px;cursor:pointer;transition:border-color .15s,background .15s}
+.service-card:hover{background:var(--color-background-secondary)}
+.service-card.active{border:2px solid #3B6D11;background:#EAF3DE}
+.service-card .s-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.service-card .s-price{font-size:12px;color:var(--color-text-secondary)}
+.service-card.active .s-name{color:#27500A}
+.service-card.active .s-price{color:#3B6D11}
+.area-row{display:flex;align-items:center;gap:14px}
+.area-row input[type=range]{flex:1}
+.area-val{font-size:15px;font-weight:500;color:var(--color-text-primary);min-width:58px;text-align:right}
+.room-chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font-size:13px;padding:6px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+.chip:hover{background:var(--color-background-secondary)}
+.chip.active{background:#EAF3DE;border-color:#3B6D11;color:#27500A;font-weight:500}
+.extras-list{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.extra-item{display:flex;align-items:center;gap:10px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px;cursor:pointer;transition:background .15s}
+.extra-item:hover{background:var(--color-background-secondary)}
+.extra-item.active{background:#EAF3DE;border-color:#3B6D11}
+.extra-check{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--color-border-secondary);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.extra-item.active .extra-check{background:#3B6D11;border-color:#3B6D11;color:#fff}
+.extra-text{flex:1}
+.extra-text .e-name{font-size:13px;color:var(--color-text-primary)}
+.extra-item.active .e-name{color:#27500A;font-weight:500}
+.extra-text .e-price{font-size:11px;color:var(--color-text-secondary)}
+.divider{height:0.5px;background:var(--color-border-tertiary);margin:1.5rem 0}
+.result-card{background:#EAF3DE;border:0.5px solid #97C459;border-radius:var(--border-radius-lg);padding:1.25rem 1.5rem}
+.result-rows{}
+.result-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:0.5px solid #C0DD97}
+.result-row:last-child{border-bottom:none}
+.result-row .r-name{font-size:13px;color:#3B6D11}
+.result-row .r-val{font-size:13px;font-weight:500;color:#27500A}
+.result-total{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px;padding-top:12px;border-top:1.5px solid #97C459}
+.result-total .t-label{font-size:14px;font-weight:500;color:#27500A}
+.result-total .t-val{font-size:22px;font-weight:500;color:#173404}
+.result-note{font-size:11px;color:#3B6D11;margin-top:8px}
+.hint{font-size:12px;color:var(--color-text-tertiary);margin-top:6px}
+.windows-row{display:flex;align-items:center;gap:10px;margin-top:8px}
+.windows-row label{font-size:13px;color:var(--color-text-secondary)}
+.windows-row input[type=number]{width:70px;font-size:14px;text-align:center}
+.furniture-row{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.furn-item{display:flex;align-items:center;gap:8px}
+.furn-item label{font-size:13px;color:var(--color-text-secondary);width:130px}
+.furn-item input[type=number]{width:60px;font-size:13px;text-align:center}
+.furn-item .furn-price{font-size:12px;color:var(--color-text-tertiary);margin-left:4px}
+</style>
+
+<div class="calc">
+  <div class="section">
+    <div class="step-label">Шаг 1 — Выберите услугу</div>
+    <div class="service-grid" id="services">
+      <div class="service-card active" data-service="wet" onclick="selectService(this)">
+        <div class="s-name">Влажная уборка</div>
+        <div class="s-price">550 ₸/м²</div>
+      </div>
+      <div class="service-card" data-service="general" onclick="selectService(this)">
+        <div class="s-name">Генеральная уборка</div>
+        <div class="s-price">650 ₸/м²</div>
+      </div>
+      <div class="service-card" data-service="renovation" onclick="selectService(this)">
+        <div class="s-name">После ремонта</div>
+        <div class="s-price">850 ₸/м²</div>
+      </div>
+      <div class="service-card" data-service="windows_only" onclick="selectService(this)">
+        <div class="s-name">Только окна</div>
+        <div class="s-price">3 000 ₸/окно</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="area-section" class="section">
+    <div class="step-label">Шаг 2 — Площадь квартиры</div>
+    <div class="room-chips" id="room-chips">
+      <div class="chip" data-area="25" onclick="selectRoom(this)">Студия<br><span style="font-size:11px;opacity:.7">~25 м²</span></div>
+      <div class="chip" data-area="40" onclick="selectRoom(this)">1 комн<br><span style="font-size:11px;opacity:.7">~40 м²</span></div>
+      <div class="chip active" data-area="60" onclick="selectRoom(this)">2 комн<br><span style="font-size:11px;opacity:.7">~60 м²</span></div>
+      <div class="chip" data-area="80" onclick="selectRoom(this)">3 комн<br><span style="font-size:11px;opacity:.7">~80 м²</span></div>
+      <div class="chip" data-area="100" onclick="selectRoom(this)">4+ комн<br><span style="font-size:11px;opacity:.7">~100 м²</span></div>
+    </div>
+    <div class="area-row" style="margin-top:14px">
+      <span style="font-size:13px;color:var(--color-text-secondary)">Или укажите точно:</span>
+      <input type="range" id="area-slider" min="20" max="200" step="5" value="60" oninput="onAreaSlide(this.value)">
+      <span class="area-val"><span id="area-display">60</span> м²</span>
+    </div>
+  </div>
+
+  <div id="windows-section" class="section" style="display:none">
+    <div class="step-label">Шаг 2 — Количество окон</div>
+    <div class="windows-row">
+      <label>Окон в квартире:</label>
+      <input type="number" id="win-count" min="1" max="30" value="4" oninput="calc()">
+    </div>
+  </div>
+
+  <div id="extras-section" class="section">
+    <div class="step-label">Шаг 3 — Дополнительно (необязательно)</div>
+    <div class="extras-list">
+      <div class="extra-item" id="ex-windows" onclick="toggleExtra(this,'windows')">
+        <div class="extra-check" id="ch-windows"><i class="ti ti-check" style="font-size:12px"></i></div>
+        <div class="extra-text">
+          <div class="e-name">Мойка окон</div>
+          <div class="e-price">3 000 ₸ / окно</div>
+        </div>
+      </div>
+      <div class="extra-item" id="ex-sofa" onclick="toggleExtra(this,'sofa')">
+        <div class="extra-check" id="ch-sofa"><i class="ti ti-check" style="font-size:12px"></i></div>
+        <div class="extra-text">
+          <div class="e-name">Химчистка дивана</div>
+          <div class="e-price">от 10 000 ₸</div>
+        </div>
+      </div>
+      <div class="extra-item" id="ex-chair" onclick="toggleExtra(this,'chair')">
+        <div class="extra-check" id="ch-chair"><i class="ti ti-check" style="font-size:12px"></i></div>
+        <div class="extra-text">
+          <div class="e-name">Химчистка стула</div>
+          <div class="e-price">1 000 ₸ / шт</div>
+        </div>
+      </div>
+      <div class="extra-item" id="ex-mattress" onclick="toggleExtra(this,'mattress')">
+        <div class="extra-check" id="ch-mattress"><i class="ti ti-check" style="font-size:12px"></i></div>
+        <div class="extra-text">
+          <div class="e-name">Химчистка матраса</div>
+          <div class="e-price">от 10 000 ₸</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="win-extra-row" style="display:none;margin-top:10px">
+      <div class="windows-row">
+        <label>Количество окон:</label>
+        <input type="number" id="extra-win-count" min="1" max="30" value="3" oninput="calc()">
+      </div>
+    </div>
+    <div id="chair-extra-row" style="display:none;margin-top:10px">
+      <div class="windows-row">
+        <label>Количество стульев:</label>
+        <input type="number" id="chair-count" min="1" max="20" value="2" oninput="calc()">
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="result-card">
+    <div class="result-rows" id="result-rows"></div>
+    <div class="result-total">
+      <span class="t-label">Итого</span>
+      <span class="t-val" id="total-val">—</span>
+    </div>
+    <div class="result-note" id="result-note"></div>
+  </div>
+</div>
+
+<script>
+const PRICES = {
+  wet: 550,
+  general: 650,
+  renovation: 850,
+  windows_only: 3000
+};
+const NAMES = {
+  wet: 'Влажная уборка',
+  general: 'Генеральная уборка',
+  renovation: 'Уборка после ремонта',
+  windows_only: 'Мойка окон'
+};
+
+let state = {
+  service: 'wet',
+  area: 60,
+  extras: { windows: false, sofa: false, chair: false, mattress: false }
+};
+
+function fmt(n){ return Math.round(n).toLocaleString('ru-RU') + ' ₸'; }
+
+function selectService(el){
+  document.querySelectorAll('.service-card').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  state.service = el.dataset.service;
+  const isWin = state.service === 'windows_only';
+  document.getElementById('area-section').style.display = isWin ? 'none' : '';
+  document.getElementById('windows-section').style.display = isWin ? '' : 'none';
+  document.getElementById('extras-section').style.display = isWin ? 'none' : '';
+  calc();
+}
+
+function selectRoom(el){
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  const a = parseInt(el.dataset.area);
+  state.area = a;
+  document.getElementById('area-slider').value = a;
+  document.getElementById('area-display').textContent = a;
+  calc();
+}
+
+function onAreaSlide(v){
+  state.area = parseInt(v);
+  document.getElementById('area-display').textContent = v;
+  document.querySelectorAll('.chip').forEach(c=>{
+    c.classList.toggle('active', parseInt(c.dataset.area) === state.area);
+  });
+  calc();
+}
+
+function toggleExtra(el, key){
+  state.extras[key] = !state.extras[key];
+  el.classList.toggle('active', state.extras[key]);
+  if(key==='windows') document.getElementById('win-extra-row').style.display = state.extras.windows ? '' : 'none';
+  if(key==='chair') document.getElementById('chair-extra-row').style.display = state.extras.chair ? '' : 'none';
+  calc();
+}
+
+function calc(){
+  const rows = [];
+  let total = 0;
+
+  if(state.service === 'windows_only'){
+    const n = parseInt(document.getElementById('win-count').value) || 1;
+    const sub = n * 3000;
+    rows.push([`Мойка окон (${n} шт × 3 000 ₸)`, sub]);
+    total += sub;
+  } else {
+    const rate = PRICES[state.service];
+    const base = state.area * rate;
+    rows.push([`${NAMES[state.service]} (${state.area} м² × ${rate} ₸)`, base]);
+    total += base;
+
+    if(state.extras.windows){
+      const n = parseInt(document.getElementById('extra-win-count').value) || 1;
+      const sub = n * 3000;
+      rows.push([`Мойка окон (${n} шт × 3 000 ₸)`, sub]);
+      total += sub;
+    }
+    if(state.extras.sofa){
+      rows.push(['Химчистка дивана', 10000]);
+      total += 10000;
+    }
+    if(state.extras.chair){
+      const n = parseInt(document.getElementById('chair-count').value) || 1;
+      const sub = n * 1000;
+      rows.push([`Химчистка стульев (${n} шт × 1 000 ₸)`, sub]);
+      total += sub;
+    }
+    if(state.extras.mattress){
+      rows.push(['Химчистка матраса', 10000]);
+      total += 10000;
+    }
+  }
+
+  const rowsEl = document.getElementById('result-rows');
+  rowsEl.innerHTML = rows.map(([name, val]) =>
+    `<div class="result-row"><span class="r-name">${name}</span><span class="r-val">${fmt(val)}</span></div>`
+  ).join('');
+
+  document.getElementById('total-val').textContent = fmt(total);
+
+  const note = (state.service === 'windows_only' || state.extras.sofa || state.extras.mattress)
+    ? 'Финальная цена уточняется при выезде мастера'
+    : 'Цена фиксированная, скрытых доплат нет';
+  document.getElementById('result-note').textContent = note;
+}
+
+calc();
+</script>

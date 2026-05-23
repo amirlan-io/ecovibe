@@ -1,0 +1,626 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+
+.site-map {
+  padding: 1.5rem 0;
+}
+
+.page-card {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  margin-bottom: 1.25rem;
+  overflow: hidden;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 1rem 1.25rem;
+  border-bottom: 0.5px solid var(--color-border-tertiary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.page-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.page-icon.green { background: #EAF3DE; color: #3B6D11; }
+.page-icon.teal  { background: #E1F5EE; color: #0F6E56; }
+.page-icon.amber { background: #FAEEDA; color: #854F0B; }
+.page-icon.blue  { background: #E6F1FB; color: #185FA5; }
+.page-icon.purple { background: #EEEDFE; color: #534AB7; }
+.page-icon.coral { background: #FAECE7; color: #993C1D; }
+
+.page-title {
+  flex: 1;
+}
+
+.page-title h3 {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: 2px;
+}
+
+.page-title p {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.chevron {
+  font-size: 16px;
+  color: var(--color-text-tertiary);
+  transition: transform 0.2s;
+}
+
+.page-header.open .chevron {
+  transform: rotate(180deg);
+}
+
+.page-content {
+  display: none;
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+.page-content.open {
+  display: block;
+}
+
+.section-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.section-block {
+  background: var(--color-background-secondary);
+  border-radius: var(--border-radius-md);
+  padding: 0.875rem 1rem;
+}
+
+.section-block h4 {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.section-block h4 .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot.green  { background: #3B6D11; }
+.dot.teal   { background: #0F6E56; }
+.dot.amber  { background: #854F0B; }
+.dot.blue   { background: #185FA5; }
+.dot.purple { background: #534AB7; }
+.dot.coral  { background: #993C1D; }
+.dot.gray   { background: #5F5E5A; }
+
+.section-block ul {
+  list-style: none;
+  padding: 0;
+}
+
+.section-block ul li {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  padding: 3px 0;
+  border-bottom: 0.5px solid var(--color-border-tertiary);
+  line-height: 1.4;
+}
+
+.section-block ul li:last-child {
+  border-bottom: none;
+}
+
+.content-pill {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  margin: 2px;
+  background: var(--color-background-secondary);
+  border: 0.5px solid var(--color-border-secondary);
+  color: var(--color-text-secondary);
+}
+
+.nav-flow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--color-background-secondary);
+  border-radius: var(--border-radius-md);
+}
+
+.nav-item {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 0.5px solid var(--color-border-secondary);
+  background: var(--color-background-primary);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.nav-item:hover {
+  background: var(--color-background-secondary);
+}
+
+.sep { color: var(--color-text-tertiary); font-size: 12px; }
+
+.header-label {
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  margin-bottom: 6px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.full-width-block {
+  background: var(--color-background-secondary);
+  border-radius: var(--border-radius-md);
+  padding: 0.875rem 1rem;
+  margin-bottom: 10px;
+}
+
+.full-width-block h4 {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.full-width-block p {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.cta-box {
+  background: #EAF3DE;
+  border: 0.5px solid #97C459;
+  border-radius: var(--border-radius-md);
+  padding: 0.75rem 1rem;
+  margin-top: 10px;
+}
+
+.cta-box p {
+  font-size: 12px;
+  color: #3B6D11;
+  line-height: 1.5;
+}
+
+.badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.badge.must { background: #E6F1FB; color: #185FA5; }
+.badge.seo  { background: #FAEEDA; color: #854F0B; }
+.badge.conv { background: #EAF3DE; color: #3B6D11; }
+</style>
+
+<div class="site-map">
+  <div style="margin-bottom: 1.25rem;">
+    <div class="header-label">Навигация сайта</div>
+    <div class="nav-flow">
+      <span class="nav-item">Главная</span>
+      <span class="sep">›</span>
+      <span class="nav-item">Влажная уборка</span>
+      <span class="sep">›</span>
+      <span class="nav-item">Генеральная уборка</span>
+      <span class="sep">›</span>
+      <span class="nav-item">Цены</span>
+      <span class="sep">›</span>
+      <span class="nav-item">О нас</span>
+      <span class="sep">›</span>
+      <span class="nav-item">Контакты</span>
+    </div>
+  </div>
+
+  <!-- Page 1: Home -->
+  <div class="page-card">
+    <div class="page-header" onclick="toggle(this)">
+      <div class="page-icon green"><i class="ti ti-home" aria-hidden="true"></i></div>
+      <div class="page-title">
+        <h3>Главная страница</h3>
+        <p>Первое впечатление · Конверсия · SEO</p>
+      </div>
+      <span class="chevron"><i class="ti ti-chevron-down"></i></span>
+    </div>
+    <div class="page-content">
+      <div class="section-grid">
+        <div class="section-block">
+          <h4><span class="dot green"></span>Hero-блок <span class="badge conv">конверсия</span></h4>
+          <ul>
+            <li><b>Заголовок:</b> «Чистота вашего дома — наша работа»</li>
+            <li><b>Подзаголовок:</b> Профессиональная уборка в Астане с eco-средствами</li>
+            <li>Кнопка «Заказать уборку» → форма</li>
+            <li>Фото: чистая квартира / команда в деле</li>
+            <li>Мини-доверие: 500+ клиентов · Eco-состав</li>
+          </ul>
+        </div>
+        <div class="section-block">
+          <h4><span class="dot green"></span>Наши услуги</h4>
+          <ul>
+            <li>2 карточки: Влажная уборка + Генеральная</li>
+            <li>Карточка: иконка, название, 3 пункта, цена «от…», кнопка</li>
+            <li>Визуальный акцент на разницу между услугами</li>
+          </ul>
+        </div>
+        <div class="section-block">
+          <h4><span class="dot green"></span>Как мы работаем</h4>
+          <ul>
+            <li>1. Оставляете заявку</li>
+            <li>2. Выбираете день и время</li>
+            <li>3. Мастер приезжает и убирает</li>
+            <li>4. Вы принимаете работу</li>
+          </ul>
+        </div>
+        <div class="section-block">
+          <h4><span class="dot green"></span>Почему Ecovibe</h4>
+          <ul>
+            <li>Eco-средства — безопасно для детей и питомцев</li>
+            <li>Опытные мастера — проверены и обучены</li>
+            <li>Гарантия качества — переделаем бесплатно</li>
+            <li>Удобный график — работаем 7 дней в неделю</li>
+          </ul>
+        </div>
+        <div class="section-block">
+          <h4><span class="dot green"></span>Отзывы клиентов</h4>
+          <ul>
+            <li>3–5 карточек с отзывами + фото</li>
+            <li>Имя, тип услуги, оценка ★★★★★</li>
+            <li>Ссылка на 2ГИС / Google</li>
+          </ul>
+        </div>
+        <div class="section-block">
+          <h4><span class="dot green"></span>CTA-блок финальный</h4>
+          <ul>
+            <li>«Готовы к чистоте? Закажите сейчас»</li>
+            <li>Форма: имя + телефон + тип услуги</li>
+            <li>Или кнопка → WhatsApp</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page 2: Wet Cleaning -->
+  <div class="page-card">
+    <div class="page-header" onclick="toggle(this)">
+      <div class="page-icon teal"><i class="ti ti-droplet" aria-hidden="true"></i></div>
+      <div class="page-title">
+        <h3>Влажная уборка</h3>
+        <p>Лендинг услуги · SEO-страница</p>
+      </div>
+      <span class="chevron"><i class="ti ti-chevron-down"></i></span>
+    </div>
+    <div class="page-content">
+      <div class="full-width-block">
+        <h4><span class="dot teal"></span>Hero-блок страницы <span class="badge seo">SEO</span></h4>
+        <p><b>H1:</b> «Влажная уборка квартиры в Астане» | Цена от [X] тг | Приедем сегодня</p>
+      </div>
+      <div class="section-grid">
+        <div class="section-block">
+          <h4><span class="dot teal"></span>Что входит в услугу</h4>
+          <ul>
+            <li>✓ Моем полы</li>
+            <li>✓ Заправляем постель</li>
+            <li>✓ Протираем двери</li>
+            <li>✓ Чистим подоконники</li>
+            <li>✓ Убираем пыль в шкафах и на поверхностях</li>
+            <li>✓ Протираем плинтусы</li>
+            <li>✓ Полная уборка санузла</li>
+            <li>✓ Чистим балкон от пыли</li>
+          </ul>
+        </div>
+        <div class="section-block">
+          <h4><span class="dot teal"></span>Для кого подходит</h4>
+          <ul>
+            <li>Поддерживающая уборка 1–2 раза в месяц</li>
+            <li>После небольших праздников дома</li>
+            <li>Нет времени убраться самому</li>
+            <li>Хочется чистоты без генеральной</li>
+          </ul>
+        </div>
+        <div class="section-block">
+          <h4><span class="dot teal"></span>Калькулятор цены</h4>
+          <ul>
+            <li>Выбор: 1-комн / 2-комн / 3-комн / студия</li>
+            <li>Результат: цена + примерное время</li>
+            <li>Кнопка «Заказать за [X] тг»</li>
+          </ul>
+        </div>
+        <div class="section-block">
+          <h4><span class="dot teal"></span>FAQ по услуге</h4>
+          <ul>
+            <li>Сколько времени займёт уборка?</li>
+            <li>Нужно ли быть дома?</li>
+            <li>Какими средствами убираете?</li>
+            <li>Что если что-то не понравится?</li>
+          </ul>
+        </div>
+      </div>
+      <div class="cta-box">
+        <p><b>CTA:</b> Форма заказа + WhatsApp-кнопка · «Позвоним в течение 15 минут»</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page 3: General Cleaning -->
+  <div class="page-card">
+    <div class="page-header" onclick="toggle(this)">
+      <div class="page-icon amber"><i class="ti ti-sparkles" aria-hidden="true"></i></div>
+      <div class="page-title">
+        <h3>Генеральная уборка</h3>
+        <p>Лендинг услуги · SEO-страница</p>
+      </div>
+      <span class="chevron"><i class="ti ti-chevron-down"></i></span>
+    </div>
+    <div class="page-content">
+      <div class="full-width-block">
+        <h4><span class="dot amber"></span>Hero-блок страницы <span class="badge seo">SEO</span></h4>
+        <p><b>H1:</b> «Генеральная уборка квартиры в Астане» | Глубокая очистка · Кухня, санузел, балкон</p>
+      </div>
+      <div class="section-grid">
+        <div class="section-block">
+          <h4><span class="dot amber"></span>Что входит в услугу</h4>
+          <ul>
+            <li>✓ Глубокая очистка всех поверхностей</li>
+            <li>✓ Подоконники и оконные рамы</li>
+            <li>✓ Двери и дверные ручки</li>
+            <li>✓ Бытовая техника снаружи</li>
+            <li>✓ Кухня: фартук, плита, вытяжка, шкафы</li>
+            <li>✓ Санузел: плитка, сантехника, зеркало</li>
+            <li>✓ Полы + плинтусы</li>
+            <li>✓ Балкон от пыли и загрязнений</li>
+            <li>✓ Мебель, светильники, труднодоступные места</li>
+            <li>✓ Постель, вещи; холодильник и микроволновка</li>
+          </ul>
+        </div>
+        <div class="section-block">
+          <h4><span class="dot amber"></span>Для кого подходит</h4>
+          <ul>
+            <li>После ремонта или переезда</li>
+            <li>Давно не делали генеральную</li>
+            <li>Сдача/приём квартиры</li>
+            <li>Подготовка к большому событию</li>
+          </ul>
+        </div>
+        <div class="section-block">
+          <h4><span class="dot amber"></span>Сравнение с влажной</h4>
+          <ul>
+            <li>Таблица: Влажная vs Генеральная</li>
+            <li>Объём, глубина, цена, время</li>
+            <li>Помогает клиенту выбрать нужное</li>
+          </ul>
+        </div>
+        <div class="section-block">
+          <h4><span class="dot amber"></span>FAQ по услуге</h4>
+          <ul>
+            <li>Сколько занимает генеральная уборка?</li>
+            <li>Сколько мастеров приедет?</li>
+            <li>Нужно ли готовить квартиру?</li>
+            <li>Входит ли уборка внутри шкафов?</li>
+          </ul>
+        </div>
+      </div>
+      <div class="cta-box">
+        <p><b>CTA:</b> Форма + WhatsApp · «Бесплатно выезжаем на оценку для больших объектов»</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page 4: Prices -->
+  <div class="page-card">
+    <div class="page-header" onclick="toggle(this)">
+      <div class="page-icon blue"><i class="ti ti-receipt" aria-hidden="true"></i></div>
+      <div class="page-title">
+        <h3>Цены</h3>
+        <p>Прайс-лист · Калькулятор</p>
+      </div>
+      <span class="chevron"><i class="ti ti-chevron-down"></i></span>
+    </div>
+    <div class="page-content">
+      <div class="section-grid">
+        <div class="section-block">
+          <h4><span class="dot blue"></span>Таблица тарифов</h4>
+          <ul>
+            <li>Студия / 1-комн / 2-комн / 3-комн / 4+ комн</li>
+            <li>Строки: Влажная уборка | Генеральная уборка</li>
+            <li>Цена + примерное время</li>
+          </ul>
+        </div>
+        <div class="section-block">
+          <h4><span class="dot blue"></span>Доп. опции</h4>
+          <ul>
+            <li>Мытьё окон снаружи</li>
+            <li>Уборка внутри шкафов</li>
+            <li>Химчистка мягкой мебели</li>
+            <li>Уборка балкона (если не входит)</li>
+          </ul>
+        </div>
+        <div class="section-block">
+          <h4><span class="dot blue"></span>Что включено в цену</h4>
+          <ul>
+            <li>Все eco-средства — наши</li>
+            <li>Инвентарь и оборудование</li>
+            <li>Выезд по всей Астане</li>
+            <li>Гарантия результата</li>
+          </ul>
+        </div>
+        <div class="section-block">
+          <h4><span class="dot blue"></span>Онлайн-калькулятор <span class="badge conv">конверсия</span></h4>
+          <ul>
+            <li>Выбор типа услуги</li>
+            <li>Количество комнат / площадь</li>
+            <li>Доп. опции (чекбоксы)</li>
+            <li>Итого: «Стоимость от X тг»</li>
+            <li>Кнопка «Заказать»</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page 5: About -->
+  <div class="page-card">
+    <div class="page-header" onclick="toggle(this)">
+      <div class="page-icon purple"><i class="ti ti-leaf" aria-hidden="true"></i></div>
+      <div class="page-title">
+        <h3>О нас</h3>
+        <p>Доверие · История · Команда</p>
+      </div>
+      <span class="chevron"><i class="ti ti-chevron-down"></i></span>
+    </div>
+    <div class="page-content">
+      <div class="section-grid">
+        <div class="section-block">
+          <h4><span class="dot purple"></span>История Ecovibe</h4>
+          <ul>
+            <li>Кто мы, когда основали</li>
+            <li>Почему выбрали eco-подход</li>
+            <li>Наша миссия в 2–3 предложения</li>
+          </ul>
+        </div>
+        <div class="section-block">
+          <h4><span class="dot purple"></span>Цифры</h4>
+          <ul>
+            <li>500+ довольных клиентов</li>
+            <li>X лет на рынке Астаны</li>
+            <li>100% eco-средства</li>
+            <li>Рейтинг X.X / 5 на 2ГИС</li>
+          </ul>
+        </div>
+        <div class="section-block">
+          <h4><span class="dot purple"></span>Наши мастера</h4>
+          <ul>
+            <li>Фото команды</li>
+            <li>Опыт, обучение, проверка</li>
+            <li>Форма + бейдж при визите</li>
+          </ul>
+        </div>
+        <div class="section-block">
+          <h4><span class="dot purple"></span>Eco-принципы</h4>
+          <ul>
+            <li>Какие средства используем</li>
+            <li>Безопасно для детей, животных</li>
+            <li>Сертификаты (если есть)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page 6: Contacts -->
+  <div class="page-card">
+    <div class="page-header" onclick="toggle(this)">
+      <div class="page-icon coral"><i class="ti ti-map-pin" aria-hidden="true"></i></div>
+      <div class="page-title">
+        <h3>Контакты</h3>
+        <p>Форма · WhatsApp · Адрес</p>
+      </div>
+      <span class="chevron"><i class="ti ti-chevron-down"></i></span>
+    </div>
+    <div class="page-content">
+      <div class="section-grid">
+        <div class="section-block">
+          <h4><span class="dot coral"></span>Контактная информация</h4>
+          <ul>
+            <li>Телефон (кнопка — позвонить)</li>
+            <li>WhatsApp (быстрый чат)</li>
+            <li>Email</li>
+            <li>Режим работы: 7 дней в неделю</li>
+            <li>Зона обслуживания: вся Астана</li>
+          </ul>
+        </div>
+        <div class="section-block">
+          <h4><span class="dot coral"></span>Форма заявки <span class="badge conv">конверсия</span></h4>
+          <ul>
+            <li>Имя</li>
+            <li>Телефон / WhatsApp</li>
+            <li>Тип услуги (выбор)</li>
+            <li>Удобная дата</li>
+            <li>Комментарий (необяз.)</li>
+            <li>Кнопка «Отправить заявку»</li>
+          </ul>
+        </div>
+        <div class="section-block">
+          <h4><span class="dot coral"></span>Карта</h4>
+          <ul>
+            <li>Карта 2ГИС или Яндекс</li>
+            <li>Отметка зоны работы в Астане</li>
+          </ul>
+        </div>
+        <div class="section-block">
+          <h4><span class="dot coral"></span>Соцсети</h4>
+          <ul>
+            <li>Instagram — кейсы до/после</li>
+            <li>WhatsApp Business</li>
+            <li>2ГИС — отзывы</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="margin-top: 1rem; padding: 1rem; background: var(--color-background-secondary); border-radius: var(--border-radius-md);">
+    <div class="header-label" style="margin-bottom: 8px;">Шапка и подвал (на всех страницах)</div>
+    <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px;">
+      <span class="content-pill"><i class="ti ti-brand-whatsapp" aria-hidden="true"></i> Кнопка WhatsApp (фикс.)</span>
+      <span class="content-pill">Логотип Ecovibe</span>
+      <span class="content-pill">Телефон в шапке</span>
+      <span class="content-pill">Навигация</span>
+      <span class="content-pill">Кнопка «Заказать»</span>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+      <span class="content-pill">© Ecovibe Астана</span>
+      <span class="content-pill">Ссылки на услуги</span>
+      <span class="content-pill">Соцсети</span>
+      <span class="content-pill">Политика конфиденциальности</span>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggle(header) {
+  header.classList.toggle('open');
+  const content = header.nextElementSibling;
+  content.classList.toggle('open');
+}
+document.querySelectorAll('.page-header').forEach(h => {
+  h.click();
+});
+</script>
