@@ -2,7 +2,8 @@ import { useState } from "react";
 import { CheckCircle2, Loader2, Send } from "lucide-react";
 import { toast } from "sonner";
 import { formatPhoneNumber, phoneForSubmit } from "../utils/phoneFormat";
-import { submitLeadToQazCrm, type QazCrmLeadPayload } from "../utils/qazcrm";
+import { submitLeadToMakeSheets } from "../utils/makeWebhook";
+import { submitLeadToQazCrm } from "../utils/qazcrm";
 import { Checkbox } from "./ui/checkbox";
 import { cn } from "./ui/utils";
 import { PrivacyPolicyLink } from "./PrivacyPolicyLink";
@@ -135,43 +136,57 @@ export function BookingCalculator() {
     const cleaningType = NAMES[state.service];
     const extrasLabels = buildSelectedExtrasLabels(state);
     const extrasText = extrasLabels.join(", ");
-    const orderParts = [
-      cleaningType,
-      `${state.area}м²`,
-      ...(extrasText ? [extrasText] : []),
-      `Итог: ${Math.round(total)}₸`,
-    ];
-    const orderShortInfo = `(${orderParts.join(", ")})`;
-    const finalName = `${state.name.trim()} ${orderShortInfo}`;
     const phone = phoneForSubmit(state.phone);
-
-    const payload: QazCrmLeadPayload = {
-      name: finalName,
-      phone,
-      standard_name: finalName,
-      standard_phone: phone,
-      client_phone: phone,
-      cleaning_type: cleaningType,
-      area: state.area,
-      address: state.address.trim(),
-      date_time: `${state.date} ${state.time}`.trim(),
-      extras: extrasText,
-      calculated_price: Math.round(total),
-      status: "confirmed",
-    };
+    const crmName = `${state.name.trim()} (${cleaningType}, ${state.area}м², Допы: ${extrasText}, Итог: ${Math.round(total)}₸)`;
 
     setIsSubmitting(true);
 
-    try {
-      await submitLeadToQazCrm(payload);
+    const sendToCrm = async () => {
+      try {
+        await submitLeadToQazCrm({ name: crmName, phone });
+        return true;
+      } catch (error) {
+        console.error("QazCRM submit failed:", error);
+        return false;
+      }
+    };
+
+    const sendToMake = async () => {
+      try {
+        await submitLeadToMakeSheets({
+          client_phone: phone,
+          cleaning_type: cleaningType,
+          area: state.area,
+          address: state.address.trim(),
+          date_time: `${state.date} ${state.time}`.trim(),
+          extras: extrasText,
+          calculated_price: Math.round(total),
+          status: "confirmed",
+          current_step: 7,
+        });
+        return true;
+      } catch (error) {
+        console.error("Make webhook submit failed:", error);
+        return false;
+      }
+    };
+
+    const [crmOk, makeOk] = await Promise.all([sendToCrm(), sendToMake()]);
+
+    if (crmOk || makeOk) {
       setIsSuccess(true);
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Ошибка отправки заявки";
-      toast.error(message);
-    } finally {
-      setIsSubmitting(false);
+      if (!crmOk || !makeOk) {
+        toast.warning(
+          "Заявка принята, но один из каналов недоступен. Мы всё равно свяжемся с вами.",
+        );
+      }
+    } else {
+      toast.error(
+        "Не удалось отправить заявку. Попробуйте ещё раз или напишите нам в WhatsApp.",
+      );
     }
+
+    setIsSubmitting(false);
   };
 
   return (

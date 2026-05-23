@@ -39,6 +39,11 @@ export default defineConfig({
         rewrite: () =>
           "/api/public/forms/84be7530-2d6a-4066-b548-06748a90aada/",
       },
+      "/api/make-lead": {
+        target: "https://hook.eu1.make.com",
+        changeOrigin: true,
+        rewrite: () => "/3q66ii6temuioymdiplpxcrjiv7tl2vd",
+      },
     },
   },
 
