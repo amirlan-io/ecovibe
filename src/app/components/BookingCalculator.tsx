@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { CheckCircle2, Loader2, Send } from "lucide-react";
 import { toast } from "sonner";
-import { formatPhoneNumber } from "../utils/phoneFormat";
+import { formatPhoneNumber, phoneForSubmit } from "../utils/phoneFormat";
 import { submitLeadToQazCrm, type QazCrmLeadPayload } from "../utils/qazcrm";
 import { Checkbox } from "./ui/checkbox";
 import { cn } from "./ui/utils";
@@ -55,6 +55,12 @@ const EXTRA_OPTIONS: {
   { key: "chair", title: "Химчистка стульев", price: "1 000 ₸ / шт" },
   { key: "mattress", title: "Химчистка матраса", price: "от 10 000 ₸" },
 ];
+
+function buildSelectedExtrasLabels(state: BookingState): string[] {
+  return EXTRA_OPTIONS.filter((opt) => state.extras[opt.key]).map(
+    (opt) => opt.title,
+  );
+}
 
 export function BookingCalculator() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -127,12 +133,15 @@ export function BookingCalculator() {
     if (isSubmitting) return;
 
     const cleaningType = NAMES[state.service];
-    const orderShortInfo = `(${cleaningType}, ${state.area}м², Итог: ${Math.round(total)}₸)`;
+    const extrasLabels = buildSelectedExtrasLabels(state);
+    const extrasPart =
+      extrasLabels.length > 0 ? `, Допы: ${extrasLabels.join(", ")}` : "";
+    const orderShortInfo = `(${cleaningType}, ${state.area}м²${extrasPart}, Итог: ${Math.round(total)}₸)`;
     const finalName = `${state.name.trim()} ${orderShortInfo}`;
 
     const payload: QazCrmLeadPayload = {
       name: finalName,
-      phone: state.phone.trim(),
+      phone: phoneForSubmit(state.phone),
     };
 
     setIsSubmitting(true);

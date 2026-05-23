@@ -1,33 +1,38 @@
+/** Маска +7 7XX XXX XX XX (логика как в официальной форме QazCRM) */
 export function formatPhoneNumber(value: string): string {
-  // Удаляем все нечисловые символы
-  const numbers = value.replace(/\D/g, '');
+  let digits = value.replace(/\D/g, "");
 
-  // Если начинается с 8, заменяем на 7
-  let digits = numbers.startsWith('8') ? '7' + numbers.slice(1) : numbers;
+  if (digits.length === 0) return "";
 
-  // Если начинается с 7, используем как есть
-  if (digits.startsWith('7')) {
-    digits = digits.slice(1); // Убираем первую 7
+  if (digits[0] === "8") {
+    digits = "7" + digits.substring(1);
+  }
+  if (digits[0] !== "7") {
+    digits = "7" + digits;
   }
 
-  // Ограничиваем до 10 цифр (после +7)
-  digits = digits.slice(0, 10);
-
-  // Форматируем: +7 7XX XXX XX XX
-  let formatted = '+7';
-
-  if (digits.length > 0) {
-    formatted += ' 7' + digits.slice(0, 2);
-  }
-  if (digits.length > 2) {
-    formatted += ' ' + digits.slice(2, 5);
-  }
-  if (digits.length > 5) {
-    formatted += ' ' + digits.slice(5, 7);
-  }
-  if (digits.length > 7) {
-    formatted += ' ' + digits.slice(7, 9);
+  if (digits.length > 11) {
+    digits = digits.substring(0, 11);
   }
 
-  return formatted;
+  if (digits.length === 1) return "+7";
+
+  if (digits.length <= 4) {
+    return `+7 ${digits.substring(1)}`;
+  }
+  if (digits.length <= 7) {
+    return `+7 ${digits.substring(1, 4)} ${digits.substring(4)}`;
+  }
+  if (digits.length <= 9) {
+    return `+7 ${digits.substring(1, 4)} ${digits.substring(4, 7)} ${digits.substring(7)}`;
+  }
+
+  return `+7 ${digits.substring(1, 4)} ${digits.substring(4, 7)} ${digits.substring(7, 9)} ${digits.substring(9)}`;
+}
+
+/** Номер для API: те же цифры, что ввёл пользователь, без искажения маской */
+export function phoneForSubmit(value: string): string {
+  const digits = value.replace(/\D/g, "");
+  if (digits.length < 10) return value.trim();
+  return formatPhoneNumber(value);
 }
