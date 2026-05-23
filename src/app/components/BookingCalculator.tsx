@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { MessageCircle } from "lucide-react";
+import { CheckCircle2, Loader2, Send } from "lucide-react";
+import { toast } from "sonner";
 import { formatPhoneNumber } from "../utils/phoneFormat";
+import { submitLeadToQazCrm, type QazCrmLeadPayload } from "../utils/qazcrm";
 import { Checkbox } from "./ui/checkbox";
 import { cn } from "./ui/utils";
 import { PrivacyPolicyLink } from "./PrivacyPolicyLink";
@@ -52,7 +54,46 @@ const EXTRA_OPTIONS: {
   { key: "mattress", title: "Химчистка матраса", price: "от 10 000 ₸" },
 ];
 
+function buildOrderMessage(
+  state: BookingState,
+  rows: [string, number][],
+  total: number,
+): string {
+  const extrasList = EXTRA_OPTIONS.filter((opt) => state.extras[opt.key]).map(
+    (opt) => {
+      if (opt.key === "windows") {
+        return `${opt.title} (${state.extraWindowCount} шт)`;
+      }
+      if (opt.key === "chair") {
+        return `${opt.title} (${state.chairCount} шт)`;
+      }
+      return opt.title;
+    },
+  );
+
+  const lines = [
+    `Тип уборки: ${NAMES[state.service]}`,
+    `Площадь: ${state.area} м²`,
+    `Адрес: ${state.address}`,
+    `Доп. услуги: ${extrasList.length > 0 ? extrasList.join(", ") : "нет"}`,
+    "",
+    "Расчёт:",
+    ...rows.map(
+      ([name, price]) =>
+        `• ${name}: ${Math.round(price).toLocaleString("ru-RU")} ₸`,
+    ),
+    "",
+    `Итого: ${Math.round(total).toLocaleString("ru-RU")} ₸`,
+    "",
+    "Источник: калькулятор на сайте EcoVibe",
+  ];
+
+  return lines.join("\n");
+}
+
 export function BookingCalculator() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [state, setState] = useState<BookingState>({
     service: "wet",
     area: 60,
@@ -114,35 +155,29 @@ export function BookingCalculator() {
 
   const { rows, total } = calculateTotal();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
 
-    // Формируем сообщение для WhatsApp
-    let message = `🏠 *Новая заявка на уборку*\n\n`;
-    message += `👤 *Имя:* ${state.name}\n`;
-    message += `📞 *Телефон:* ${state.phone}\n`;
-    message += `📍 *Адрес:* ${state.address}\n\n`;
-    message += `📋 *Детали заказа:*\n`;
+    const payload: QazCrmLeadPayload = {
+      standard_name: state.name.trim(),
+      standard_phone: state.phone.trim(),
+      website_url: "",
+      message: buildOrderMessage(state, rows, total),
+    };
 
-    rows.forEach(([name, price]) => {
-      message += `• ${name}: ${Math.round(price).toLocaleString("ru-RU")} ₸\n`;
-    });
+    setIsSubmitting(true);
 
-    message += `\n💰 *Итого: ${Math.round(total).toLocaleString("ru-RU")} ₸*`;
-
-    // Кодируем сообщение для URL
-    const encodedMessage = encodeURIComponent(message);
-
-    // Открываем WhatsApp с сообщением
-    window.open(`https://wa.me/77073204199?text=${encodedMessage}`, "_blank");
-
-    // Очищаем форму
-    setState((prev) => ({
-      ...prev,
-      name: "",
-      phone: "",
-      address: "",
-    }));
+    try {
+      await submitLeadToQazCrm(payload);
+      setIsSuccess(true);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Ошибка отправки заявки";
+      toast.error(message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -343,82 +378,113 @@ export function BookingCalculator() {
 
         {/* Right Column - Contact Form */}
         <div className="relative z-0 p-4 sm:p-6 md:p-8 bg-gray-50 max-md:pb-8">
-          <h3 className="mb-5 sm:mb-6 text-center md:text-left text-lg sm:text-xl">Оформить заявку</h3>
-          <div className="flex flex-col gap-4">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium mb-2">
-                Ваше имя *
-              </label>
-              <input
-                type="text"
-                id="name"
-                required
-                value={state.name}
-                onChange={(e) =>
-                  setState((prev) => ({ ...prev, name: e.target.value }))
-                }
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
-                placeholder="Как вас зовут?"
-              />
-            </div>
+          <h3 className="mb-5 sm:mb-6 text-center text-lg sm:text-xl md:text-left">
+            Оформить заявку
+          </h3>
 
-            <div>
-              <label htmlFor="phone" className="block text-sm font-medium mb-2">
-                Телефон *
-              </label>
-              <input
-                type="tel"
-                id="phone"
-                required
-                value={state.phone}
-                onChange={(e) =>
-                  setState((prev) => ({ ...prev, phone: formatPhoneNumber(e.target.value) }))
-                }
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
-                placeholder="+7 7__ ___ __ __"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="address" className="block text-sm font-medium mb-2">
-                Адрес *
-              </label>
-              <input
-                type="text"
-                id="address"
-                required
-                value={state.address}
-                onChange={(e) =>
-                  setState((prev) => ({ ...prev, address: e.target.value }))
-                }
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
-                placeholder="Улица, дом, квартира"
-              />
-            </div>
-
-            <div className="mt-2 space-y-3 max-md:pb-2">
-              <button
-                type="submit"
-                className="relative z-0 w-full py-3.5 sm:py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium flex items-center justify-center gap-2 shadow-lg text-sm sm:text-base px-3"
-              >
-                <MessageCircle className="w-5 h-5 shrink-0" />
-                <span className="text-center">Отправить заявку в WhatsApp</span>
-              </button>
-
-              <p className="text-center text-xs text-gray-500">
-                Нажимая кнопку, вы соглашаетесь с{" "}
-                <PrivacyPolicyLink className="text-green-600 hover:text-green-700">
-                  политикой конфиденциальности
-                </PrivacyPolicyLink>
+          {isSuccess ? (
+            <div className="rounded-xl border border-green-200 bg-green-50 p-6 sm:p-8 text-center">
+              <CheckCircle2 className="mx-auto mb-4 h-12 w-12 text-green-600" />
+              <h4 className="mb-3 text-lg font-semibold text-green-900">
+                Спасибо за заявку!
+              </h4>
+              <p className="text-sm leading-relaxed text-green-800 sm:text-base">
+                Данные успешно переданы в CRM. Менеджер свяжется с вами в ближайшее
+                время.
               </p>
             </div>
+          ) : (
+            <div className="flex flex-col gap-4">
+              <div>
+                <label htmlFor="name" className="mb-2 block text-sm font-medium">
+                  Ваше имя *
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="standard_name"
+                  required
+                  disabled={isSubmitting}
+                  value={state.name}
+                  onChange={(e) =>
+                    setState((prev) => ({ ...prev, name: e.target.value }))
+                  }
+                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
+                  placeholder="Как вас зовут?"
+                />
+              </div>
 
-            <div className="p-4 bg-white border border-gray-200 rounded-lg">
-              <p className="text-sm text-gray-600 text-center">
-                ⚡ Ответим в течение 15 минут
-              </p>
+              <div>
+                <label htmlFor="phone" className="mb-2 block text-sm font-medium">
+                  Телефон *
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="standard_phone"
+                  required
+                  disabled={isSubmitting}
+                  value={state.phone}
+                  onChange={(e) =>
+                    setState((prev) => ({
+                      ...prev,
+                      phone: formatPhoneNumber(e.target.value),
+                    }))
+                  }
+                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
+                  placeholder="+7 7__ ___ __ __"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="address" className="mb-2 block text-sm font-medium">
+                  Адрес *
+                </label>
+                <input
+                  type="text"
+                  id="address"
+                  required
+                  disabled={isSubmitting}
+                  value={state.address}
+                  onChange={(e) =>
+                    setState((prev) => ({ ...prev, address: e.target.value }))
+                  }
+                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
+                  placeholder="Улица, дом, квартира"
+                />
+              </div>
+
+              <div className="mt-2 max-md:pb-2 space-y-3">
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="relative z-0 flex w-full items-center justify-center gap-2 rounded-lg bg-green-600 px-3 py-3.5 text-sm font-medium text-white shadow-lg transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-70 sm:py-4 sm:text-base"
+                >
+                  {isSubmitting ? (
+                    <Loader2 className="h-5 w-5 shrink-0 animate-spin" />
+                  ) : (
+                    <Send className="h-5 w-5 shrink-0" />
+                  )}
+                  <span className="text-center">
+                    {isSubmitting ? "Отправка..." : "Отправить заявку"}
+                  </span>
+                </button>
+
+                <p className="text-center text-xs text-gray-500">
+                  Нажимая кнопку, вы соглашаетесь с{" "}
+                  <PrivacyPolicyLink className="text-green-600 hover:text-green-700">
+                    политикой конфиденциальности
+                  </PrivacyPolicyLink>
+                </p>
+              </div>
+
+              <div className="rounded-lg border border-gray-200 bg-white p-4">
+                <p className="text-center text-sm text-gray-600">
+                  ⚡ Ответим в течение 15 минут
+                </p>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </form>
     </div>

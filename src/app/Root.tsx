@@ -4,10 +4,12 @@ import { Footer } from "./components/Footer";
 import { WhatsAppButton } from "./components/WhatsAppButton";
 import { BottomNav } from "./components/BottomNav";
 import { RouteScrollManager } from "./components/RouteScrollManager";
+import { AppToaster } from "./components/AppToaster";
 
 export function Root() {
   return (
     <div className="min-h-screen flex flex-col">
+      <AppToaster />
       <RouteScrollManager />
       <Header />
       <main className="flex-1 pb-24 md:pb-0">
