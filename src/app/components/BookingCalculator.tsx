@@ -72,6 +72,27 @@ function formatBookingTime(time: string): string {
   return time.slice(0, 5);
 }
 
+function getRoomsLabel(area: number): string {
+  const preset = ROOM_PRESETS.reduce((closest, current) =>
+    Math.abs(current.area - area) < Math.abs(closest.area - area)
+      ? current
+      : closest,
+  );
+  return preset.label;
+}
+
+function buildAdditionalServices(state: BookingState): string[] {
+  return EXTRA_OPTIONS.filter((opt) => state.extras[opt.key]).map((opt) => {
+    if (opt.key === "windows") {
+      return `${opt.title} (${state.extraWindowCount} шт)`;
+    }
+    if (opt.key === "chair") {
+      return `${opt.title} (${state.chairCount} шт)`;
+    }
+    return opt.title;
+  });
+}
+
 function buildOrderComment(
   state: BookingState,
   total: number,
@@ -175,8 +196,14 @@ export function BookingCalculator() {
     const payload: QazCrmLeadPayload = {
       name: state.name.trim(),
       phone: state.phone.trim(),
-      description: buildOrderComment(state, total),
+      serviceType: NAMES[state.service],
+      area: state.area,
+      rooms: getRoomsLabel(state.area),
+      additionalServices: buildAdditionalServices(state),
+      date: state.date,
+      time: state.time,
       budget: Math.round(total),
+      description: buildOrderComment(state, total),
     };
 
     setIsSubmitting(true);
