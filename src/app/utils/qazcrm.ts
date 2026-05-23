@@ -8,7 +8,10 @@ export const QAZCRM_SUBMIT_URL = "/api/qazcrm-lead";
 export interface QazCrmLeadPayload {
   name: string;
   phone: string;
-  comment: string;
+  /** Текст для поля «Описание» в QazCRM */
+  description: string;
+  /** Сумма сделки (число, без валюты) */
+  budget: number;
 }
 
 export async function parseQazCrmError(response: Response): Promise<string> {
@@ -28,12 +31,13 @@ export async function parseQazCrmError(response: Response): Promise<string> {
   return "Не удалось отправить заявку. Попробуйте ещё раз или свяжитесь с нами по телефону.";
 }
 
-/** Тело запроса к QazCRM (поля standard_* обязательны в API формы) */
+/** Тело запроса к QazCRM */
 function toApiBody(payload: QazCrmLeadPayload) {
   return {
     name: payload.name,
     phone: payload.phone,
-    comment: payload.comment,
+    description: payload.description,
+    budget: payload.budget,
     standard_name: payload.name,
     standard_phone: payload.phone,
     website_url: "",

@@ -175,7 +175,8 @@ export function BookingCalculator() {
     const payload: QazCrmLeadPayload = {
       name: state.name.trim(),
       phone: state.phone.trim(),
-      comment: buildOrderComment(state, total),
+      description: buildOrderComment(state, total),
+      budget: Math.round(total),
     };
 
     setIsSubmitting(true);
