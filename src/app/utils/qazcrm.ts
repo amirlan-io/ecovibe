@@ -2,6 +2,9 @@ export const QAZCRM_FORM_ID = "84be7530-2d6a-4066-b548-06748a90aada";
 
 export const QAZCRM_FORM_URL = `https://crm.tennet.kz/api/public/forms/${QAZCRM_FORM_ID}/`;
 
+/** Прокси на том же домене — обход CORS в браузере */
+export const QAZCRM_SUBMIT_URL = "/api/qazcrm-lead";
+
 export interface QazCrmLeadPayload {
   name: string;
   phone: string;
@@ -38,11 +41,19 @@ function toApiBody(payload: QazCrmLeadPayload) {
 }
 
 export async function submitLeadToQazCrm(payload: QazCrmLeadPayload) {
-  const response = await fetch(QAZCRM_FORM_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(toApiBody(payload)),
-  });
+  let response: Response;
+
+  try {
+    response = await fetch(QAZCRM_SUBMIT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(toApiBody(payload)),
+    });
+  } catch {
+    throw new Error(
+      "Не удалось отправить заявку. Проверьте интернет или напишите нам в WhatsApp.",
+    );
+  }
 
   if (!response.ok) {
     throw new Error(await parseQazCrmError(response));

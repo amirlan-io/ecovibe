@@ -31,6 +31,17 @@ export default defineConfig({
     },
   },
 
+  server: {
+    proxy: {
+      "/api/qazcrm-lead": {
+        target: "https://crm.tennet.kz",
+        changeOrigin: true,
+        rewrite: () =>
+          "/api/public/forms/84be7530-2d6a-4066-b548-06748a90aada/",
+      },
+    },
+  },
+
   // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
   assetsInclude: ['**/*.svg', '**/*.csv'],
 })
