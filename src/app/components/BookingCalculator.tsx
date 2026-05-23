@@ -23,6 +23,8 @@ interface BookingState {
   name: string;
   phone: string;
   address: string;
+  date: string;
+  time: string;
 }
 
 const PRICES = {
@@ -54,9 +56,24 @@ const EXTRA_OPTIONS: {
   { key: "mattress", title: "Химчистка матраса", price: "от 10 000 ₸" },
 ];
 
-function buildOrderMessage(
+function formatBookingDate(date: string): string {
+  if (!date) return "не указана";
+  const parsed = new Date(`${date}T00:00:00`);
+  if (Number.isNaN(parsed.getTime())) return date;
+  return parsed.toLocaleDateString("ru-RU", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+function formatBookingTime(time: string): string {
+  if (!time) return "не указано";
+  return time.slice(0, 5);
+}
+
+function buildOrderComment(
   state: BookingState,
-  rows: [string, number][],
   total: number,
 ): string {
   const extrasList = EXTRA_OPTIONS.filter((opt) => state.extras[opt.key]).map(
@@ -71,24 +88,18 @@ function buildOrderMessage(
     },
   );
 
-  const lines = [
-    `Тип уборки: ${NAMES[state.service]}`,
-    `Площадь: ${state.area} м²`,
-    `Адрес: ${state.address}`,
-    `Доп. услуги: ${extrasList.length > 0 ? extrasList.join(", ") : "нет"}`,
-    "",
-    "Расчёт:",
-    ...rows.map(
-      ([name, price]) =>
-        `• ${name}: ${Math.round(price).toLocaleString("ru-RU")} ₸`,
-    ),
-    "",
-    `Итого: ${Math.round(total).toLocaleString("ru-RU")} ₸`,
-    "",
-    "Источник: калькулятор на сайте EcoVibe",
-  ];
+  const extrasText =
+    extrasList.length > 0 ? extrasList.join(", ") : "не выбраны";
 
-  return lines.join("\n");
+  return [
+    "Заказ с калькулятора EcoVibe:",
+    `- Услуга: ${NAMES[state.service]}`,
+    `- Площадь: ${state.area} кв.м.`,
+    `- Доп. услуги: ${extrasText}`,
+    `- Адрес: ${state.address.trim()}`,
+    `- Дата и время: ${formatBookingDate(state.date)}, ${formatBookingTime(state.time)}`,
+    `- Итоговая стоимость: ${Math.round(total).toLocaleString("ru-RU")} ₸`,
+  ].join("\n");
 }
 
 export function BookingCalculator() {
@@ -108,6 +119,8 @@ export function BookingCalculator() {
     name: "",
     phone: "",
     address: "",
+    date: "",
+    time: "",
   });
 
   const selectService = (service: ServiceType) => {
@@ -160,10 +173,9 @@ export function BookingCalculator() {
     if (isSubmitting) return;
 
     const payload: QazCrmLeadPayload = {
-      standard_name: state.name.trim(),
-      standard_phone: state.phone.trim(),
-      website_url: "",
-      message: buildOrderMessage(state, rows, total),
+      name: state.name.trim(),
+      phone: state.phone.trim(),
+      comment: buildOrderComment(state, total),
     };
 
     setIsSubmitting(true);
@@ -402,7 +414,7 @@ export function BookingCalculator() {
                 <input
                   type="text"
                   id="name"
-                  name="standard_name"
+                  name="name"
                   required
                   disabled={isSubmitting}
                   value={state.name}
@@ -421,7 +433,7 @@ export function BookingCalculator() {
                 <input
                   type="tel"
                   id="phone"
-                  name="standard_phone"
+                  name="phone"
                   required
                   disabled={isSubmitting}
                   value={state.phone}
@@ -452,6 +464,44 @@ export function BookingCalculator() {
                   className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
                   placeholder="Улица, дом, квартира"
                 />
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="date" className="mb-2 block text-sm font-medium">
+                    Дата уборки *
+                  </label>
+                  <input
+                    type="date"
+                    id="date"
+                    name="date"
+                    required
+                    disabled={isSubmitting}
+                    min={new Date().toISOString().split("T")[0]}
+                    value={state.date}
+                    onChange={(e) =>
+                      setState((prev) => ({ ...prev, date: e.target.value }))
+                    }
+                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="time" className="mb-2 block text-sm font-medium">
+                    Время *
+                  </label>
+                  <input
+                    type="time"
+                    id="time"
+                    name="time"
+                    required
+                    disabled={isSubmitting}
+                    value={state.time}
+                    onChange={(e) =>
+                      setState((prev) => ({ ...prev, time: e.target.value }))
+                    }
+                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
+                  />
+                </div>
               </div>
 
               <div className="mt-2 max-md:pb-2 space-y-3">

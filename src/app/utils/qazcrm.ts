@@ -2,13 +2,10 @@ export const QAZCRM_FORM_ID = "84be7530-2d6a-4066-b548-06748a90aada";
 
 export const QAZCRM_FORM_URL = `https://crm.tennet.kz/api/public/forms/${QAZCRM_FORM_ID}/`;
 
-/** Поля из конфигурации формы QazCRM (GET /api/public/forms/{id}/) */
 export interface QazCrmLeadPayload {
-  standard_name: string;
-  standard_phone: string;
-  website_url: string;
-  /** Детали заказа из калькулятора (если CRM принимает доп. поле) */
-  message: string;
+  name: string;
+  phone: string;
+  comment: string;
 }
 
 export async function parseQazCrmError(response: Response): Promise<string> {
@@ -28,11 +25,23 @@ export async function parseQazCrmError(response: Response): Promise<string> {
   return "Не удалось отправить заявку. Попробуйте ещё раз или свяжитесь с нами по телефону.";
 }
 
+/** Тело запроса к QazCRM (поля standard_* обязательны в API формы) */
+function toApiBody(payload: QazCrmLeadPayload) {
+  return {
+    name: payload.name,
+    phone: payload.phone,
+    comment: payload.comment,
+    standard_name: payload.name,
+    standard_phone: payload.phone,
+    website_url: "",
+  };
+}
+
 export async function submitLeadToQazCrm(payload: QazCrmLeadPayload) {
   const response = await fetch(QAZCRM_FORM_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(toApiBody(payload)),
   });
 
   if (!response.ok) {
