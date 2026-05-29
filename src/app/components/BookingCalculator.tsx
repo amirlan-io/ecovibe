@@ -32,6 +32,8 @@ interface BookingState {
   time: string;
 }
 
+const WINDOW_PRICE = 4000;
+
 const PRICES = {
   wet: 550,
   general: 650,
@@ -55,7 +57,7 @@ const EXTRA_OPTIONS: {
   title: string;
   price: string;
 }[] = [
-  { key: "windows", title: "Мойка окон", price: "3 000 ₸ / окно" },
+  { key: "windows", title: "Мойка окон", price: "4 000 ₸ / окно" },
   { key: "sofa", title: "Химчистка дивана", price: "от 10 000 ₸" },
   { key: "chair", title: "Химчистка стульев", price: "1 000 ₸ / шт" },
   { key: "mattress", title: "Химчистка матраса", price: "от 10 000 ₸" },
@@ -110,8 +112,8 @@ export function BookingCalculator() {
     total += base;
 
     if (state.extras.windows) {
-      const sub = state.extraWindowCount * 3000;
-      rows.push([`Мойка окон (${state.extraWindowCount} шт × 3 000 ₸)`, sub]);
+      const sub = state.extraWindowCount * WINDOW_PRICE;
+      rows.push([`Мойка окон (${state.extraWindowCount} шт × ${WINDOW_PRICE.toLocaleString("ru-RU")} ₸)`, sub]);
       total += sub;
     }
     if (state.extras.sofa) {

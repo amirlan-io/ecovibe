@@ -22,11 +22,13 @@ interface CalculatorState {
   address: string;
 }
 
+const WINDOW_PRICE = 4000;
+
 const PRICES = {
   wet: 550,
   general: 650,
   renovation: 850,
-  windows_only: 3000,
+  windows_only: WINDOW_PRICE,
 };
 
 const NAMES = {
@@ -86,8 +88,8 @@ export function Calculator() {
     let total = 0;
 
     if (state.service === "windows_only") {
-      const sub = state.windowCount * 3000;
-      rows.push([`Мойка окон (${state.windowCount} шт × 3 000 ₸)`, sub]);
+      const sub = state.windowCount * WINDOW_PRICE;
+      rows.push([`Мойка окон (${state.windowCount} шт × ${WINDOW_PRICE.toLocaleString("ru-RU")} ₸)`, sub]);
       total += sub;
     } else {
       const rate = PRICES[state.service];
@@ -96,8 +98,8 @@ export function Calculator() {
       total += base;
 
       if (state.extras.windows) {
-        const sub = state.extraWindowCount * 3000;
-        rows.push([`Мойка окон (${state.extraWindowCount} шт × 3 000 ₸)`, sub]);
+        const sub = state.extraWindowCount * WINDOW_PRICE;
+        rows.push([`Мойка окон (${state.extraWindowCount} шт × ${WINDOW_PRICE.toLocaleString("ru-RU")} ₸)`, sub]);
         total += sub;
       }
       if (state.extras.sofa) {
@@ -195,7 +197,7 @@ export function Calculator() {
                     }`}
                   >
                     {service === "windows_only"
-                      ? "3 000 ₸/окно"
+                      ? `${WINDOW_PRICE.toLocaleString("ru-RU")} ₸/окно`
                       : `${PRICES[service]} ₸/м²`}
                   </div>
                 </button>
@@ -304,7 +306,7 @@ export function Calculator() {
                 >
                   Мойка окон
                 </div>
-                <div className="text-xs text-gray-500">3 000 ₸ / окно</div>
+                <div className="text-xs text-gray-500">{WINDOW_PRICE.toLocaleString("ru-RU")} ₸ / окно</div>
               </div>
               </button>
 

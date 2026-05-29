@@ -69,7 +69,7 @@
       </div>
       <div class="service-card" data-service="windows_only" onclick="selectService(this)">
         <div class="s-name">Только окна</div>
-        <div class="s-price">3 000 ₸/окно</div>
+        <div class="s-price">4 000 ₸/окно</div>
       </div>
     </div>
   </div>
@@ -105,7 +105,7 @@
         <div class="extra-check" id="ch-windows"><i class="ti ti-check" style="font-size:12px"></i></div>
         <div class="extra-text">
           <div class="e-name">Мойка окон</div>
-          <div class="e-price">3 000 ₸ / окно</div>
+          <div class="e-price">4 000 ₸ / окно</div>
         </div>
       </div>
       <div class="extra-item" id="ex-sofa" onclick="toggleExtra(this,'sofa')">
@@ -162,7 +162,7 @@ const PRICES = {
   wet: 550,
   general: 650,
   renovation: 850,
-  windows_only: 3000
+  windows_only: 4000
 };
 const NAMES = {
   wet: 'Влажная уборка',
@@ -223,8 +223,8 @@ function calc(){
 
   if(state.service === 'windows_only'){
     const n = parseInt(document.getElementById('win-count').value) || 1;
-    const sub = n * 3000;
-    rows.push([`Мойка окон (${n} шт × 3 000 ₸)`, sub]);
+    const sub = n * 4000;
+    rows.push([`Мойка окон (${n} шт × 4 000 ₸)`, sub]);
     total += sub;
   } else {
     const rate = PRICES[state.service];
@@ -234,8 +234,8 @@ function calc(){
 
     if(state.extras.windows){
       const n = parseInt(document.getElementById('extra-win-count').value) || 1;
-      const sub = n * 3000;
-      rows.push([`Мойка окон (${n} шт × 3 000 ₸)`, sub]);
+      const sub = n * 4000;
+      rows.push([`Мойка окон (${n} шт × 4 000 ₸)`, sub]);
       total += sub;
     }
     if(state.extras.sofa){
