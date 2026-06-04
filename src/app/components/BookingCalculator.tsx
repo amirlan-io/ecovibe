@@ -6,7 +6,7 @@ import {
   isPhoneComplete,
   phoneForSubmit,
 } from "../utils/phoneFormat";
-import { submitLeadToMakeSheets } from "../utils/makeWebhook";
+import { submitBookingToMakeBackup } from "../utils/makeWebhook";
 import { submitLeadToQazCrm } from "../utils/qazcrm";
 import { Checkbox } from "./ui/checkbox";
 import { cn } from "./ui/utils";
@@ -164,8 +164,7 @@ export function BookingCalculator() {
       date: state.date,
       time: state.time,
     };
-    const crmTitle = `${formData.name} — Заявка с сайта`;
-    const canSendToMake = Boolean(address && phoneRaw && isPhoneComplete(phoneRaw));
+    const crmTitle = `${formData.name} (${formData.cleaningType}, ${formData.area}м², Адрес: ${formData.address}, Допы: ${extrasText}, Время: ${formData.date} в ${formData.time})`;
 
     setIsSubmitting(true);
 
@@ -175,11 +174,6 @@ export function BookingCalculator() {
           name: crmTitle,
           phone,
           price: totalPrice,
-          cleaning_type: formData.cleaningType,
-          area: formData.area,
-          extras: extrasText,
-          address: formData.address,
-          date_time: `${formData.date} в ${formData.time}`,
         });
         return true;
       } catch (error) {
@@ -188,22 +182,16 @@ export function BookingCalculator() {
       }
     };
 
-    const sendToMake = async (): Promise<boolean | null> => {
-      if (!canSendToMake) {
-        return null;
-      }
-
+    const sendToMake = async () => {
       try {
-        await submitLeadToMakeSheets({
-          client_phone: phone,
-          cleaning_type: formData.cleaningType,
-          area: state.area,
-          address,
-          date_time: `${state.date} ${state.time}`.trim(),
+        await submitBookingToMakeBackup({
+          name: formData.name,
+          phone,
+          address: formData.address,
+          cleaningType: formData.cleaningType,
+          area: formData.area,
           extras: extrasText,
-          calculated_price: totalPrice,
-          status: "confirmed",
-          current_step: 7,
+          totalPrice,
         });
         return true;
       } catch (error) {
@@ -214,9 +202,9 @@ export function BookingCalculator() {
 
     const [crmOk, makeOk] = await Promise.all([sendToCrm(), sendToMake()]);
 
-    if (crmOk || makeOk === true) {
+    if (crmOk || makeOk) {
       setIsSuccess(true);
-      if (!crmOk || makeOk === false) {
+      if (!crmOk || !makeOk) {
         toast.warning(
           "Заявка принята, но один из каналов недоступен. Мы всё равно свяжемся с вами.",
         );
