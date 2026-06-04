@@ -5,7 +5,11 @@ export const QAZCRM_FORM_URL = `https://crm.tennet.kz/api/public/forms/${QAZCRM_
 /** Прокси на том же домене — обход CORS в браузере */
 export const QAZCRM_SUBMIT_URL = "/api/qazcrm-lead";
 
-/** Ключи кастомных полей — замените на реальные имена из QazCRM при необходимости */
+/**
+ * Ключи кастомных полей — должны совпадать с `name` из GET /api/public/forms/{id}/.
+ * Сейчас в форме только standard_name и standard_phone; остальные ключи CRM не сохраняет,
+ * пока поля не добавят в конструкторе лид-формы QazCRM.
+ */
 export const QAZCRM_CUSTOM_FIELDS = {
   cleaning_type: "cleaning_type",
   area: "area",
@@ -13,6 +17,33 @@ export const QAZCRM_CUSTOM_FIELDS = {
   address: "address",
   date_time: "date_time",
 } as const;
+
+function buildOrderDetailsComment(payload: QazCrmLeadPayload): string {
+  const lines: string[] = [];
+
+  if (payload.cleaning_type) {
+    lines.push(`Услуга: ${payload.cleaning_type}`);
+  }
+  if (payload.area != null) {
+    lines.push(`Площадь: ${payload.area} м²`);
+  }
+  if (payload.extras) {
+    lines.push(`Доп. услуги: ${payload.extras}`);
+  } else {
+    lines.push("Доп. услуги: —");
+  }
+  if (payload.address) {
+    lines.push(`Адрес: ${payload.address}`);
+  }
+  if (payload.date_time) {
+    lines.push(`Дата и время: ${payload.date_time}`);
+  }
+  if (payload.price != null && !Number.isNaN(Number(payload.price))) {
+    lines.push(`Расчётная сумма: ${Number(payload.price).toLocaleString("ru-RU")} ₸`);
+  }
+
+  return lines.join("\n");
+}
 
 export interface QazCrmLeadPayload {
   name: string;
@@ -73,6 +104,19 @@ function toApiBody(payload: QazCrmLeadPayload) {
     if (value == null || value === "") continue;
     const apiKey = QAZCRM_CUSTOM_FIELDS[field];
     body[apiKey] = typeof value === "number" ? value : String(value);
+  }
+
+  if (payload.address?.trim()) {
+    body.standard_address = payload.address.trim();
+    body.address = payload.address.trim();
+  }
+
+  const orderDetails = buildOrderDetailsComment(payload);
+  if (orderDetails) {
+    body.comments = orderDetails;
+    body.comment = orderDetails;
+    body.standard_comments = orderDetails;
+    body.description = orderDetails;
   }
 
   return body;
