@@ -156,14 +156,16 @@ export function BookingCalculator() {
     const extrasLabels = buildSelectedExtrasLabels(state);
     const extrasText = extrasLabels.join(", ");
     const phone = phoneForSubmit(phoneRaw);
-    const crmName = `${state.name.trim()} (${cleaningType}, ${state.area}м², Допы: ${extrasText}, Итог: ${Math.round(total)}₸)`;
+    const totalPrice = Number(Math.round(total));
+    const extrasSuffix = extrasText ? `, Допы: ${extrasText}` : "";
+    const crmName = `${state.name.trim()} (${cleaningType}, ${state.area}м²${extrasSuffix})`;
     const canSendToMake = Boolean(address && phoneRaw && isPhoneComplete(phoneRaw));
 
     setIsSubmitting(true);
 
     const sendToCrm = async () => {
       try {
-        await submitLeadToQazCrm({ name: crmName, phone });
+        await submitLeadToQazCrm({ name: crmName, phone, price: totalPrice });
         return true;
       } catch (error) {
         console.error("QazCRM submit failed:", error);
@@ -184,7 +186,7 @@ export function BookingCalculator() {
           address,
           date_time: `${state.date} ${state.time}`.trim(),
           extras: extrasText,
-          calculated_price: Math.round(total),
+          calculated_price: totalPrice,
           status: "confirmed",
           current_step: 7,
         });

@@ -8,6 +8,8 @@ export const QAZCRM_SUBMIT_URL = "/api/qazcrm-lead";
 export interface QazCrmLeadPayload {
   name: string;
   phone: string;
+  /** Итоговая сумма сделки (число, без валюты) */
+  price?: number;
 }
 
 export async function parseQazCrmError(response: Response): Promise<string> {
@@ -28,12 +30,24 @@ export async function parseQazCrmError(response: Response): Promise<string> {
 }
 
 function toApiBody(payload: QazCrmLeadPayload) {
-  return {
+  const body: Record<string, string | number> = {
     name: payload.name,
     phone: payload.phone,
     standard_name: payload.name,
     standard_phone: payload.phone,
   };
+
+  if (payload.price != null) {
+    const price = Number(payload.price);
+    if (!Number.isNaN(price) && price > 0) {
+      body.price = price;
+      body.amount = price;
+      body.standard_budget = price;
+      body.standard_amount = price;
+    }
+  }
+
+  return body;
 }
 
 export async function submitLeadToQazCrm(payload: QazCrmLeadPayload) {
