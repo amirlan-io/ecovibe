@@ -5,11 +5,25 @@ export const QAZCRM_FORM_URL = `https://crm.tennet.kz/api/public/forms/${QAZCRM_
 /** Прокси на том же домене — обход CORS в браузере */
 export const QAZCRM_SUBMIT_URL = "/api/qazcrm-lead";
 
+/** Ключи кастомных полей — замените на реальные имена из QazCRM при необходимости */
+export const QAZCRM_CUSTOM_FIELDS = {
+  cleaning_type: "cleaning_type",
+  area: "area",
+  extras: "extras",
+  address: "address",
+  date_time: "date_time",
+} as const;
+
 export interface QazCrmLeadPayload {
   name: string;
   phone: string;
   /** Итоговая сумма сделки (число, без валюты) */
   price?: number;
+  cleaning_type?: string;
+  area?: number;
+  extras?: string;
+  address?: string;
+  date_time?: string;
 }
 
 export async function parseQazCrmError(response: Response): Promise<string> {
@@ -45,6 +59,20 @@ function toApiBody(payload: QazCrmLeadPayload) {
       body.standard_budget = price;
       body.standard_amount = price;
     }
+  }
+
+  const customFields: [keyof typeof QAZCRM_CUSTOM_FIELDS, string | number | undefined][] = [
+    ["cleaning_type", payload.cleaning_type],
+    ["area", payload.area],
+    ["extras", payload.extras],
+    ["address", payload.address],
+    ["date_time", payload.date_time],
+  ];
+
+  for (const [field, value] of customFields) {
+    if (value == null || value === "") continue;
+    const apiKey = QAZCRM_CUSTOM_FIELDS[field];
+    body[apiKey] = typeof value === "number" ? value : String(value);
   }
 
   return body;

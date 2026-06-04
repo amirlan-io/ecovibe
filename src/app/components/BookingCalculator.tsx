@@ -152,20 +152,35 @@ export function BookingCalculator() {
       return;
     }
 
-    const cleaningType = NAMES[state.service];
-    const extrasLabels = buildSelectedExtrasLabels(state);
-    const extrasText = extrasLabels.join(", ");
+    const selectedExtras = buildSelectedExtrasLabels(state);
+    const extrasText = selectedExtras.join(", ");
     const phone = phoneForSubmit(phoneRaw);
     const totalPrice = Number(Math.round(total));
-    const extrasSuffix = extrasText ? `, Допы: ${extrasText}` : "";
-    const crmName = `${state.name.trim()} (${cleaningType}, ${state.area}м²${extrasSuffix})`;
+    const formData = {
+      name: state.name.trim(),
+      cleaningType: NAMES[state.service],
+      area: state.area,
+      address,
+      date: state.date,
+      time: state.time,
+    };
+    const crmTitle = `${formData.name} — Заявка с сайта`;
     const canSendToMake = Boolean(address && phoneRaw && isPhoneComplete(phoneRaw));
 
     setIsSubmitting(true);
 
     const sendToCrm = async () => {
       try {
-        await submitLeadToQazCrm({ name: crmName, phone, price: totalPrice });
+        await submitLeadToQazCrm({
+          name: crmTitle,
+          phone,
+          price: totalPrice,
+          cleaning_type: formData.cleaningType,
+          area: formData.area,
+          extras: extrasText,
+          address: formData.address,
+          date_time: `${formData.date} в ${formData.time}`,
+        });
         return true;
       } catch (error) {
         console.error("QazCRM submit failed:", error);
@@ -181,7 +196,7 @@ export function BookingCalculator() {
       try {
         await submitLeadToMakeSheets({
           client_phone: phone,
-          cleaning_type: cleaningType,
+          cleaning_type: formData.cleaningType,
           area: state.area,
           address,
           date_time: `${state.date} ${state.time}`.trim(),
