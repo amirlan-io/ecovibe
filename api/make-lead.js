@@ -1,26 +1,34 @@
 const MAKE_WEBHOOK_URL =
   "https://hook.eu1.make.com/3q66ii6temuioymdiplpxcrjiv7tl2vd";
 
+function formatClientPhone(phone) {
+  return String(phone ?? "")
+    .replace(/\+/g, "")
+    .trim();
+}
+
 function isValidBooking(body) {
-  const name = String(body.name ?? "").trim();
-  const phone = String(body.phone ?? "").trim();
+  const clientPhone = formatClientPhone(body.client_phone);
   const address = String(body.address ?? "").trim();
-  const cleaningType = String(body.cleaningType ?? "").trim();
+  const cleaningType = String(body.cleaning_type ?? "").trim();
+  const dateTime = String(body.date_time ?? "").trim();
   const area = Number(body.area);
-  const totalPrice = Number(body.totalPrice);
-  const phoneDigits = phone.replace(/\D/g, "");
+  const calculatedPrice = Number(body.calculated_price);
+  const phoneDigits = clientPhone.replace(/\D/g, "");
   const localDigits = phoneDigits.startsWith("7")
     ? phoneDigits.slice(1)
     : phoneDigits;
 
   return (
-    name.length >= 2 &&
     address.length >= 3 &&
     cleaningType.length > 0 &&
+    dateTime.length > 0 &&
     Number.isFinite(area) &&
     area > 0 &&
-    Number.isFinite(totalPrice) &&
-    totalPrice > 0 &&
+    Number.isFinite(calculatedPrice) &&
+    calculatedPrice > 0 &&
+    Number(body.current_step) === 7 &&
+    String(body.status ?? "") === "confirmed" &&
     phoneDigits.length >= 11 &&
     !/^7+$/.test(localDigits)
   );
@@ -48,13 +56,15 @@ export default async function handler(req, res) {
   }
 
   const payload = {
-    name: String(body.name).trim(),
-    phone: String(body.phone).trim(),
-    address: String(body.address).trim(),
-    cleaningType: String(body.cleaningType).trim(),
+    client_phone: formatClientPhone(body.client_phone),
+    current_step: 7,
+    cleaning_type: String(body.cleaning_type).trim(),
     area: Number(body.area),
+    address: String(body.address).trim(),
+    date_time: String(body.date_time).trim(),
     extras: String(body.extras ?? "").trim(),
-    totalPrice: Number(body.totalPrice),
+    calculated_price: Number(body.calculated_price),
+    status: "confirmed",
   };
 
   try {

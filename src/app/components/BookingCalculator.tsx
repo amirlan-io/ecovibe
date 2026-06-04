@@ -6,7 +6,10 @@ import {
   isPhoneComplete,
   phoneForSubmit,
 } from "../utils/phoneFormat";
-import { submitBookingToMakeBackup } from "../utils/makeWebhook";
+import {
+  formatClientPhoneForSheets,
+  submitBookingToMakeBackup,
+} from "../utils/makeWebhook";
 import { submitLeadToQazCrm } from "../utils/qazcrm";
 import { Checkbox } from "./ui/checkbox";
 import { cn } from "./ui/utils";
@@ -185,13 +188,15 @@ export function BookingCalculator() {
     const sendToMake = async () => {
       try {
         await submitBookingToMakeBackup({
-          name: formData.name,
-          phone,
+          client_phone: formatClientPhoneForSheets(phone),
+          current_step: 7,
+          cleaning_type: formData.cleaningType,
+          area: Number(formData.area),
           address: formData.address,
-          cleaningType: formData.cleaningType,
-          area: formData.area,
+          date_time: `${formData.date} ${formData.time}`.trim(),
           extras: extrasText,
-          totalPrice,
+          calculated_price: Number(totalPrice),
+          status: "confirmed",
         });
         return true;
       } catch (error) {
