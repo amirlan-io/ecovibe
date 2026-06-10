@@ -115,7 +115,10 @@ export function Footer() {
         </div>
 
         <div className="mt-8 pt-8 border-t border-border text-center text-sm text-gray-600 space-y-3">
-          <p>&copy; {new Date().getFullYear()} EcoVibe Астана. Все права защищены.</p>
+          <p>
+            &copy; 2026 EcoVibe.kz. Клининговые услуги в Астане. Поддерживаем инклюзивное
+            трудоустройство и социальные инициативы. Все права защищены.
+          </p>
           <p>
             <PrivacyPolicyLink className="text-xs text-muted-foreground hover:text-green-600">
               Политика конфиденциальности
