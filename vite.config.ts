@@ -42,7 +42,7 @@ export default defineConfig({
       "/api/make-lead": {
         target: "https://hook.eu1.make.com",
         changeOrigin: true,
-        rewrite: () => "/3q66ii6temuioymdiplpxcrjiv7tl2vd",
+        rewrite: () => "/1r4hd503tqwfv1p1awpm74lay3szufso",
       },
     },
   },

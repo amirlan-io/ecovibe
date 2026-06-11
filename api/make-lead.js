@@ -1,5 +1,5 @@
 const MAKE_WEBHOOK_URL =
-  "https://hook.eu1.make.com/3q66ii6temuioymdiplpxcrjiv7tl2vd";
+  "https://hook.eu1.make.com/1r4hd503tqwfv1p1awpm74lay3szufso";
 
 function formatClientPhone(phone) {
   return String(phone ?? "")
