@@ -3,6 +3,8 @@
   --font-display: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
 }
 
+/* Google Fonts подключены с &display=swap в index.html */
+
 body {
   font-family: var(--font-sans);
 }

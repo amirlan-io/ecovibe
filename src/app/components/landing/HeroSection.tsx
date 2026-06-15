@@ -12,24 +12,22 @@ const HERO = {
 
 export function HeroSection() {
   return (
-    <section className="relative flex min-h-[85vh] items-center overflow-hidden">
+    <section className="hero relative flex min-h-[85vh] items-center overflow-hidden">
       <OptimizedPicture
+        pictureClassName="hero-bg-picture"
         avifSrc={HERO.avif}
         webpSrc={HERO.webp}
         fallbackSrc={HERO.jpg}
-        alt="Клининг Астана EcoVibe — профессиональная уборка"
-        className="absolute inset-0 h-full w-full object-cover"
+        alt="Профессиональный клининг EcoVibe в Астане"
+        className="hero-bg-img"
         loading="eager"
         fetchPriority="high"
         width={1600}
         height={900}
       />
-      <div
-        className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/55 to-black/40"
-        aria-hidden
-      />
+      <div className="hero-overlay" aria-hidden />
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-28 sm:px-6 lg:px-8">
+      <div className="hero-content mx-auto w-full max-w-7xl px-4 py-28 sm:px-6 lg:px-8">
         <div className="max-w-2xl">
           <h1 className="text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl lg:text-[3.25rem]">
             Профессиональный эко-клининг в Астане от 15 000 ₸

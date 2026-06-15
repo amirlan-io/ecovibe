@@ -3,6 +3,7 @@ type OptimizedPictureProps = {
   webpSrc: string;
   fallbackSrc: string;
   alt: string;
+  pictureClassName?: string;
   className?: string;
   loading?: "eager" | "lazy";
   fetchPriority?: "high" | "low" | "auto";
@@ -15,6 +16,7 @@ export function OptimizedPicture({
   webpSrc,
   fallbackSrc,
   alt,
+  pictureClassName,
   className,
   loading = "lazy",
   fetchPriority,
@@ -22,7 +24,7 @@ export function OptimizedPicture({
   height,
 }: OptimizedPictureProps) {
   return (
-    <picture>
+    <picture className={pictureClassName}>
       {avifSrc && <source srcSet={avifSrc} type="image/avif" />}
       <source srcSet={webpSrc} type="image/webp" />
       <img
