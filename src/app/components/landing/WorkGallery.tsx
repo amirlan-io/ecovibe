@@ -1,9 +1,27 @@
 import { BeforeAfterSlider } from "./BeforeAfterSlider";
 
 const GALLERY_ITEMS = [
-  { title: "Кухня", before: "Жир и налёт", after: "Сияющая чистота" },
-  { title: "Санузел", before: "Известковый налёт", after: "Блестящая сантехника" },
-  { title: "Комната", before: "Пыль и разводы", after: "Свежий воздух и порядок" },
+  {
+    title: "Кухня",
+    before: "Кухня до уборки",
+    after: "Кухня после уборки",
+    beforeSrc: "https://placehold.co/800x600/4a3728/ffffff?text=Кухня+до",
+    afterSrc: "https://placehold.co/800x600/e8f5e9/2d7a3a?text=Кухня+после",
+  },
+  {
+    title: "Санузел",
+    before: "Санузел до уборки",
+    after: "Санузел после уборки",
+    beforeSrc: "https://placehold.co/800x600/3d3d3d/ffffff?text=Санузел+до",
+    afterSrc: "https://placehold.co/800x600/e0f2fe/0369a1?text=Санузел+после",
+  },
+  {
+    title: "Комната",
+    before: "Комната до уборки",
+    after: "Комната после уборки",
+    beforeSrc: "https://placehold.co/800x600/5c4033/ffffff?text=Комната+до",
+    afterSrc: "https://placehold.co/800x600/f0fdf4/166534?text=Комната+после",
+  },
 ];
 
 export function WorkGallery() {
@@ -16,6 +34,8 @@ export function WorkGallery() {
             <BeforeAfterSlider
               beforeLabel={item.before}
               afterLabel={item.after}
+              beforeSrc={item.beforeSrc}
+              afterSrc={item.afterSrc}
             />
           </div>
         ))}
