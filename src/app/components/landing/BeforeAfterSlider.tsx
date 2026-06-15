@@ -1,9 +1,7 @@
 import { useCallback, useRef, useState } from "react";
 
-const DEFAULT_BEFORE_SRC =
-  "https://placehold.co/800x600/5c4033/ffffff?text=До+уборки";
-const DEFAULT_AFTER_SRC =
-  "https://placehold.co/800x600/e8f5e9/2d7a3a?text=После+уборки";
+const DEFAULT_BEFORE_SRC = "https://placehold.co/600x400/5c4033/ffffff";
+const DEFAULT_AFTER_SRC = "https://placehold.co/600x400/e8f5e9/2d7a3a";
 
 type BeforeAfterSliderProps = {
   beforeLabel?: string;
@@ -49,7 +47,7 @@ export function BeforeAfterSlider({
   return (
     <div
       ref={containerRef}
-      className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl select-none shadow-xl"
+      className="relative aspect-[16/10] w-full max-h-[200px] overflow-hidden rounded-xl select-none shadow-lg sm:max-h-[240px] md:max-h-[280px] lg:max-h-[300px]"
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
@@ -94,7 +92,7 @@ export function BeforeAfterSlider({
       >
         <div
           data-handle
-          className="absolute top-1/2 left-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-white bg-green-600 text-sm font-bold text-white shadow-md"
+          className="absolute top-1/2 left-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-white bg-green-600 text-xs font-bold text-white shadow-md md:h-11 md:w-11"
         >
           ↔
         </div>

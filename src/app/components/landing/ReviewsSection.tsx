@@ -67,10 +67,10 @@ export function ReviewsSection() {
           Сравните «до» и «после», а также отзывы наших клиентов
         </p>
 
-        <div className="mt-12 hidden justify-center md:flex">
+        <div className="mx-auto mt-8 hidden w-full max-w-xs justify-center sm:max-w-sm md:mt-10 md:flex md:max-w-md lg:max-w-lg">
           <BeforeAfterSlider />
         </div>
-        <div className="mt-12 md:hidden">
+        <div className="mx-auto mt-8 max-w-xs sm:max-w-sm md:hidden">
           <WorkGallery />
         </div>
 

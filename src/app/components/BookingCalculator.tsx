@@ -231,27 +231,27 @@ export function BookingCalculator() {
           <label className="block text-sm font-medium mb-3">
             Выберите услугу
           </label>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {(["wet", "general", "renovation"] as ServiceType[]).map((service) => (
               <button
                 key={service}
                 type="button"
                 onClick={() => selectService(service)}
-                className={`p-3 sm:p-4 rounded-xl border-2 transition-all text-left ${
+                className={`min-w-0 w-full overflow-hidden rounded-xl border-2 p-3 text-left transition-all sm:p-4 ${
                   state.service === service
                     ? "border-green-600 bg-green-50"
                     : "border-gray-200 bg-white hover:border-green-300"
                 }`}
               >
                 <div
-                  className={`font-medium mb-1 ${
+                  className={`mb-1 break-words text-sm font-medium leading-tight sm:text-base ${
                     state.service === service ? "text-green-900" : "text-gray-900"
                   }`}
                 >
                   {NAMES[service]}
                 </div>
                 <div
-                  className={`text-sm ${
+                  className={`text-xs sm:text-sm ${
                     state.service === service ? "text-green-700" : "text-gray-500"
                   }`}
                 >
