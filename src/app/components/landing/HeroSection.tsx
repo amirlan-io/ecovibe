@@ -68,7 +68,7 @@ function HeroCopy({ className }: { className?: string }) {
 
 export function HeroSection() {
   return (
-    <section className="hero relative overflow-hidden bg-[#CCFBCC]">
+    <section className="hero relative overflow-hidden bg-[#f1faf5]">
       {/* Mobile */}
       <div className="flex flex-col gap-8 px-4 pb-10 pt-28 sm:px-6 md:hidden">
         <HeroCopy className="max-w-2xl" />
