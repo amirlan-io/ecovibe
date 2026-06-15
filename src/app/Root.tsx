@@ -12,7 +12,7 @@ export function Root() {
       <AppToaster />
       <RouteScrollManager />
       <Header />
-      <main className="flex-1 pb-24 md:pb-0">
+      <main className="flex-1 pt-16 pb-24 md:pb-0">
         <Outlet />
       </main>
       <Footer />

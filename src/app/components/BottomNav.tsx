@@ -1,77 +1,58 @@
-import { Link, useLocation, useNavigate } from "react-router";
-import { Home, Calculator, Phone, MessageCircle } from "lucide-react";
+import { MessageCircle, Calculator, Phone, Home } from "lucide-react";
 import { WHATSAPP_LINK } from "../utils/whatsapp";
-import { CALCULATOR_HASH, CALCULATOR_ID, scrollToCalculator } from "../utils/scroll";
+import { SECTIONS } from "../utils/sections";
+import { scrollToElementById, scrollToTopSmooth } from "../utils/scroll";
+import { AnchorLink } from "./AnchorLink";
 
 export function BottomNav() {
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const isActive = (path: string) => {
-    if (path === "/") {
-      return location.pathname === "/";
-    }
-    return location.pathname.startsWith(path);
-  };
-
-  const handleWhatsApp = () => {
-    window.open(WHATSAPP_LINK, "_blank");
-  };
-
   const handleCalculator = () => {
-    if (location.pathname === "/") {
-      scrollToCalculator();
-      window.history.replaceState(null, "", `/${CALCULATOR_HASH}`);
-      return;
-    }
+    scrollToElementById(SECTIONS.calculator);
+    window.history.replaceState(null, "", `/#${SECTIONS.calculator}`);
+  };
 
-    navigate({ pathname: "/", hash: CALCULATOR_ID });
+  const handleHome = () => {
+    scrollToTopSmooth();
+    window.history.replaceState(null, "", "/");
   };
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg">
-      <div className="grid grid-cols-4 h-16">
-        <Link
-          to="/"
-          className={`flex flex-col items-center justify-center gap-1 transition-colors ${
-            isActive("/")
-              ? "text-green-600"
-              : "text-gray-600 hover:text-green-600"
-          }`}
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 bg-white/95 shadow-lg backdrop-blur-md md:hidden">
+      <div className="grid h-16 grid-cols-4">
+        <button
+          type="button"
+          onClick={handleHome}
+          className="flex flex-col items-center justify-center gap-1 text-green-600 transition-colors"
         >
-          <Home className="w-5 h-5" />
+          <Home className="h-5 w-5" />
           <span className="text-xs">Главная</span>
-        </Link>
+        </button>
 
         <button
           type="button"
           onClick={handleCalculator}
           className="flex flex-col items-center justify-center gap-1 text-gray-600 transition-colors hover:text-green-600"
         >
-          <Calculator className="w-5 h-5" />
-          <span className="text-xs">Расчет</span>
+          <Calculator className="h-5 w-5" />
+          <span className="text-xs">Расчёт</span>
         </button>
 
-        <Link
-          to="/contacts"
-          className={`flex flex-col items-center justify-center gap-1 transition-colors ${
-            isActive("/contacts")
-              ? "text-green-600"
-              : "text-gray-600 hover:text-green-600"
-          }`}
+        <AnchorLink
+          sectionId={SECTIONS.contacts}
+          className="flex flex-col items-center justify-center gap-1 text-gray-600 transition-colors hover:text-green-600"
         >
-          <Phone className="w-5 h-5" />
+          <Phone className="h-5 w-5" />
           <span className="text-xs">Контакты</span>
-        </Link>
+        </AnchorLink>
 
-        <button
-          type="button"
-          onClick={handleWhatsApp}
+        <a
+          href={WHATSAPP_LINK}
+          target="_blank"
+          rel="noopener noreferrer"
           className="flex flex-col items-center justify-center gap-1 text-green-600 transition-colors hover:text-green-700"
         >
-          <MessageCircle className="w-5 h-5" />
+          <MessageCircle className="h-5 w-5" />
           <span className="text-xs">WhatsApp</span>
-        </button>
+        </a>
       </div>
     </nav>
   );

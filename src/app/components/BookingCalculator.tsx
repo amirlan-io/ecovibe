@@ -1,3 +1,4 @@
+import { Minus, Plus } from "lucide-react";
 import { useState } from "react";
 import { CheckCircle2, Loader2, Send } from "lucide-react";
 import { toast } from "sonner";
@@ -15,16 +16,17 @@ import { Checkbox } from "./ui/checkbox";
 import { cn } from "./ui/utils";
 import { PrivacyPolicyLink } from "./PrivacyPolicyLink";
 
-type ServiceType = "wet" | "general";
+type ServiceType = "wet" | "general" | "renovation";
 
 interface BookingState {
   service: ServiceType;
   area: number;
+  rooms: number;
+  bathrooms: number;
   extras: {
     windows: boolean;
     sofa: boolean;
-    chair: boolean;
-    mattress: boolean;
+    balcony: boolean;
   };
   extraWindowCount: number;
   chairCount: number;
@@ -40,11 +42,13 @@ const WINDOW_PRICE = 4000;
 const PRICES = {
   wet: 550,
   general: 650,
+  renovation: 850,
 };
 
 const NAMES = {
-  wet: "Влажная уборка",
-  general: "Генеральная уборка",
+  wet: "Поддерживающая",
+  general: "Генеральная",
+  renovation: "После ремонта",
 };
 
 const ROOM_PRESETS = [
@@ -62,8 +66,7 @@ const EXTRA_OPTIONS: {
 }[] = [
   { key: "windows", title: "Мойка окон", price: "4 000 ₸ / окно" },
   { key: "sofa", title: "Химчистка дивана", price: "от 10 000 ₸" },
-  { key: "chair", title: "Химчистка стульев", price: "1 000 ₸ / шт" },
-  { key: "mattress", title: "Химчистка матраса", price: "от 10 000 ₸" },
+  { key: "balcony", title: "Уборка балкона", price: "5 000 ₸" },
 ];
 
 function buildSelectedExtrasLabels(state: BookingState): string[] {
@@ -78,14 +81,14 @@ export function BookingCalculator() {
   const [state, setState] = useState<BookingState>({
     service: "wet",
     area: 60,
+    rooms: 2,
+    bathrooms: 1,
     extras: {
       windows: false,
       sofa: false,
-      chair: false,
-      mattress: false,
+      balcony: false,
     },
     extraWindowCount: 3,
-    chairCount: 2,
     name: "",
     phone: "",
     address: "",
@@ -123,14 +126,9 @@ export function BookingCalculator() {
       rows.push(["Химчистка дивана", 10000]);
       total += 10000;
     }
-    if (state.extras.chair) {
-      const sub = state.chairCount * 1000;
-      rows.push([`Химчистка стульев (${state.chairCount} шт × 1 000 ₸)`, sub]);
-      total += sub;
-    }
-    if (state.extras.mattress) {
-      rows.push(["Химчистка матраса", 10000]);
-      total += 10000;
+    if (state.extras.balcony) {
+      rows.push(["Уборка балкона", 5000]);
+      total += 5000;
     }
 
     return { rows, total };
@@ -167,7 +165,7 @@ export function BookingCalculator() {
       date: state.date,
       time: state.time,
     };
-    const crmTitle = `${formData.name} (${formData.cleaningType}, ${formData.area}м², Адрес: ${formData.address}, Допы: ${extrasText}, Время: ${formData.date} в ${formData.time})`;
+    const crmTitle = `${formData.name} (${formData.cleaningType}, ${formData.area}м², ${state.rooms} комн., ${state.bathrooms} с/у, Адрес: ${formData.address}, Допы: ${extrasText}, Время: ${formData.date} в ${formData.time})`;
 
     setIsSubmitting(true);
 
@@ -224,12 +222,8 @@ export function BookingCalculator() {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-      <h2 className="px-4 py-5 sm:px-6 sm:py-6 md:px-8 md:py-8 pb-4 text-center text-lg sm:text-xl md:text-2xl border-b border-gray-200">
-        Рассчитайте стоимость уборки
-      </h2>
-
-      <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-0">
+    <div className="overflow-hidden rounded-2xl bg-white shadow-xl">
+      <form onSubmit={handleSubmit} className="grid gap-0 md:grid-cols-2">
         {/* Left Column - Calculator */}
         <div className="p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6 border-b md:border-b-0 md:border-r border-gray-200">
         {/* Step 1: Service Selection */}
@@ -237,8 +231,8 @@ export function BookingCalculator() {
           <label className="block text-sm font-medium mb-3">
             Выберите услугу
           </label>
-          <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-3">
-            {(["wet", "general"] as ServiceType[]).map((service) => (
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            {(["wet", "general", "renovation"] as ServiceType[]).map((service) => (
               <button
                 key={service}
                 type="button"
@@ -268,9 +262,26 @@ export function BookingCalculator() {
           </div>
         </div>
 
-        {/* Step 2: Area Selection */}
-        <div>
-          <label className="block text-sm font-medium mb-3">
+        {/* Step 2: Rooms, bathrooms & area */}
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <CounterField
+              label="Комнат"
+              value={state.rooms}
+              min={1}
+              max={10}
+              onChange={(rooms) => setState((prev) => ({ ...prev, rooms }))}
+            />
+            <CounterField
+              label="Санузлов"
+              value={state.bathrooms}
+              min={1}
+              max={5}
+              onChange={(bathrooms) => setState((prev) => ({ ...prev, bathrooms }))}
+            />
+          </div>
+          <div>
+          <label className="mb-3 block text-sm font-medium">
             Площадь квартиры
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 mb-4">
@@ -306,6 +317,7 @@ export function BookingCalculator() {
             <span className="font-medium shrink-0 text-green-600 sm:min-w-[58px] sm:text-right">
               {state.area} м²
             </span>
+          </div>
           </div>
         </div>
 
@@ -358,7 +370,7 @@ export function BookingCalculator() {
 
           {/* Extra options inputs */}
           {state.extras.windows && (
-            <div className="flex flex-wrap items-center gap-3 mt-3 p-3 bg-green-50 rounded-lg">
+            <div className="mt-3 flex flex-wrap items-center gap-3 rounded-lg bg-green-50 p-3">
               <label className="text-sm text-gray-700">Количество окон:</label>
               <input
                 type="number"
@@ -371,25 +383,7 @@ export function BookingCalculator() {
                     extraWindowCount: parseInt(e.target.value) || 1,
                   }))
                 }
-                className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-center"
-              />
-            </div>
-          )}
-          {state.extras.chair && (
-            <div className="flex flex-wrap items-center gap-3 mt-3 p-3 bg-green-50 rounded-lg">
-              <label className="text-sm text-gray-700">Количество стульев:</label>
-              <input
-                type="number"
-                min="1"
-                max="20"
-                value={state.chairCount}
-                onChange={(e) =>
-                  setState((prev) => ({
-                    ...prev,
-                    chairCount: parseInt(e.target.value) || 1,
-                  }))
-                }
-                className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-center"
+                className="w-20 rounded-lg border border-gray-300 px-3 py-2 text-center"
               />
             </div>
           )}
@@ -547,7 +541,7 @@ export function BookingCalculator() {
                     <Send className="h-5 w-5 shrink-0" />
                   )}
                   <span className="text-center">
-                    {isSubmitting ? "Отправка..." : "Отправить заявку"}
+                    {isSubmitting ? "Отправка..." : "Забронировать уборку"}
                   </span>
                 </button>
 
@@ -568,6 +562,45 @@ export function BookingCalculator() {
           )}
         </div>
       </form>
+    </div>
+  );
+}
+
+function CounterField({
+  label,
+  value,
+  min,
+  max,
+  onChange,
+}: {
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  onChange: (n: number) => void;
+}) {
+  return (
+    <div>
+      <label className="mb-2 block text-sm font-medium">{label}</label>
+      <div className="flex items-center gap-2 rounded-lg border border-gray-200 p-1.5">
+        <button
+          type="button"
+          onClick={() => onChange(Math.max(min, value - 1))}
+          className="flex h-9 w-9 items-center justify-center rounded-md bg-gray-100 transition-colors hover:bg-gray-200"
+          aria-label={`Уменьшить ${label}`}
+        >
+          <Minus className="h-4 w-4" />
+        </button>
+        <span className="flex-1 text-center text-lg font-semibold">{value}</span>
+        <button
+          type="button"
+          onClick={() => onChange(Math.min(max, value + 1))}
+          className="flex h-9 w-9 items-center justify-center rounded-md bg-gray-100 transition-colors hover:bg-gray-200"
+          aria-label={`Увеличить ${label}`}
+        >
+          <Plus className="h-4 w-4" />
+        </button>
+      </div>
     </div>
   );
 }

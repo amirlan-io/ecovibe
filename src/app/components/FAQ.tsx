@@ -7,50 +7,52 @@ import {
 
 const faqItems = [
   {
-    id: "communication",
-    question: "Как мне общаться с клинером, если он не слышит?",
+    id: "home",
+    question: "Нужно ли мне быть дома?",
     answer:
-      "Всё очень просто! Все детали уборки, адрес и ваши пожелания вы фиксируете при заказе на сайте или в WhatsApp с нашим менеджером. Клинеры приезжают уже с готовым чек-листом. Если нужно что-то показать на месте — можно использовать жесты или написать текст на телефоне. Это занимает не более 10 секунд и проверено на сотнях заказов.",
+      "Не обязательно, если вы заранее согласуете доступ и оставите инструкции менеджеру. Многие клиенты встречают клинера, показывают зоны работы и уходят — мы пришлём фото-отчёт после уборки.",
   },
   {
     id: "quality",
-    question: "Влияет ли это на качество уборки?",
+    question: "Что если мне не понравится качество?",
     answer:
-      "Да, в лучшую сторону. Наши сотрудники обладают повышенной концентрацией и вниманием к мелочам. Они бережно относятся к вашему дому, работают в абсолютной тишине и не отвлекаются на телефонные звонки или пустые разговоры во время работы.",
+      "Мы гарантируем результат. Если что-то не устроит — сообщите менеджеру в течение 24 часов, и мы бесплатно переделаем проблемные зоны.",
   },
   {
     id: "chemistry",
     question: "Какую химию вы используете?",
     answer:
-      "Мы используем только сертифицированные эко-средства. Они полностью гипоаллергенны, не имеют резкого химического запаха и абсолютно безопасны для детей и домашних животных.",
+      "Только сертифицированные эко-средства: гипоаллергенные, без резкого запаха, безопасные для детей и домашних животных.",
   },
   {
-    id: "guarantee",
-    question: "Что делать, если мне что-то не понравится?",
+    id: "communication",
+    question: "Как общаться с клинером, если он не слышит?",
     answer:
-      "Мы гарантируем качество. Если после уборки вы заметите недочеты, просто сообщите нашему менеджеру — мы оперативно приедем и бесплатно всё исправим.",
+      "Все детали фиксируются при заказе. На месте можно использовать жесты или короткие сообщения в WhatsApp — это занимает секунды.",
   },
 ];
 
 export function FAQ() {
   return (
-    <section className="py-20 bg-white">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-center mb-4">Часто задаваемые вопросы</h2>
-        <p className="text-center text-gray-600 mb-10">
+    <section className="bg-white py-16 md:py-24">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+        <h2 className="text-center text-2xl font-bold sm:text-3xl md:text-4xl">
+          Часто задаваемые вопросы
+        </h2>
+        <p className="mt-3 text-center text-gray-600">
           Ответы на главные вопросы о нашей работе
         </p>
         <Accordion
           type="single"
           collapsible
-          className="rounded-2xl border border-gray-200 bg-white px-6 shadow-sm"
+          className="mt-10 rounded-2xl border border-gray-200 bg-white px-4 shadow-sm sm:px-6"
         >
           {faqItems.map((item) => (
             <AccordionItem key={item.id} value={item.id}>
-              <AccordionTrigger className="text-base font-medium hover:no-underline py-5">
+              <AccordionTrigger className="py-5 text-left text-base font-medium hover:no-underline">
                 {item.question}
               </AccordionTrigger>
-              <AccordionContent className="text-gray-600 text-base leading-relaxed">
+              <AccordionContent className="pb-5 text-base leading-relaxed text-gray-600">
                 {item.answer}
               </AccordionContent>
             </AccordionItem>

@@ -1,32 +1,14 @@
-import { Link, useLocation } from "react-router";
-import { Phone, Menu, X } from "lucide-react";
+import { MapPin, Menu, MessageCircle, Phone, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
-import { CalculatorLink } from "./CalculatorLink";
+import { AnchorLink } from "./AnchorLink";
+import { NAV_ITEMS, SECTIONS } from "../utils/sections";
+import { WHATSAPP_LINK } from "../utils/whatsapp";
 import { cn } from "./ui/utils";
-
-const desktopNavigation = [
-  { name: "Главная", href: "/" },
-  { name: "Цены", href: "/prices" },
-  { name: "О нас", href: "/about" },
-  { name: "Вакансии", href: "/careers" },
-  { name: "Контакты", href: "/contacts" },
-];
-
-const mobileNavigation = [
-  ...desktopNavigation,
-  { name: "Влажная уборка", href: "/wet-cleaning" },
-  { name: "Генеральная уборка", href: "/general-cleaning" },
-];
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const location = useLocation();
-
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [location.pathname, location.hash]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -37,113 +19,112 @@ export function Header() {
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
-  const isActive = (href: string) => {
-    if (href === "/") {
-      return location.pathname === "/";
-    }
-    return location.pathname.startsWith(href);
-  };
-
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 transition-all duration-300",
+        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
         scrolled
-          ? "border-b border-gray-200/60 bg-white/80 shadow-sm backdrop-blur-md"
-          : "border-b border-border bg-white",
+          ? "border-b border-gray-200/60 bg-white/85 shadow-sm backdrop-blur-md"
+          : "border-b border-transparent bg-white/90 backdrop-blur-sm",
       )}
     >
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          <Link to="/" className="flex shrink-0 items-center gap-2" onClick={closeMobileMenu}>
+      <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between gap-3">
+          <AnchorLink
+            scrollToTop
+            onClick={closeMobileMenu}
+            className="flex shrink-0 items-center gap-2"
+          >
             <Logo />
-            <span className="text-lg font-semibold">EcoVibe.kz</span>
-          </Link>
+            <span className="text-lg font-semibold">EcoVibe</span>
+          </AnchorLink>
 
-          {/* Desktop Navigation */}
-          <div className="hidden items-center gap-8 md:flex lg:gap-10">
-            {desktopNavigation.map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                className={cn(
-                  "text-sm tracking-wide transition-colors",
-                  isActive(item.href)
-                    ? "font-medium text-green-600"
-                    : "text-gray-600 hover:text-green-600",
-                )}
+          <div className="hidden items-center gap-6 lg:flex xl:gap-8">
+            {NAV_ITEMS.map((item) => (
+              <AnchorLink
+                key={item.id}
+                sectionId={item.id}
+                className="text-sm text-gray-600 transition-colors duration-300 hover:text-green-600"
               >
-                {item.name}
-              </Link>
+                {item.label}
+              </AnchorLink>
             ))}
           </div>
 
-          <div className="hidden items-center gap-4 md:flex">
+          <div className="hidden items-center gap-3 md:flex lg:gap-4">
+            <span className="hidden items-center gap-1 text-sm text-gray-500 lg:flex">
+              <MapPin className="h-4 w-4 shrink-0" />
+              г. Астана
+            </span>
+            <a
+              href={WHATSAPP_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-green-600 text-white transition-all duration-300 hover:bg-green-500"
+            >
+              <MessageCircle className="h-4 w-4" />
+            </a>
             <a
               href="tel:+77073204199"
-              className="flex items-center gap-2 text-gray-700 transition-colors hover:text-green-600"
+              className="hidden items-center gap-1.5 text-sm font-medium text-gray-800 transition-colors hover:text-green-600 sm:flex"
             >
               <Phone className="h-4 w-4 shrink-0" />
-              <span className="text-sm font-medium whitespace-nowrap">+7 707 320 41 99</span>
+              +7 707 320 41 99
             </a>
-            <CalculatorLink className="whitespace-nowrap rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700">
-              Заказать уборку
-            </CalculatorLink>
+            <AnchorLink
+              sectionId={SECTIONS.calculator}
+              className="whitespace-nowrap rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-green-700"
+            >
+              Заказать
+            </AnchorLink>
           </div>
 
-          {/* Mobile menu button */}
           <button
             type="button"
-            className="p-2 md:hidden"
+            className="rounded-lg p-2 lg:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-expanded={mobileMenuOpen}
             aria-label={mobileMenuOpen ? "Закрыть меню" : "Открыть меню"}
           >
-            {mobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
 
-        {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div
-            className={cn(
-              "space-y-2 border-t py-4 md:hidden",
-              scrolled ? "border-gray-200/60" : "border-border",
-            )}
-          >
-            {mobileNavigation.map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
+          <div className="space-y-1 border-t border-gray-200 py-4 lg:hidden">
+            <p className="mb-2 flex items-center gap-1 px-2 text-sm text-gray-500">
+              <MapPin className="h-4 w-4" />
+              г. Астана
+            </p>
+            {NAV_ITEMS.map((item) => (
+              <AnchorLink
+                key={item.id}
+                sectionId={item.id}
                 onClick={closeMobileMenu}
-                className={cn(
-                  "block rounded-lg px-4 py-2 transition-colors",
-                  isActive(item.href)
-                    ? "bg-green-50 font-medium text-green-600"
-                    : "text-gray-600 hover:bg-gray-50",
-                )}
+                className="block rounded-lg px-3 py-2.5 text-gray-700 transition-colors hover:bg-green-50 hover:text-green-700"
               >
-                {item.name}
-              </Link>
+                {item.label}
+              </AnchorLink>
             ))}
-            <CalculatorLink
-              onClick={closeMobileMenu}
-              className="block rounded-lg bg-green-600 px-4 py-3 text-center font-medium text-white transition-colors hover:bg-green-700"
-            >
-              Заказать уборку
-            </CalculatorLink>
-            <a
-              href="tel:+77073204199"
-              onClick={closeMobileMenu}
-              className="flex items-center gap-2 px-4 py-2 text-gray-900"
-            >
-              <Phone className="h-4 w-4" />
-              <span>+7 707 320 41 99</span>
-            </a>
+            <div className="mt-3 flex flex-col gap-2 border-t border-gray-100 pt-3">
+              <a
+                href="tel:+77073204199"
+                className="flex items-center gap-2 px-3 py-2 text-gray-900"
+              >
+                <Phone className="h-4 w-4" />
+                +7 707 320 41 99
+              </a>
+              <a
+                href={WHATSAPP_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mx-3 flex items-center justify-center gap-2 rounded-lg bg-green-600 py-3 font-medium text-white"
+              >
+                <MessageCircle className="h-5 w-5" />
+                WhatsApp
+              </a>
+            </div>
           </div>
         )}
       </nav>
