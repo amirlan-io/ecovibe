@@ -533,7 +533,7 @@ export function BookingCalculator() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="relative z-0 flex w-full items-center justify-center gap-2 rounded-lg bg-green-600 px-3 py-3.5 text-sm font-medium text-white shadow-lg transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-70 sm:py-4 sm:text-base"
+                  className="relative z-0 flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-green-600 px-3 py-3.5 text-sm font-medium text-white shadow-lg transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-70 sm:py-4 sm:text-base"
                 >
                   {isSubmitting ? (
                     <Loader2 className="h-5 w-5 shrink-0 animate-spin" />

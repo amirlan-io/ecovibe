@@ -8,6 +8,31 @@
       <meta name="description" content="Профессиональные услуги клининга в Астане от EcoVibe.kz. 🧹 Уборка квартир, офисов и домов. Наш социальный проект: поддерживаем инклюзивность и предоставляем рабочие места для глухонемых и слабослышащих специалистов. Идеальная чистота с заботой о людях!" />
       <meta name="google-site-verification" content="dJFbUPhuddzGPKR5hhZbfOM8dsqBQQqwsV6uniI6BMo" />
 
+      <!-- LCP: preload hero image -->
+      <link rel="preload" as="image" href="/images/hero.avif" type="image/avif" fetchpriority="high" />
+      <link rel="preload" as="image" href="/images/hero.webp" type="image/webp" fetchpriority="high" />
+
+      <!-- Fonts: non-blocking load with swap -->
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link
+        rel="preload"
+        as="style"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap"
+      />
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap"
+        media="print"
+        onload="this.media='all'"
+      />
+      <noscript>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap"
+        />
+      </noscript>
+
       <script type="application/ld+json">
         {
           "@context": "https://schema.org",
@@ -39,12 +64,12 @@
       <meta name="twitter:title" content="Клининг Услуги в Астане | Профессиональная Уборка | EcoVibe.kz" />
       <meta name="twitter:description" content="Профессиональные услуги клининга в Астане от EcoVibe.kz. 🧹 Уборка квартир, офисов и домов. Наш социальный проект: поддерживаем инклюзивность и предоставляем рабочие места для глухонемых и слабослышащих специалистов. Идеальная чистота с заботой о людях!" />
       <meta name="twitter:image" content="https://www.ecovibe.kz/og-image.png" />
-      <style>html, body { height: 100%; margin: 0; } #root { height: 100%; }</style>
+      <style>html, body { height: 100%; margin: 0; overflow-x: hidden; } #root { height: 100%; min-height: 100%; }</style>
     </head>
 
     <body>
       <div id="root"></div>
-      <script type="module" src="/src/main.tsx"></script>
+      <script type="module" src="/src/main.tsx" defer></script>
     </body>
   </html>
   

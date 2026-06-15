@@ -86,7 +86,7 @@ export function PricesSection() {
         <div className="mt-10 text-center">
           <AnchorLink
             sectionId={SECTIONS.calculator}
-            className="inline-flex rounded-xl bg-green-600 px-8 py-3.5 font-semibold text-white transition-all duration-300 hover:bg-green-700"
+            className="inline-flex min-h-12 items-center justify-center rounded-xl bg-green-600 px-8 py-3.5 font-semibold text-white transition-all duration-300 hover:bg-green-700"
           >
             Рассчитать точную стоимость
           </AnchorLink>

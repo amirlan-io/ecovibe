@@ -13,7 +13,7 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <div className="mb-4 flex items-center gap-2">
-              <Logo />
+              <Logo lazy className="w-10 h-10" />
               <span className="text-lg font-semibold text-white">EcoVibe.kz</span>
             </div>
             <p className="text-sm leading-relaxed text-gray-400">
