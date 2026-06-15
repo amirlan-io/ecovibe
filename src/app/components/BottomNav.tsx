@@ -1,8 +1,8 @@
 import { MessageCircle, Calculator, Phone, Home } from "lucide-react";
 import { WHATSAPP_LINK } from "../utils/whatsapp";
+import { PHONE_TEL } from "../utils/phone";
 import { SECTIONS } from "../utils/sections";
 import { scrollToElementById, scrollToTopSmooth } from "../utils/scroll";
-import { AnchorLink } from "./AnchorLink";
 
 export function BottomNav() {
   const handleCalculator = () => {
@@ -17,7 +17,7 @@ export function BottomNav() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-gray-200 bg-white/95 shadow-lg backdrop-blur-md md:hidden">
-      <div className="grid h-[4.5rem] min-h-[48px] grid-cols-4">
+      <div className="grid h-16 min-h-[64px] grid-cols-4">
         <button
           type="button"
           onClick={handleHome}
@@ -36,13 +36,13 @@ export function BottomNav() {
           <span className="text-xs">Расчёт</span>
         </button>
 
-        <AnchorLink
-          sectionId={SECTIONS.contacts}
+        <a
+          href={PHONE_TEL}
           className="flex min-h-12 flex-col items-center justify-center gap-1 text-gray-600 transition-colors hover:text-green-600"
         >
           <Phone className="h-5 w-5" />
-          <span className="text-xs">Контакты</span>
-        </AnchorLink>
+          <span className="text-xs">Позвонить</span>
+        </a>
 
         <a
           href={WHATSAPP_LINK}
