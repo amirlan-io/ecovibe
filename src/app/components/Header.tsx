@@ -1,10 +1,8 @@
-import { MapPin, Menu, MessageCircle, Phone, X } from "lucide-react";
+import { MapPin, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
 import { AnchorLink } from "./AnchorLink";
 import { NAV_ITEMS, SECTIONS } from "../utils/sections";
-import { PHONE_DISPLAY, PHONE_TEL } from "../utils/phone";
-import { WHATSAPP_LINK } from "../utils/whatsapp";
 import { cn } from "./ui/utils";
 
 export function Header() {
@@ -66,22 +64,6 @@ export function Header() {
                 <MapPin className="h-4 w-4 shrink-0" />
                 г. Астана
               </span>
-              <a
-                href={WHATSAPP_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="WhatsApp"
-                className="btn-touch flex h-11 w-11 items-center justify-center rounded-full bg-green-600 text-white transition-all duration-300 hover:bg-green-500"
-              >
-                <MessageCircle className="h-5 w-5" />
-              </a>
-              <a
-                href={PHONE_TEL}
-                className="hidden items-center gap-1.5 text-sm font-medium text-gray-800 transition-colors hover:text-green-600 lg:flex"
-              >
-                <Phone className="h-4 w-4 shrink-0" />
-                {PHONE_DISPLAY}
-              </a>
               <AnchorLink
                 sectionId={SECTIONS.calculator}
                 className="btn inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-lg bg-green-600 px-4 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:bg-green-700"
