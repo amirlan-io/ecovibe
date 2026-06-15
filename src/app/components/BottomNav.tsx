@@ -38,7 +38,8 @@ export function BottomNav() {
 
         <a
           href={PHONE_TEL}
-          className="flex min-h-12 flex-col items-center justify-center gap-1 text-gray-600 transition-colors hover:text-green-600"
+          aria-label="Позвонить"
+          className="flex min-h-12 min-w-[44px] flex-col items-center justify-center gap-1 font-medium text-green-600 transition-colors hover:text-green-700"
         >
           <Phone className="h-5 w-5" />
           <span className="text-xs">Позвонить</span>

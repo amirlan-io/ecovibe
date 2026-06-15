@@ -34,7 +34,7 @@ const EXTRAS = [
 
 export function PricesSection() {
   return (
-    <section id="prices" className="scroll-mt-20 bg-gradient-to-b from-green-50/80 to-white py-16 md:py-24">
+    <section id="prices" className="section-mobile scroll-mt-20 bg-gradient-to-b from-green-50/80 to-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h2 className="landing-h2 text-center font-bold">
           Прозрачные цены на клининг в Астане
@@ -43,7 +43,7 @@ export function PricesSection() {
           Фиксированные тарифы за м² — точную сумму рассчитает калькулятор
         </p>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <div className="prices-grid mt-12">
           {PRICE_CARDS.map((card) => (
             <article
               key={card.title}

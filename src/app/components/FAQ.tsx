@@ -34,12 +34,12 @@ const faqItems = [
 
 export function FAQ() {
   return (
-    <section className="bg-white py-16 md:py-24">
+    <section className="section-mobile bg-white">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <h2 className="text-center text-2xl font-bold sm:text-3xl md:text-4xl">
+        <h2 className="landing-h2 text-center font-bold">
           Часто задаваемые вопросы
         </h2>
-        <p className="mt-3 text-center text-gray-600">
+        <p className="landing-body mt-3 text-center text-gray-600">
           Ответы на главные вопросы о нашей работе
         </p>
         <Accordion
@@ -49,7 +49,7 @@ export function FAQ() {
         >
           {faqItems.map((item) => (
             <AccordionItem key={item.id} value={item.id}>
-              <AccordionTrigger className="py-5 text-left text-base font-medium hover:no-underline">
+              <AccordionTrigger className="btn-touch py-5 text-left text-base font-medium hover:no-underline">
                 {item.question}
               </AccordionTrigger>
               <AccordionContent className="pb-5 text-base leading-relaxed text-gray-600">

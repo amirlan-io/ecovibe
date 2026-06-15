@@ -90,7 +90,7 @@ export function Header() {
 
           <button
             type="button"
-            className="burger-btn btn-touch items-center justify-center rounded-lg p-2.5 text-gray-800 md:hidden"
+            className="burger-btn btn-touch flex h-11 w-11 items-center justify-center rounded-lg text-gray-800 md:hidden"
             onClick={() => setMobileMenuOpen(true)}
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-drawer"

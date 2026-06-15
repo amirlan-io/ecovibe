@@ -79,7 +79,7 @@ export function ServicesSection() {
   const zones = SERVICE_DETAILS[active];
 
   return (
-    <section id="services" className="scroll-mt-20 bg-white py-16 md:py-24">
+    <section id="services" className="section-mobile scroll-mt-20 bg-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h2 className="landing-h2 text-center font-bold">
           Что мы делаем во время уборки
@@ -112,7 +112,7 @@ export function ServicesSection() {
             return (
               <article
                 key={zone.zone}
-                className="rounded-2xl border border-gray-200 bg-gray-50/50 p-6 transition-shadow duration-300 hover:shadow-lg"
+                className="w-full rounded-2xl border border-gray-200 bg-gray-50/50 p-6 transition-shadow duration-300 hover:shadow-lg"
               >
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-green-100 text-green-700">
                   <Icon className="h-6 w-6" />

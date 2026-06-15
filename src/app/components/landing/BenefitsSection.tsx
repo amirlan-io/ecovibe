@@ -25,12 +25,12 @@ const BENEFITS = [
 
 export function BenefitsSection() {
   return (
-    <section className="bg-gray-50 py-16 md:py-24">
+    <section className="section-mobile bg-gray-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h2 className="text-center text-2xl font-bold sm:text-3xl md:text-4xl">
+        <h2 className="landing-h2 text-center font-bold">
           Почему Астанчане доверяют EcoVibe
         </h2>
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="benefits-grid mt-12">
           {BENEFITS.map((item) => {
             const Icon = item.icon;
             return (
@@ -42,7 +42,7 @@ export function BenefitsSection() {
                   <Icon className="h-6 w-6" />
                 </div>
                 <h3 className="mb-2 font-semibold">{item.title}</h3>
-                <p className="text-sm leading-relaxed text-gray-600">{item.desc}</p>
+                <p className="landing-body text-gray-600">{item.desc}</p>
               </article>
             );
           })}

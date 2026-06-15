@@ -447,7 +447,7 @@ export function BookingCalculator() {
                   onChange={(e) =>
                     setState((prev) => ({ ...prev, name: e.target.value }))
                   }
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
+                  className="form-input-mobile w-full rounded-lg border border-gray-300 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
                   placeholder="Как вас зовут?"
                 />
               </div>
@@ -471,7 +471,7 @@ export function BookingCalculator() {
                       phone: formatPhoneNumber(e.target.value),
                     }))
                   }
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
+                  className="form-input-mobile w-full rounded-lg border border-gray-300 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
                   placeholder="+7 (___) ___-__-__"
                 />
               </div>
@@ -491,7 +491,7 @@ export function BookingCalculator() {
                   onChange={(e) =>
                     setState((prev) => ({ ...prev, address: e.target.value }))
                   }
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
+                  className="form-input-mobile w-full rounded-lg border border-gray-300 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
                   placeholder="Улица, дом, квартира"
                 />
               </div>
@@ -512,7 +512,7 @@ export function BookingCalculator() {
                     onChange={(e) =>
                       setState((prev) => ({ ...prev, date: e.target.value }))
                     }
-                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
+                    className="form-input-mobile w-full rounded-lg border border-gray-300 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
                   />
                 </div>
                 <div>
@@ -529,7 +529,7 @@ export function BookingCalculator() {
                     onChange={(e) =>
                       setState((prev) => ({ ...prev, time: e.target.value }))
                     }
-                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
+                    className="form-input-mobile w-full rounded-lg border border-gray-300 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
                   />
                 </div>
               </div>
@@ -550,7 +550,7 @@ export function BookingCalculator() {
                   </span>
                 </button>
 
-                <p className="text-center text-xs text-gray-500">
+                <p className="text-mobile-min text-center text-gray-500">
                   Нажимая кнопку, вы соглашаетесь с{" "}
                   <PrivacyPolicyLink className="text-green-600 hover:text-green-700">
                     политикой конфиденциальности

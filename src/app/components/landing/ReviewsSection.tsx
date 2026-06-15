@@ -58,7 +58,7 @@ export function ReviewsSection() {
   }, [emblaApi]);
 
   return (
-    <section id="reviews" className="scroll-mt-20 bg-gradient-to-br from-green-50 to-emerald-50 py-16 md:py-24">
+    <section id="reviews" className="section-mobile scroll-mt-20 bg-gradient-to-br from-green-50 to-emerald-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h2 className="landing-h2 text-center font-bold">
           Результаты нашей работы

@@ -1,10 +1,17 @@
-/* Mobile-first UX per EcoVibe spec */
+/* Mobile-first UX — EcoVibe cleaning service */
 
-.cta-fixed {
-  position: relative;
-  z-index: 999;
+/* ── Overflow & responsive images ── */
+html {
+  overflow-x: hidden;
 }
 
+img,
+picture img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ── Navigation (≤768px) ── */
 @media (max-width: 767px) {
   .nav-links {
     display: none;
@@ -12,6 +19,8 @@
 
   .burger-btn {
     display: flex;
+    min-height: 44px;
+    min-width: 44px;
   }
 }
 
@@ -21,18 +30,56 @@
   }
 }
 
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+/* ── Section spacing: 48px vertical mobile, 80px desktop ── */
+.section-mobile {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
 }
 
-@media (max-width: 767px) {
-  .services-grid {
-    grid-template-columns: 1fr;
+@media (min-width: 768px) {
+  .section-mobile {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
   }
 }
 
+/* ── Service & price grids ── */
+.services-grid,
+.prices-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .services-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .prices-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .benefits-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .benefits-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ── Swipe gallery ── */
 .gallery-scroll {
   display: flex;
   gap: 1rem;
@@ -57,10 +104,11 @@
   }
 }
 
-/* Touch targets — Apple / Google minimum 44×44px */
+/* ── Touch targets (min 44×44px) ── */
 .btn-touch,
 a.btn,
-a.cta-fixed {
+a.cta-fixed,
+.icon-touch {
   min-height: 44px;
   min-width: 44px;
 }
@@ -70,23 +118,40 @@ a.cta-fixed {
   padding: 12px 20px;
 }
 
-/* Fluid typography */
+.icon-touch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+/* ── Form inputs on mobile ── */
+.form-input-mobile {
+  min-height: 48px;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* ── Fluid typography (min 14px on mobile) ── */
 .landing-h1 {
-  font-size: clamp(1.5rem, 6vw, 3rem);
+  font-size: clamp(1.625rem, 7vw, 3.25rem);
   line-height: 1.2;
 }
 
 .landing-h2 {
-  font-size: clamp(1.375rem, 5vw, 2.25rem);
+  font-size: clamp(1.25rem, 5vw, 2.25rem);
   line-height: 1.25;
 }
 
-.landing-lead {
-  font-size: clamp(0.875rem, 4vw, 1.125rem);
+.landing-lead,
+.landing-body {
+  font-size: clamp(0.875rem, 4vw, 1rem);
   line-height: 1.6;
 }
 
-.landing-body {
-  font-size: clamp(0.875rem, 3.5vw, 1rem);
-  line-height: 1.6;
+/* Never smaller than 14px on mobile */
+@media (max-width: 767px) {
+  .text-mobile-min {
+    font-size: max(0.875rem, 14px);
+  }
 }

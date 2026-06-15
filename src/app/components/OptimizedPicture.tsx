@@ -1,3 +1,5 @@
+import { cn } from "./ui/utils";
+
 type OptimizedPictureProps = {
   avifSrc?: string;
   webpSrc: string;
@@ -47,7 +49,7 @@ export function OptimizedPicture({
         srcSet={imgSet}
         sizes={sizes}
         alt={alt}
-        className={className}
+        className={cn("max-w-full h-auto", className)}
         loading={loading}
         fetchPriority={fetchPriority}
         width={width}

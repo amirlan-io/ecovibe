@@ -25,9 +25,9 @@ export function HeroSection() {
         width={1600}
         height={900}
         sizes="100vw"
-        webpSrcSet="/images/hero.webp 800w, /images/hero.webp 1600w"
-        avifSrcSet="/images/hero.avif 800w, /images/hero.avif 1600w"
-        fallbackSrcSet="/images/hero.jpg 800w, /images/hero.jpg 1600w"
+        webpSrcSet="/images/hero.webp 400w, /images/hero.webp 800w, /images/hero.webp 1600w"
+        avifSrcSet="/images/hero.avif 400w, /images/hero.avif 800w, /images/hero.avif 1600w"
+        fallbackSrcSet="/images/hero.jpg 400w, /images/hero.jpg 800w, /images/hero.jpg 1600w"
       />
       <div className="hero-overlay" aria-hidden />
 
@@ -51,7 +51,7 @@ export function HeroSection() {
               Узнать цены
             </AnchorLink>
           </div>
-          <div className="mt-8 flex flex-wrap gap-5 text-sm text-white/85">
+          <div className="mt-8 flex flex-wrap gap-5 landing-body text-white/85">
             <span className="flex items-center gap-2">
               <Check className="h-5 w-5 shrink-0 text-green-400" />
               500+ довольных клиентов

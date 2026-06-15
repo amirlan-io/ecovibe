@@ -86,7 +86,7 @@ export function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Instagram"
-                    className="text-gray-400 transition-colors hover:text-green-400"
+                    className="icon-touch text-gray-400 transition-colors hover:text-green-400"
                   >
                     <Instagram className="h-5 w-5" />
                   </a>
@@ -95,7 +95,7 @@ export function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Threads"
-                    className="text-gray-400 transition-colors hover:text-green-400"
+                    className="icon-touch text-gray-400 transition-colors hover:text-green-400"
                   >
                     <ThreadsIcon className="h-5 w-5" />
                   </a>

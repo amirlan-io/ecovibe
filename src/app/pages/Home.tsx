@@ -14,7 +14,7 @@ export function Home() {
 
       <section
         id="calculator"
-        className="scroll-mt-20 bg-gradient-to-br from-gray-50 to-green-50 py-16 md:py-24"
+        className="scroll-mt-20 bg-gradient-to-br from-gray-50 to-green-50 section-mobile"
         data-calculator
       >
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">

@@ -23,9 +23,9 @@ const STEPS = [
 
 export function ProcessSection() {
   return (
-    <section className="bg-white py-16 md:py-24">
+    <section className="section-mobile bg-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h2 className="text-center text-2xl font-bold sm:text-3xl md:text-4xl">
+        <h2 className="landing-h2 text-center font-bold">
           Как заказать уборку
         </h2>
         <ol className="mt-12 grid gap-8 md:grid-cols-4">
