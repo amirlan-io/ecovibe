@@ -128,7 +128,7 @@ export function ReviewsSection() {
               onClick={scrollPrev}
               disabled={!canPrev}
               aria-label="Предыдущий отзыв"
-              className="btn-touch flex h-11 w-11 items-center justify-center rounded-full border border-gray-300 bg-white transition-colors hover:bg-gray-50 disabled:opacity-40"
+              className="btn-touch flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-white transition-colors hover:bg-gray-50 disabled:opacity-40"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
@@ -137,7 +137,7 @@ export function ReviewsSection() {
               onClick={scrollNext}
               disabled={!canNext}
               aria-label="Следующий отзыв"
-              className="btn-touch flex h-11 w-11 items-center justify-center rounded-full border border-gray-300 bg-white transition-colors hover:bg-gray-50 disabled:opacity-40"
+              className="btn-touch flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-white transition-colors hover:bg-gray-50 disabled:opacity-40"
             >
               <ChevronRight className="h-5 w-5" />
             </button>

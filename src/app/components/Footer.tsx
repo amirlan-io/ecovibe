@@ -1,4 +1,4 @@
-import { Instagram, Mail, MapPin, Phone } from "lucide-react";
+import { Instagram, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { Logo } from "./Logo";
 import { AnchorLink } from "./AnchorLink";
 import { ThreadsIcon } from "./icons/ThreadsIcon";
@@ -56,8 +56,9 @@ export function Footer() {
                   href={WHATSAPP_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-gray-400 transition-colors hover:text-green-400"
+                  className="flex items-center gap-2 text-gray-300 transition-colors hover:text-white"
                 >
+                  <MessageCircle className="h-4 w-4" />
                   WhatsApp
                 </a>
               </li>

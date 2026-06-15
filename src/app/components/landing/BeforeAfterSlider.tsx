@@ -46,11 +46,13 @@ export function BeforeAfterSlider({
     >
       <div className="absolute inset-0 bg-gradient-to-br from-slate-100 via-white to-green-50">
         <div className="flex h-full flex-col items-center justify-center p-8 text-center">
-          <span className="mb-2 rounded-full bg-green-600 px-3 py-1 text-xs font-semibold text-white">
+          <span className="mb-2 hidden rounded-full bg-green-600 px-3 py-1 text-xs font-semibold text-white sm:block">
             После
           </span>
-          <p className="text-lg font-semibold text-gray-800">{afterLabel}</p>
-          <p className="landing-body mt-2 text-gray-500">Плита, кафель и поверхности как новые</p>
+          <p className="hidden text-lg font-semibold text-gray-800 sm:block">{afterLabel}</p>
+          <p className="landing-body mt-2 hidden text-gray-500 sm:block">
+            Плита, кафель и поверхности как новые
+          </p>
         </div>
       </div>
 
@@ -59,11 +61,13 @@ export function BeforeAfterSlider({
         style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
       >
         <div className="flex h-full flex-col items-center justify-center p-8 text-center">
-          <span className="mb-2 rounded-full bg-amber-700 px-3 py-1 text-xs font-semibold text-white">
+          <span className="mb-2 hidden rounded-full bg-amber-700 px-3 py-1 text-xs font-semibold text-white sm:block">
             До
           </span>
-          <p className="text-lg font-semibold text-white">{beforeLabel}</p>
-          <p className="landing-body mt-2 text-white/80">Типичное состояние до уборки</p>
+          <p className="hidden text-lg font-semibold text-white sm:block">{beforeLabel}</p>
+          <p className="landing-body mt-2 hidden text-white/80 sm:block">
+            Типичное состояние до уборки
+          </p>
         </div>
       </div>
 

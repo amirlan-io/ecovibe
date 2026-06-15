@@ -1,7 +1,6 @@
 import { Outlet } from "react-router";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
-import { WhatsAppButton } from "./components/WhatsAppButton";
 import { BottomNav } from "./components/BottomNav";
 import { RouteScrollManager } from "./components/RouteScrollManager";
 import { AppToaster } from "./components/AppToaster";
@@ -16,7 +15,6 @@ export function Root() {
         <Outlet />
       </main>
       <Footer />
-      <WhatsAppButton />
       <BottomNav />
     </div>
   );
