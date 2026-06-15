@@ -51,7 +51,7 @@ export function Header() {
             ))}
           </div>
 
-          <div className="hidden items-center gap-3 md:flex lg:gap-4">
+          <div className="hidden items-center gap-2 sm:gap-3 md:flex lg:gap-4">
             <span className="hidden items-center gap-1 text-sm text-gray-500 lg:flex">
               <MapPin className="h-4 w-4 shrink-0" />
               г. Астана
@@ -74,7 +74,7 @@ export function Header() {
             </a>
             <AnchorLink
               sectionId={SECTIONS.calculator}
-              className="whitespace-nowrap rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-green-700"
+              className="inline-flex min-h-10 shrink-0 items-center justify-center whitespace-nowrap rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-green-700 sm:px-4"
             >
               Заказать
             </AnchorLink>
@@ -108,9 +108,16 @@ export function Header() {
               </AnchorLink>
             ))}
             <div className="mt-3 flex flex-col gap-2 border-t border-gray-100 pt-3">
+              <AnchorLink
+                sectionId={SECTIONS.calculator}
+                onClick={closeMobileMenu}
+                className="mx-3 flex min-h-12 items-center justify-center rounded-lg bg-green-600 font-medium text-white transition-colors hover:bg-green-700"
+              >
+                Заказать уборку
+              </AnchorLink>
               <a
                 href="tel:+77073204199"
-                className="flex items-center gap-2 px-3 py-2 text-gray-900"
+                className="flex min-h-12 items-center gap-2 px-3 py-2 text-gray-900"
               >
                 <Phone className="h-4 w-4" />
                 +7 707 320 41 99
@@ -119,7 +126,7 @@ export function Header() {
                 href={WHATSAPP_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mx-3 flex items-center justify-center gap-2 rounded-lg bg-green-600 py-3 font-medium text-white"
+                className="mx-3 flex min-h-12 items-center justify-center gap-2 rounded-lg bg-green-600 py-3 font-medium text-white"
               >
                 <MessageCircle className="h-5 w-5" />
                 WhatsApp

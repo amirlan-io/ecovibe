@@ -8,7 +8,7 @@ import { AppToaster } from "./components/AppToaster";
 
 export function Root() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-dvh flex-col">
       <AppToaster />
       <RouteScrollManager />
       <Header />

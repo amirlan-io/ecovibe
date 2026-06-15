@@ -8,7 +8,7 @@ import { WHATSAPP_LINK } from "../utils/whatsapp";
 
 export function Footer() {
   return (
-    <footer id="contacts" className="scroll-mt-20 mt-0 bg-gray-900 text-gray-300">
+    <footer id="contacts" className="mt-auto shrink-0 scroll-mt-20 bg-gray-900 text-gray-300 pb-20 md:pb-0">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
