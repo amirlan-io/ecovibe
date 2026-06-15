@@ -2,6 +2,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { BeforeAfterSlider } from "./BeforeAfterSlider";
+import { WorkGallery } from "./WorkGallery";
 
 const REVIEWS = [
   {
@@ -59,15 +60,18 @@ export function ReviewsSection() {
   return (
     <section id="reviews" className="scroll-mt-20 bg-gradient-to-br from-green-50 to-emerald-50 py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h2 className="text-center text-2xl font-bold sm:text-3xl md:text-4xl">
+        <h2 className="landing-h2 text-center font-bold">
           Результаты нашей работы
         </h2>
-        <p className="mx-auto mt-3 max-w-2xl text-center text-gray-600">
+        <p className="landing-body mx-auto mt-3 max-w-2xl text-center text-gray-600">
           Сравните «до» и «после», а также отзывы наших клиентов
         </p>
 
-        <div className="mt-12 flex justify-center">
+        <div className="mt-12 hidden justify-center md:flex">
           <BeforeAfterSlider />
+        </div>
+        <div className="mt-12 md:hidden">
+          <WorkGallery />
         </div>
 
         <div className="relative mt-14">
@@ -124,7 +128,7 @@ export function ReviewsSection() {
               onClick={scrollPrev}
               disabled={!canPrev}
               aria-label="Предыдущий отзыв"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-300 bg-white transition-colors hover:bg-gray-50 disabled:opacity-40"
+              className="btn-touch flex h-11 w-11 items-center justify-center rounded-full border border-gray-300 bg-white transition-colors hover:bg-gray-50 disabled:opacity-40"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
@@ -133,7 +137,7 @@ export function ReviewsSection() {
               onClick={scrollNext}
               disabled={!canNext}
               aria-label="Следующий отзыв"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-300 bg-white transition-colors hover:bg-gray-50 disabled:opacity-40"
+              className="btn-touch flex h-11 w-11 items-center justify-center rounded-full border border-gray-300 bg-white transition-colors hover:bg-gray-50 disabled:opacity-40"
             >
               <ChevronRight className="h-5 w-5" />
             </button>

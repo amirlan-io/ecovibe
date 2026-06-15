@@ -4,11 +4,12 @@ import { AnchorLink } from "./AnchorLink";
 import { ThreadsIcon } from "./icons/ThreadsIcon";
 import { PrivacyPolicyLink } from "./PrivacyPolicyLink";
 import { NAV_ITEMS } from "../utils/sections";
+import { PHONE_DISPLAY, PHONE_TEL } from "../utils/phone";
 import { WHATSAPP_LINK } from "../utils/whatsapp";
 
 export function Footer() {
   return (
-    <footer id="contacts" className="mt-auto shrink-0 scroll-mt-20 bg-gray-900 text-gray-300 pb-20 md:pb-0">
+    <footer id="contacts" className="mt-auto shrink-0 scroll-mt-20 bg-gray-900 text-gray-300 pb-36 md:pb-0">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
@@ -43,11 +44,11 @@ export function Footer() {
             <ul className="space-y-3 text-sm">
               <li>
                 <a
-                  href="tel:+77073204199"
-                  className="flex items-center gap-2 text-gray-400 transition-colors hover:text-green-400"
+                  href={PHONE_TEL}
+                  className="btn-touch flex items-center gap-2 text-gray-400 transition-colors hover:text-green-400"
                 >
                   <Phone className="h-4 w-4 shrink-0" />
-                  +7 707 320 41 99
+                  {PHONE_DISPLAY}
                 </a>
               </li>
               <li>

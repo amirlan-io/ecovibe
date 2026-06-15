@@ -36,10 +36,10 @@ export function PricesSection() {
   return (
     <section id="prices" className="scroll-mt-20 bg-gradient-to-b from-green-50/80 to-white py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h2 className="text-center text-2xl font-bold sm:text-3xl md:text-4xl">
+        <h2 className="landing-h2 text-center font-bold">
           Прозрачные цены на клининг в Астане
         </h2>
-        <p className="mx-auto mt-3 max-w-2xl text-center text-gray-600">
+        <p className="landing-body mx-auto mt-3 max-w-2xl text-center text-gray-600">
           Фиксированные тарифы за м² — точную сумму рассчитает калькулятор
         </p>
 

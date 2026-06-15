@@ -440,6 +440,7 @@ export function BookingCalculator() {
                   type="text"
                   id="name"
                   name="name"
+                  autoComplete="name"
                   required
                   disabled={isSubmitting}
                   value={state.name}
@@ -459,6 +460,8 @@ export function BookingCalculator() {
                   type="tel"
                   id="phone"
                   name="phone"
+                  autoComplete="tel"
+                  inputMode="tel"
                   required
                   disabled={isSubmitting}
                   value={state.phone}
@@ -469,7 +472,7 @@ export function BookingCalculator() {
                     }))
                   }
                   className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
-                  placeholder="+7 7__ ___ __ __"
+                  placeholder="+7 (___) ___-__-__"
                 />
               </div>
 
@@ -480,6 +483,8 @@ export function BookingCalculator() {
                 <input
                   type="text"
                   id="address"
+                  name="address"
+                  autoComplete="street-address"
                   required
                   disabled={isSubmitting}
                   value={state.address}
@@ -586,7 +591,7 @@ function CounterField({
         <button
           type="button"
           onClick={() => onChange(Math.max(min, value - 1))}
-          className="flex h-9 w-9 items-center justify-center rounded-md bg-gray-100 transition-colors hover:bg-gray-200"
+          className="btn-touch flex h-11 w-11 items-center justify-center rounded-md bg-gray-100 transition-colors hover:bg-gray-200"
           aria-label={`Уменьшить ${label}`}
         >
           <Minus className="h-4 w-4" />
@@ -595,7 +600,7 @@ function CounterField({
         <button
           type="button"
           onClick={() => onChange(Math.min(max, value + 1))}
-          className="flex h-9 w-9 items-center justify-center rounded-md bg-gray-100 transition-colors hover:bg-gray-200"
+          className="btn-touch flex h-11 w-11 items-center justify-center rounded-md bg-gray-100 transition-colors hover:bg-gray-200"
           aria-label={`Увеличить ${label}`}
         >
           <Plus className="h-4 w-4" />

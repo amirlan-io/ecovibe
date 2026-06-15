@@ -24,15 +24,19 @@ export function HeroSection() {
         fetchPriority="high"
         width={1600}
         height={900}
+        sizes="100vw"
+        webpSrcSet="/images/hero.webp 800w, /images/hero.webp 1600w"
+        avifSrcSet="/images/hero.avif 800w, /images/hero.avif 1600w"
+        fallbackSrcSet="/images/hero.jpg 800w, /images/hero.jpg 1600w"
       />
       <div className="hero-overlay" aria-hidden />
 
       <div className="hero-content mx-auto w-full max-w-7xl px-4 py-28 sm:px-6 lg:px-8">
         <div className="max-w-2xl">
-          <h1 className="text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl lg:text-[3.25rem]">
+          <h1 className="landing-h1 font-bold text-white">
             Профессиональный эко-клининг в Астане от 15 000 ₸
           </h1>
-          <p className="mt-5 text-base leading-relaxed text-white/90 sm:text-lg">
+          <p className="landing-lead mt-5 text-white/90">
             Используем гипоаллергенные средства, безопасные для детей и питомцев.
             Вернём блеск вашему дому уже сегодня!
           </p>

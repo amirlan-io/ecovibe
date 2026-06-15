@@ -3,6 +3,7 @@ import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { WhatsAppButton } from "./components/WhatsAppButton";
 import { BottomNav } from "./components/BottomNav";
+import { MobileFixedCTA } from "./components/MobileFixedCTA";
 import { RouteScrollManager } from "./components/RouteScrollManager";
 import { AppToaster } from "./components/AppToaster";
 
@@ -12,10 +13,11 @@ export function Root() {
       <AppToaster />
       <RouteScrollManager />
       <Header />
-      <main className="flex-1 pt-16 pb-24 md:pb-0">
+      <main className="flex-1 pt-16 pb-36 md:pb-0">
         <Outlet />
       </main>
       <Footer />
+      <MobileFixedCTA />
       <WhatsAppButton />
       <BottomNav />
     </div>

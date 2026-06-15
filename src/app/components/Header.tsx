@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
 import { AnchorLink } from "./AnchorLink";
 import { NAV_ITEMS, SECTIONS } from "../utils/sections";
+import { PHONE_DISPLAY, PHONE_TEL } from "../utils/phone";
 import { WHATSAPP_LINK } from "../utils/whatsapp";
 import { cn } from "./ui/utils";
 
@@ -17,6 +18,13 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
+
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
   return (
@@ -28,7 +36,7 @@ export function Header() {
           : "border-b border-transparent bg-white/90 backdrop-blur-sm",
       )}
     >
-      <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Основная навигация">
         <div className="flex h-16 items-center justify-between gap-3">
           <AnchorLink
             scrollToTop
@@ -39,7 +47,7 @@ export function Header() {
             <span className="text-lg font-semibold">EcoVibe</span>
           </AnchorLink>
 
-          <div className="hidden items-center gap-6 lg:flex xl:gap-8">
+          <div className="nav-links hidden items-center gap-6 md:flex lg:gap-8">
             {NAV_ITEMS.map((item) => (
               <AnchorLink
                 key={item.id}
@@ -51,7 +59,7 @@ export function Header() {
             ))}
           </div>
 
-          <div className="hidden items-center gap-2 sm:gap-3 md:flex lg:gap-4">
+          <div className="hidden items-center gap-2 md:flex lg:gap-4">
             <span className="hidden items-center gap-1 text-sm text-gray-500 lg:flex">
               <MapPin className="h-4 w-4 shrink-0" />
               г. Астана
@@ -61,20 +69,20 @@ export function Header() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="WhatsApp"
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-green-600 text-white transition-all duration-300 hover:bg-green-500"
+              className="btn-touch flex h-11 w-11 items-center justify-center rounded-full bg-green-600 text-white transition-all duration-300 hover:bg-green-500"
             >
-              <MessageCircle className="h-4 w-4" />
+              <MessageCircle className="h-5 w-5" />
             </a>
             <a
-              href="tel:+77073204199"
-              className="hidden items-center gap-1.5 text-sm font-medium text-gray-800 transition-colors hover:text-green-600 sm:flex"
+              href={PHONE_TEL}
+              className="hidden items-center gap-1.5 text-sm font-medium text-gray-800 transition-colors hover:text-green-600 lg:flex"
             >
               <Phone className="h-4 w-4 shrink-0" />
-              +7 707 320 41 99
+              {PHONE_DISPLAY}
             </a>
             <AnchorLink
               sectionId={SECTIONS.calculator}
-              className="inline-flex min-h-10 shrink-0 items-center justify-center whitespace-nowrap rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-green-700 sm:px-4"
+              className="btn inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-lg bg-green-600 px-4 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:bg-green-700"
             >
               Заказать
             </AnchorLink>
@@ -82,59 +90,97 @@ export function Header() {
 
           <button
             type="button"
-            className="rounded-lg p-2 lg:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="burger-btn btn-touch items-center justify-center rounded-lg p-2.5 text-gray-800 md:hidden"
+            onClick={() => setMobileMenuOpen(true)}
             aria-expanded={mobileMenuOpen}
-            aria-label={mobileMenuOpen ? "Закрыть меню" : "Открыть меню"}
+            aria-controls="mobile-drawer"
+            aria-label="Открыть меню"
           >
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            <Menu className="h-6 w-6" />
           </button>
         </div>
+      </nav>
 
-        {mobileMenuOpen && (
-          <div className="space-y-1 border-t border-gray-200 py-4 lg:hidden">
-            <p className="mb-2 flex items-center gap-1 px-2 text-sm text-gray-500">
-              <MapPin className="h-4 w-4" />
-              г. Астана
-            </p>
-            {NAV_ITEMS.map((item) => (
-              <AnchorLink
-                key={item.id}
-                sectionId={item.id}
+      {mobileMenuOpen && (
+        <>
+          <button
+            type="button"
+            className="fixed inset-0 z-[60] bg-black/50 md:hidden"
+            aria-label="Закрыть меню"
+            onClick={closeMobileMenu}
+          />
+          <div
+            id="mobile-drawer"
+            className="fixed inset-y-0 right-0 z-[70] flex w-[min(100%,20rem)] flex-col bg-white shadow-2xl md:hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Мобильное меню"
+          >
+            <div className="flex h-16 items-center justify-between border-b border-gray-200 px-4">
+              <span className="font-semibold text-gray-900">Меню</span>
+              <button
+                type="button"
+                className="btn-touch flex items-center justify-center rounded-lg p-2.5"
                 onClick={closeMobileMenu}
-                className="block rounded-lg px-3 py-2.5 text-gray-700 transition-colors hover:bg-green-50 hover:text-green-700"
+                aria-label="Закрыть меню"
               >
-                {item.label}
-              </AnchorLink>
-            ))}
-            <div className="mt-3 flex flex-col gap-2 border-t border-gray-100 pt-3">
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto px-4 py-4">
+              <p className="mb-4 flex items-center gap-1 text-sm text-gray-500">
+                <MapPin className="h-4 w-4" />
+                г. Астана
+              </p>
+              {NAV_ITEMS.map((item) => (
+                <AnchorLink
+                  key={item.id}
+                  sectionId={item.id}
+                  onClick={closeMobileMenu}
+                  className="btn-touch block rounded-lg px-3 py-3 text-base text-gray-700 transition-colors hover:bg-green-50 hover:text-green-700"
+                >
+                  {item.label}
+                </AnchorLink>
+              ))}
+            </div>
+
+            <div className="space-y-2 border-t border-gray-100 p-4">
               <AnchorLink
                 sectionId={SECTIONS.calculator}
                 onClick={closeMobileMenu}
-                className="mx-3 flex min-h-12 items-center justify-center rounded-lg bg-green-600 font-medium text-white transition-colors hover:bg-green-700"
+                className="btn btn-touch flex w-full items-center justify-center rounded-lg bg-green-600 font-medium text-white transition-colors hover:bg-green-700"
               >
                 Заказать уборку
               </AnchorLink>
+              <div className="grid grid-cols-2 gap-2">
+                <a
+                  href={PHONE_TEL}
+                  className="btn btn-touch flex items-center justify-center gap-2 rounded-lg border border-green-600 bg-white font-medium text-green-700"
+                >
+                  <Phone className="h-5 w-5" />
+                  Позвонить
+                </a>
+                <a
+                  href={WHATSAPP_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-touch flex items-center justify-center gap-2 rounded-lg bg-green-600 font-medium text-white"
+                >
+                  <MessageCircle className="h-5 w-5" />
+                  WhatsApp
+                </a>
+              </div>
               <a
-                href="tel:+77073204199"
-                className="flex min-h-12 items-center gap-2 px-3 py-2 text-gray-900"
+                href={PHONE_TEL}
+                className="btn-touch flex items-center justify-center gap-2 py-2 text-sm text-gray-600"
               >
-                <Phone className="h-4 w-4" />
-                +7 707 320 41 99
-              </a>
-              <a
-                href={WHATSAPP_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mx-3 flex min-h-12 items-center justify-center gap-2 rounded-lg bg-green-600 py-3 font-medium text-white"
-              >
-                <MessageCircle className="h-5 w-5" />
-                WhatsApp
+                {PHONE_DISPLAY}
               </a>
             </div>
           </div>
-        )}
-      </nav>
+        </>
+      )}
     </header>
   );
 }

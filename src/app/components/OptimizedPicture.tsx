@@ -9,6 +9,11 @@ type OptimizedPictureProps = {
   fetchPriority?: "high" | "low" | "auto";
   width?: number;
   height?: number;
+  /** Responsive WebP/AVIF descriptors, e.g. "/img.webp 400w, /img-800.webp 800w" */
+  webpSrcSet?: string;
+  avifSrcSet?: string;
+  fallbackSrcSet?: string;
+  sizes?: string;
 };
 
 export function OptimizedPicture({
@@ -22,13 +27,25 @@ export function OptimizedPicture({
   fetchPriority,
   width,
   height,
+  webpSrcSet,
+  avifSrcSet,
+  fallbackSrcSet,
+  sizes = "(max-width: 768px) 100vw, 50vw",
 }: OptimizedPictureProps) {
+  const webpSet = webpSrcSet ?? `${webpSrc} ${width ?? 800}w`;
+  const avifSet = avifSrc ? (avifSrcSet ?? `${avifSrc} ${width ?? 800}w`) : undefined;
+  const imgSet = fallbackSrcSet ?? `${fallbackSrc} ${width ?? 800}w`;
+
   return (
     <picture className={pictureClassName}>
-      {avifSrc && <source srcSet={avifSrc} type="image/avif" />}
-      <source srcSet={webpSrc} type="image/webp" />
+      {avifSrc && avifSet && (
+        <source srcSet={avifSet} sizes={sizes} type="image/avif" />
+      )}
+      <source srcSet={webpSet} sizes={sizes} type="image/webp" />
       <img
         src={fallbackSrc}
+        srcSet={imgSet}
+        sizes={sizes}
         alt={alt}
         className={className}
         loading={loading}

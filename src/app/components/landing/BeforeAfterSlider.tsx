@@ -1,6 +1,14 @@
 import { useCallback, useRef, useState } from "react";
 
-export function BeforeAfterSlider() {
+type BeforeAfterSliderProps = {
+  beforeLabel?: string;
+  afterLabel?: string;
+};
+
+export function BeforeAfterSlider({
+  beforeLabel = "Жир и налёт",
+  afterLabel = "Сияющая чистота",
+}: BeforeAfterSliderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState(50);
   const dragging = useRef(false);
@@ -31,23 +39,21 @@ export function BeforeAfterSlider() {
   return (
     <div
       ref={containerRef}
-      className="relative aspect-[4/3] w-full max-w-xl overflow-hidden rounded-2xl select-none touch-none shadow-xl"
+      className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl select-none touch-none shadow-xl"
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerLeave={onPointerUp}
     >
-      {/* After (clean) */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-100 via-white to-green-50">
         <div className="flex h-full flex-col items-center justify-center p-8 text-center">
           <span className="mb-2 rounded-full bg-green-600 px-3 py-1 text-xs font-semibold text-white">
             После
           </span>
-          <p className="text-lg font-semibold text-gray-800">Сияющая чистота</p>
-          <p className="mt-2 text-sm text-gray-500">Плита, кафель и поверхности как новые</p>
+          <p className="text-lg font-semibold text-gray-800">{afterLabel}</p>
+          <p className="landing-body mt-2 text-gray-500">Плита, кафель и поверхности как новые</p>
         </div>
       </div>
 
-      {/* Before (dirty) — clipped */}
       <div
         className="absolute inset-0 bg-gradient-to-br from-amber-900/80 via-stone-700 to-gray-800"
         style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
@@ -56,18 +62,17 @@ export function BeforeAfterSlider() {
           <span className="mb-2 rounded-full bg-amber-700 px-3 py-1 text-xs font-semibold text-white">
             До
           </span>
-          <p className="text-lg font-semibold text-white">Жир и налёт</p>
-          <p className="mt-2 text-sm text-white/80">Типичное состояние до уборки</p>
+          <p className="text-lg font-semibold text-white">{beforeLabel}</p>
+          <p className="landing-body mt-2 text-white/80">Типичное состояние до уборки</p>
         </div>
       </div>
 
-      {/* Divider */}
       <div
         className="absolute inset-y-0 z-10 w-1 cursor-ew-resize bg-white shadow-lg"
         style={{ left: `${position}%`, transform: "translateX(-50%)" }}
         onPointerDown={onPointerDown}
       >
-        <div className="absolute top-1/2 left-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-white bg-green-600 text-xs font-bold text-white shadow-md">
+        <div className="btn-touch absolute top-1/2 left-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-white bg-green-600 text-xs font-bold text-white shadow-md">
           ↔
         </div>
       </div>

@@ -18,10 +18,10 @@ export function Home() {
         data-calculator
       >
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <h2 className="mb-3 text-center text-2xl font-bold sm:text-3xl md:text-4xl">
+          <h2 className="landing-h2 mb-3 text-center font-bold">
             Рассчитайте точную стоимость уборки онлайн
           </h2>
-          <p className="mx-auto mb-10 max-w-2xl text-center text-gray-600">
+          <p className="landing-body mx-auto mb-10 max-w-2xl text-center text-gray-600">
             Выберите тип уборки, площадь и дополнительные услуги — цена обновится мгновенно
           </p>
           <BookingCalculator />
