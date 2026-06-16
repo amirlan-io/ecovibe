@@ -42,7 +42,7 @@ function HeroCopy({ className }: { className?: string }) {
         Используем гипоаллергенные средства, безопасные для детей и питомцев.
       </p>
       <div className="mt-8 flex flex-col gap-3 min-[480px]:flex-row min-[480px]:flex-wrap md:mt-10">
-        <CalculatorLink className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-green-600 px-8 py-3 text-base font-semibold text-white shadow-lg transition-colors hover:bg-green-500 min-[480px]:w-auto md:py-3.5">
+        <CalculatorLink className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-green-700 px-8 py-3 text-base font-semibold text-white shadow-lg transition-colors hover:bg-green-600 min-[480px]:w-auto md:py-3.5">
           Оставить заявку
         </CalculatorLink>
         <AnchorLink

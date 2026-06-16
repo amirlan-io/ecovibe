@@ -46,7 +46,7 @@ function ThreadsSocialIcon() {
 
 export function Footer() {
   return (
-    <footer id="contacts" className="mt-auto shrink-0 scroll-mt-20 bg-gray-900 text-gray-300 pb-20 md:pb-0">
+    <footer id="contacts" className="mt-auto shrink-0 scroll-mt-20 bg-gray-900 text-gray-200 pb-20 md:pb-0">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
@@ -54,7 +54,7 @@ export function Footer() {
               <Logo lazy className="w-10 h-10" />
               <span className="text-lg font-semibold text-white">EcoVibe.kz</span>
             </div>
-            <p className="text-sm leading-relaxed text-gray-400">
+            <p className="text-sm leading-relaxed text-gray-300">
               Профессиональный клининг в Астане. Эко-средства, обученные мастера и забота о
               каждом клиенте.
             </p>
@@ -67,7 +67,7 @@ export function Footer() {
                 <li key={item.id}>
                   <AnchorLink
                     sectionId={item.id}
-                    className="text-gray-400 transition-colors duration-300 hover:text-green-400"
+                    className="text-gray-300 transition-colors duration-300 hover:text-green-400"
                   >
                     {item.label}
                   </AnchorLink>
@@ -82,7 +82,7 @@ export function Footer() {
               <li>
                 <a
                   href={PHONE_TEL}
-                  className="btn-touch flex items-center gap-2 text-gray-400 transition-colors hover:text-green-400"
+                  className="btn-touch flex items-center gap-2 text-gray-300 transition-colors hover:text-green-400"
                 >
                   <Phone className="h-4 w-4 shrink-0" />
                   {PHONE_DISPLAY}
@@ -102,13 +102,13 @@ export function Footer() {
               <li>
                 <a
                   href="mailto:info@ecovibe.kz"
-                  className="flex items-center gap-2 text-gray-400 transition-colors hover:text-green-400"
+                  className="flex items-center gap-2 text-gray-300 transition-colors hover:text-green-400"
                 >
                   <Mail className="h-4 w-4 shrink-0" />
                   info@ecovibe.kz
                 </a>
               </li>
-              <li className="flex items-start gap-2 text-gray-400">
+              <li className="flex items-start gap-2 text-gray-300">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
                 <span>
                   г. Астана, Казахстан
@@ -123,7 +123,7 @@ export function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Instagram EcoVibe"
-                    className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-gray-300 transition-colors hover:bg-white/20 hover:text-white"
+                    className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-gray-200 transition-colors hover:bg-white/20 hover:text-white"
                   >
                     <InstagramIcon />
                   </a>
@@ -132,7 +132,7 @@ export function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Threads EcoVibe"
-                    className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-gray-300 transition-colors hover:bg-white/20 hover:text-white"
+                    className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-gray-200 transition-colors hover:bg-white/20 hover:text-white"
                   >
                     <ThreadsSocialIcon />
                   </a>
@@ -143,11 +143,11 @@ export function Footer() {
 
           <div>
             <h4 className="mb-4 font-medium text-white">Юридическая информация</h4>
-            <ul className="space-y-2 text-sm text-gray-400">
+            <ul className="space-y-2 text-sm text-gray-300">
               <li>ТОО «EcoVibe»</li>
               <li>Республика Казахстан, г. Астана</li>
               <li>
-                <PrivacyPolicyLink className="text-gray-400 no-underline transition-colors hover:text-green-400 hover:underline">
+                <PrivacyPolicyLink className="text-gray-300 no-underline transition-colors hover:text-green-400 hover:underline">
                   Политика конфиденциальности
                 </PrivacyPolicyLink>
               </li>
@@ -155,7 +155,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
+        <div className="mt-10 border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
           <p>
             &copy; 2026 EcoVibe.kz. Клининговые услуги в Астане. Поддерживаем инклюзивное
             трудоустройство и социальные инициативы. Все права защищены.

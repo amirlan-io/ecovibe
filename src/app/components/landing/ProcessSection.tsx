@@ -37,7 +37,7 @@ export function ProcessSection() {
                   aria-hidden
                 />
               )}
-              <div className="relative z-10 mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-green-600 text-base font-bold text-white md:mb-4 md:h-16 md:w-16 md:text-lg">
+              <div className="relative z-10 mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-green-800 text-base font-bold text-white md:mb-4 md:h-16 md:w-16 md:text-lg">
                 {step.num}
               </div>
               <h3 className="mb-1 text-sm font-semibold md:mb-2 md:text-base">{step.title}</h3>

@@ -79,14 +79,14 @@ export function ReviewsSection() {
                   className="min-w-0 flex-[0_0_100%] sm:flex-[0_0_calc(50%-0.5rem)] lg:flex-[0_0_calc(33.333%-0.67rem)]"
                 >
                   {review.source === "WhatsApp" ? (
-                    <div className="rounded-2xl border border-gray-200 bg-[#e5ddd5] p-4 shadow-sm">
+                    <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
                       <div className="mb-3 flex items-center gap-2">
                         <div className="flex h-9 w-9 items-center justify-center rounded-full bg-green-600 text-sm font-bold text-white">
                           {review.name[0]}
                         </div>
                         <div>
                           <p className="text-sm font-semibold text-gray-900">{review.name}</p>
-                          <p className="text-xs text-gray-500">{review.time}</p>
+                          <p className="text-xs text-gray-600">{review.time}</p>
                         </div>
                       </div>
                       <div className="rounded-lg rounded-tl-none bg-white px-3 py-2 text-sm text-gray-800 shadow-sm">

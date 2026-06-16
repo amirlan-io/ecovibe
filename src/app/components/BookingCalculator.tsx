@@ -239,7 +239,7 @@ export function BookingCalculator() {
                 onClick={() => selectService(service)}
                 className={`min-w-0 w-full overflow-hidden rounded-xl border-2 p-3 text-left transition-all sm:p-4 ${
                   state.service === service
-                    ? "border-green-600 bg-green-50"
+                    ? "border-green-700 bg-green-50"
                     : "border-gray-200 bg-white hover:border-green-300"
                 }`}
               >
@@ -297,7 +297,7 @@ export function BookingCalculator() {
                 }`}
               >
                 <div className="text-sm">{preset.label}</div>
-                <div className="text-xs opacity-70">{preset.sublabel}</div>
+                <div className="text-xs text-gray-500">{preset.sublabel}</div>
               </button>
             ))}
           </div>
@@ -553,7 +553,7 @@ export function BookingCalculator() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="relative z-0 flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-green-600 px-3 py-3.5 text-sm font-medium text-white shadow-lg transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-70 sm:py-4 sm:text-base"
+                  className="relative z-0 flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-green-700 px-3 py-3.5 text-sm font-medium text-white shadow-lg transition-colors hover:bg-green-800 disabled:cursor-not-allowed disabled:opacity-70 sm:py-4 sm:text-base"
                 >
                   {isSubmitting ? (
                     <Loader2 className="h-5 w-5 shrink-0 animate-spin" />
@@ -567,7 +567,7 @@ export function BookingCalculator() {
 
                 <p className="text-mobile-min text-center text-gray-500">
                   Нажимая кнопку, вы соглашаетесь с{" "}
-                  <PrivacyPolicyLink className="text-green-600 hover:text-green-700">
+                  <PrivacyPolicyLink className="text-green-700 underline hover:text-green-800">
                     политикой конфиденциальности
                   </PrivacyPolicyLink>
                 </p>
