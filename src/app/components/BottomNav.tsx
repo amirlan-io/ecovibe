@@ -18,8 +18,8 @@ export function BottomNav() {
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-between border-t border-gray-100 bg-white px-4 md:hidden">
-      <div className="flex items-center gap-1">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center gap-2 border-t border-gray-100 bg-white px-2 sm:px-3 md:hidden">
+      <div className="flex min-w-0 flex-1 items-center justify-around">
         <button
           type="button"
           onClick={handleHome}
@@ -52,12 +52,12 @@ export function BottomNav() {
         href={ORDER_WHATSAPP_LINK}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex h-11 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-green-600 px-4 text-[13px] font-semibold text-white transition-all hover:bg-green-700 active:scale-95 active:bg-green-700"
+        className="flex h-11 shrink-0 items-center justify-center gap-1 rounded-lg bg-green-600 px-2.5 text-xs font-semibold text-white transition-all hover:bg-green-700 active:scale-95 active:bg-green-700 sm:gap-1.5 sm:px-3"
       >
-        Заказать сейчас
+        <span className="whitespace-nowrap">Заказать</span>
         <svg
-          width="16"
-          height="16"
+          width="14"
+          height="14"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -65,6 +65,7 @@ export function BottomNav() {
           strokeLinecap="round"
           strokeLinejoin="round"
           aria-hidden
+          className="shrink-0"
         >
           <path d="M5 12h14M13 6l6 6-6 6" />
         </svg>
