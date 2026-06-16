@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
 import { AnchorLink } from "./AnchorLink";
 import { NAV_ITEMS, SECTIONS } from "../utils/sections";
+import { WHATSAPP_LINK } from "../utils/whatsapp";
 import { cn } from "./ui/utils";
 
 export function Header() {
@@ -121,13 +122,24 @@ export function Header() {
             </div>
 
             <div className="border-t border-gray-100 p-4">
-              <AnchorLink
-                sectionId={SECTIONS.calculator}
-                onClick={closeMobileMenu}
-                className="btn btn-touch flex w-full items-center justify-center rounded-lg bg-green-600 py-3 font-medium text-white transition-colors hover:bg-green-700"
-              >
-                Заказать уборку
-              </AnchorLink>
+              <div className="grid grid-cols-2 gap-3">
+                <AnchorLink
+                  sectionId={SECTIONS.calculator}
+                  onClick={closeMobileMenu}
+                  className="btn btn-touch flex min-h-11 items-center justify-center rounded-lg bg-green-600 px-3 py-3 text-center font-medium text-white transition-colors hover:bg-green-700"
+                >
+                  Заказать уборку
+                </AnchorLink>
+                <a
+                  href={WHATSAPP_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={closeMobileMenu}
+                  className="btn btn-touch flex min-h-11 items-center justify-center rounded-lg border border-green-600 bg-white px-3 py-3 text-center font-medium text-green-700 transition-colors hover:bg-green-50"
+                >
+                  WhatsApp
+                </a>
+              </div>
             </div>
           </div>
         </div>

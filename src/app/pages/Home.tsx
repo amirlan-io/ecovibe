@@ -12,6 +12,9 @@ export function Home() {
     <>
       <HeroSection />
 
+      <ServicesSection />
+      <BenefitsSection />
+
       <section
         id="calculator"
         className="scroll-mt-20 bg-gradient-to-br from-gray-50 to-green-50 section-mobile"
@@ -28,8 +31,6 @@ export function Home() {
         </div>
       </section>
 
-      <ServicesSection />
-      <BenefitsSection />
       <ProcessSection />
       <PricesSection />
       <ReviewsSection />

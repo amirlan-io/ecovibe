@@ -76,7 +76,7 @@ export function HeroSection() {
       </div>
 
       {/* Desktop */}
-      <div className="hero-desktop hidden min-h-[calc(100vh-4rem)] md:flex md:items-center">
+      <div className="hero-desktop hidden min-h-[620px] md:flex md:items-center">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-2 items-center gap-12 px-6 py-16 lg:gap-16 lg:px-8 lg:py-20">
           <HeroCopy className="max-w-xl" />
           <div className="flex items-end justify-center">
