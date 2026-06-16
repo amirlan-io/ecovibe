@@ -31,18 +31,20 @@ var s=cfg.styling,f=cfg.form_fields||[],h='<div style="max-width:'+s.formMaxWidt
 h+='<h2 style="color:'+s.titleColor+';font-size:'+s.titleFontSize+';font-weight:'+s.titleFontWeight+';margin:0 0 '+s.titleMarginBottom+' 0;text-align:'+s.titleTextAlign+';">'+cfg.form_title+'</h2>';
 h+='<form id="crm-f-'+u+'">';
 f.forEach(function(fld){
+var fieldId='crm-field-'+u+'-'+fld.name;
+var fieldLabel=fld.label.replace(/"/g,'&quot;');
 h+='<div style="margin-bottom:'+s.inputMarginBottom+';">';
-h+='<label style="display:block;color:'+s.labelColor+';font-size:'+s.labelFontSize+';font-weight:'+s.labelFontWeight+';margin-bottom:'+s.labelMarginBottom+';">'+fld.label+(fld.required?' <span style="color:'+s.errorColor+'">*</span>':'')+'</label>';
+h+='<label for="'+fieldId+'" style="display:block;color:'+s.labelColor+';font-size:'+s.labelFontSize+';font-weight:'+s.labelFontWeight+';margin-bottom:'+s.labelMarginBottom+';">'+fld.label+(fld.required?' <span style="color:'+s.errorColor+'">*</span>':'')+'</label>';
 var ist='width:100%;box-sizing:border-box;background:'+s.inputBackgroundColor+';border:1px solid '+s.inputBorderColor+';border-radius:'+s.inputBorderRadius+';padding:'+s.inputPadding+';font-size:'+s.inputFontSize+';color:'+s.inputTextColor+';font-family:inherit;outline:none;';
 var isPhone=(fld.type==='tel'||(fld.fieldType==='standard'&&fld.standardField==='phone'));
-if(fld.type==='textarea'){h+='<textarea name="'+fld.name+'" placeholder="'+(fld.placeholder||'')+'"'+(fld.required?' required':'')+' style="'+ist+'min-height:100px;resize:vertical;"></textarea>';}
-else if(fld.type==='select'&&fld.options){h+='<select name="'+fld.name+'"'+(fld.required?' required':'')+' style="'+ist+'">';h+='<option value="">'+(fld.placeholder||'Выберите...')+'</option>';fld.options.forEach(function(o){h+='<option value="'+o.value+'">'+o.label+'</option>';});h+='</select>';}
-else{h+='<input type="'+(fld.type||'text')+'" name="'+fld.name+'" placeholder="'+(fld.placeholder||'')+'"'+(fld.required?' required':'')+' style="'+ist+'"'+(isPhone?' data-phone-mask="true"':'')+'>';}
+if(fld.type==='textarea'){h+='<textarea id="'+fieldId+'" name="'+fld.name+'" aria-label="'+fieldLabel+'" placeholder="'+(fld.placeholder||'')+'"'+(fld.required?' required':'')+' style="'+ist+'min-height:100px;resize:vertical;"></textarea>';}
+else if(fld.type==='select'&&fld.options){h+='<select id="'+fieldId+'" name="'+fld.name+'" aria-label="'+fieldLabel+'"'+(fld.required?' required':'')+' style="'+ist+'">';h+='<option value="">'+(fld.placeholder||'Выберите...')+'</option>';fld.options.forEach(function(o){h+='<option value="'+o.value+'">'+o.label+'</option>';});h+='</select>';}
+else{h+='<input id="'+fieldId+'" type="'+(fld.type||'text')+'" name="'+fld.name+'" aria-label="'+fieldLabel+'" placeholder="'+(fld.placeholder||'')+'"'+(fld.required?' required':'')+' style="'+ist+'"'+(isPhone?' data-phone-mask="true"':'')+'>';}
 h+='</div>';
 });
-if(cfg.honeypot_field){h+='<input type="text" name="'+cfg.honeypot_field+'" style="display:none;" tabindex="-1" autocomplete="off">';}
+if(cfg.honeypot_field){h+='<input type="text" name="'+cfg.honeypot_field+'" aria-hidden="true" style="display:none;" tabindex="-1" autocomplete="off">';}
 h+='<div style="margin-top:'+s.inputMarginBottom+';margin-bottom:'+s.inputMarginBottom+';">';
-h+='<label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:'+s.labelFontSize+';color:'+s.labelColor+';line-height:1.4;">';
+h+='<label for="crm-consent-'+u+'" style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:'+s.labelFontSize+';color:'+s.labelColor+';line-height:1.4;">';
 h+='<input type="checkbox" id="crm-consent-'+u+'" required style="margin-top:3px;flex-shrink:0;width:16px;height:16px;cursor:pointer;">';
 h+='<span>Даю согласие на сбор и обработку персональных данных в соответствии с <a href="https://adilet.zan.kz/rus/docs/Z1300000094" target="_blank" rel="noopener noreferrer" style="color:'+s.buttonBackgroundColor+';text-decoration:underline;">законом</a> РК</span>';
 h+='</label>';

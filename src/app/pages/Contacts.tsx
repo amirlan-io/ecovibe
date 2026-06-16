@@ -131,6 +131,7 @@ export function Contacts() {
                   type="text"
                   id="name"
                   name="name"
+                  aria-label="Ваше имя"
                   required
                   value={formData.name}
                   onChange={handleChange}
@@ -147,6 +148,7 @@ export function Contacts() {
                   type="tel"
                   id="phone"
                   name="phone"
+                  aria-label="Телефон или WhatsApp"
                   required
                   value={formData.phone}
                   onChange={(e) => {
@@ -183,6 +185,7 @@ export function Contacts() {
                   type="date"
                   id="date"
                   name="date"
+                  aria-label="Удобная дата"
                   value={formData.date}
                   onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
@@ -196,6 +199,7 @@ export function Contacts() {
                 <textarea
                   id="comment"
                   name="comment"
+                  aria-label="Комментарий"
                   value={formData.comment}
                   onChange={handleChange}
                   rows={4}

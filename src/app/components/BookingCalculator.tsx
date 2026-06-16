@@ -281,9 +281,9 @@ export function BookingCalculator() {
             />
           </div>
           <div>
-          <label className="mb-3 block text-sm font-medium">
+          <p className="mb-3 block text-sm font-medium" id="apartment-area-heading">
             Площадь квартиры
-          </label>
+          </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 mb-4">
             {ROOM_PRESETS.map((preset) => (
               <button
@@ -302,16 +302,22 @@ export function BookingCalculator() {
             ))}
           </div>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
-            <span className="text-sm text-gray-600 shrink-0">
+            <label
+              htmlFor="apartment-area-slider"
+              className="text-sm text-gray-600 shrink-0"
+            >
               Точная площадь:
-            </span>
+            </label>
             <input
+              id="apartment-area-slider"
               type="range"
               min="20"
               max="200"
               step="5"
               value={state.area}
               onChange={(e) => setArea(parseInt(e.target.value))}
+              aria-labelledby="apartment-area-heading apartment-area-slider"
+              aria-label="Точная площадь квартиры"
               className="w-full min-w-0 flex-1 h-2 cursor-pointer accent-green-600"
             />
             <span className="font-medium shrink-0 text-green-600 sm:min-w-[58px] sm:text-right">
@@ -371,11 +377,15 @@ export function BookingCalculator() {
           {/* Extra options inputs */}
           {state.extras.windows && (
             <div className="mt-3 flex flex-wrap items-center gap-3 rounded-lg bg-green-50 p-3">
-              <label className="text-sm text-gray-700">Количество окон:</label>
+              <label htmlFor="window-count" className="text-sm text-gray-700">
+                Количество окон:
+              </label>
               <input
+                id="window-count"
                 type="number"
                 min="1"
                 max="30"
+                aria-label="Количество окон"
                 value={state.extraWindowCount}
                 onChange={(e) =>
                   setState((prev) => ({
@@ -440,6 +450,7 @@ export function BookingCalculator() {
                   type="text"
                   id="name"
                   name="name"
+                  aria-label="Ваше имя"
                   autoComplete="name"
                   required
                   disabled={isSubmitting}
@@ -460,6 +471,7 @@ export function BookingCalculator() {
                   type="tel"
                   id="phone"
                   name="phone"
+                  aria-label="Телефон"
                   autoComplete="tel"
                   inputMode="tel"
                   required
@@ -484,6 +496,7 @@ export function BookingCalculator() {
                   type="text"
                   id="address"
                   name="address"
+                  aria-label="Адрес"
                   autoComplete="street-address"
                   required
                   disabled={isSubmitting}
@@ -505,6 +518,7 @@ export function BookingCalculator() {
                     type="date"
                     id="date"
                     name="date"
+                    aria-label="Дата уборки"
                     required
                     disabled={isSubmitting}
                     min={new Date().toISOString().split("T")[0]}
@@ -523,6 +537,7 @@ export function BookingCalculator() {
                     type="time"
                     id="time"
                     name="time"
+                    aria-label="Время уборки"
                     required
                     disabled={isSubmitting}
                     value={state.time}
