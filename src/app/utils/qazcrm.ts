@@ -77,6 +77,10 @@ export interface QazCrmLeadPayload {
 
 export interface QazCrmLeadResponse {
   id?: number | string;
+  data?: {
+    id?: number | string;
+    [key: string]: unknown;
+  };
   message?: string;
   redirect_url?: string;
   [key: string]: unknown;
@@ -174,7 +178,7 @@ export async function submitLeadToQazCrm(
     return null;
   }
 
-  const leadId = leadData?.id;
+  const leadId = leadData.data?.id;
   const noteContent = buildOrderDetailsComment(payload);
 
   if (leadId && noteContent) {
