@@ -1,5 +1,3 @@
-import { getQazCrmAuthHeaders } from "./qazcrm-auth.js";
-
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -15,28 +13,36 @@ export default async function handler(req, res) {
 
   const leadId = req.body?.leadId;
   const content = req.body?.content;
+  const token = process.env.QAZCRM_API_TOKEN;
 
   if (!leadId || !content) {
     return res.status(400).json({ error: "leadId and content are required" });
   }
 
-  const authHeaders = getQazCrmAuthHeaders();
-  if (!authHeaders) {
+  if (!token) {
     console.error("QazCRM add_note: QAZCRM_API_TOKEN is not configured");
     return res.status(500).json({
       error: "CRM token is not configured on the server.",
     });
   }
 
+  const targetUrl = `https://crm.tennet.kz/api/v1/leads/${leadId}/add_note?token=${encodeURIComponent(token)}`;
+
   try {
-    const crmResponse = await fetch(
-      `https://crm.tennet.kz/api/v1/leads/${leadId}/add_note`,
-      {
-        method: "POST",
-        headers: authHeaders,
-        body: JSON.stringify({ content }),
+    const crmResponse = await fetch(targetUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${token}`,
+        "X-API-KEY": token,
+        "X-Authorization-Bearer": `Bearer ${token}`,
       },
-    );
+      body: JSON.stringify({
+        content,
+        text: content,
+        comment: content,
+      }),
+    });
 
     const text = await crmResponse.text();
     let payload = {};
