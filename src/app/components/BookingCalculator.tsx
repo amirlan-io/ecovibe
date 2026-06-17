@@ -165,16 +165,23 @@ export function BookingCalculator() {
       date: state.date,
       time: state.time,
     };
-    const crmTitle = `${formData.name} (${formData.cleaningType}, ${formData.area}м², ${state.rooms} комн., ${state.bathrooms} с/у, Адрес: ${formData.address}, Допы: ${extrasText}, Время: ${formData.date} в ${formData.time})`;
 
     setIsSubmitting(true);
 
     const sendToCrm = async () => {
       try {
         await submitLeadToQazCrm({
-          name: crmTitle,
+          name: formData.name,
           phone,
           price: totalPrice,
+          cleaningType: formData.cleaningType,
+          area: formData.area,
+          rooms: state.rooms,
+          bathrooms: state.bathrooms,
+          address: formData.address,
+          date: formData.date,
+          time: formData.time,
+          extras: extrasText,
         });
         return true;
       } catch (error) {

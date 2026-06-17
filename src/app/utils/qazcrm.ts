@@ -19,41 +19,51 @@ export const QAZCRM_CUSTOM_FIELDS = {
 } as const;
 
 function buildOrderDetailsComment(payload: QazCrmLeadPayload): string {
-  const lines: string[] = [];
+  const parts: string[] = [];
+  const cleaningType = payload.cleaningType ?? payload.cleaning_type;
 
-  if (payload.cleaning_type) {
-    lines.push(`Услуга: ${payload.cleaning_type}`);
+  if (cleaningType) {
+    parts.push(`Тип уборки: ${cleaningType}`);
   }
-  if (payload.area != null) {
-    lines.push(`Площадь: ${payload.area} м²`);
+  if (payload.area != null && payload.area !== "") {
+    parts.push(`Площадь: ${payload.area}м²`);
   }
-  if (payload.extras) {
-    lines.push(`Доп. услуги: ${payload.extras}`);
-  } else {
-    lines.push("Доп. услуги: —");
+  if (payload.rooms != null || payload.bathrooms != null) {
+    parts.push(`Комнат: ${payload.rooms ?? "—"}, Санузлов: ${payload.bathrooms ?? "—"}`);
   }
   if (payload.address) {
-    lines.push(`Адрес: ${payload.address}`);
+    parts.push(`Адрес: ${payload.address}`);
   }
-  if (payload.date_time) {
-    lines.push(`Дата и время: ${payload.date_time}`);
+  if (payload.date && payload.time) {
+    parts.push(`Время: ${payload.date} в ${payload.time}`);
+  } else if (payload.date_time) {
+    parts.push(`Время: ${payload.date_time}`);
+  }
+  if (payload.extras) {
+    parts.push(`Допы: ${payload.extras}`);
   }
   if (payload.price != null && !Number.isNaN(Number(payload.price))) {
-    lines.push(`Расчётная сумма: ${Number(payload.price).toLocaleString("ru-RU")} ₸`);
+    parts.push(`Расчётная сумма: ${Number(payload.price).toLocaleString("ru-RU")} ₸`);
   }
 
-  return lines.join("\n");
+  return parts.join("\n");
 }
 
 export interface QazCrmLeadPayload {
   name: string;
   phone: string;
-  /** Итоговая сумма сделки (число, без валюты) */
   price?: number;
-  cleaning_type?: string;
-  area?: number;
-  extras?: string;
+  cleaningType?: string;
+  area?: number | string;
+  rooms?: number | string;
+  bathrooms?: number | string;
   address?: string;
+  date?: string;
+  time?: string;
+  extras?: string;
+  /** @deprecated используйте cleaningType */
+  cleaning_type?: string;
+  /** @deprecated используйте date + time */
   date_time?: string;
 }
 
@@ -92,12 +102,18 @@ function toApiBody(payload: QazCrmLeadPayload) {
     }
   }
 
+  const cleaningType = payload.cleaningType ?? payload.cleaning_type;
+  const dateTime =
+    payload.date && payload.time
+      ? `${payload.date} ${payload.time}`.trim()
+      : payload.date_time;
+
   const customFields: [keyof typeof QAZCRM_CUSTOM_FIELDS, string | number | undefined][] = [
-    ["cleaning_type", payload.cleaning_type],
+    ["cleaning_type", cleaningType],
     ["area", payload.area],
     ["extras", payload.extras],
     ["address", payload.address],
-    ["date_time", payload.date_time],
+    ["date_time", dateTime],
   ];
 
   for (const [field, value] of customFields) {
