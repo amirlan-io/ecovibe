@@ -12,6 +12,9 @@ export interface BuildCrmPayloadInput {
   area: number;
   extras: string[];
   totalPrice: number;
+  address?: string;
+  date?: string;
+  time?: string;
 }
 
 export interface QazCrmLeadResponse {
@@ -49,6 +52,9 @@ export function buildCRMPayload(data: {
   area: number;
   extras: string[];
   totalPrice: number;
+  address?: string;
+  date?: string;
+  time?: string;
 }) {
   return {
     name: data.name,
@@ -57,6 +63,9 @@ export function buildCRMPayload(data: {
     serviceType: data.serviceType,
     area: data.area,
     extras: data.extras.join(", "),
+    address: data.address ?? "",
+    date: data.date ?? "",
+    time: data.time ?? "",
   };
 }
 

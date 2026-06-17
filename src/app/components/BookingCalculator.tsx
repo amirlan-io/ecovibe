@@ -177,6 +177,9 @@ export function BookingCalculator() {
           area: Number(formData.area),
           extras: selectedExtras,
           totalPrice,
+          address: formData.address,
+          date: formData.date,
+          time: formData.time,
         });
         await submitLeadToQazCrm(crmPayload);
         return true;
