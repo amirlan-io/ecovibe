@@ -1,4 +1,4 @@
-export const QAZCRM_FORM_ID = "84be7530-2d6a-4066-b548-06748a90aada";
+export const QAZCRM_FORM_ID = "69cbec2a-1fe8-4f9a-b037-1e4767023765";
 
 export const QAZCRM_FORM_URL = `https://crm.tennet.kz/api/public/forms/${QAZCRM_FORM_ID}/`;
 
@@ -59,10 +59,10 @@ export function buildCRMPayload(data: {
   return {
     name: data.name,
     phone: data.phone,
-    amount: data.totalPrice,
     serviceType: data.serviceType,
     area: data.area,
     extras: data.extras.join(", "),
+    totalPrice: data.totalPrice,
     address: data.address ?? "",
     date: data.date ?? "",
     time: data.time ?? "",

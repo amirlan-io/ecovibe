@@ -1,5 +1,5 @@
 const QAZCRM_FORM_URL =
-  "https://crm.tennet.kz/api/public/forms/84be7530-2d6a-4066-b548-06748a90aada/";
+  "https://crm.tennet.kz/api/public/forms/69cbec2a-1fe8-4f9a-b037-1e4767023765/";
 
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -12,29 +12,41 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { name, phone, amount, serviceType, area, extras, address, date, time } =
-      req.body || {};
-
-    // Build enriched name with all order details
-    const parts = [
+    const {
       name,
-      serviceType && area ? `${serviceType} ${area}м²` : null,
-      amount ? `${Number(amount).toLocaleString("ru-RU")}₸` : null,
-      address || null,
-      date && time ? `${date} ${time}` : date || null,
-      extras || null,
-    ].filter(Boolean);
+      phone,
+      serviceType,
+      area,
+      extras,
+      address,
+      date,
+      time,
+      totalPrice,
+    } = req.body || {};
 
-    const enrichedName = parts.join(" | ");
-
-    // Result: "Амирлан | Генеральная 60м² | 39 000₸ | ул.Кенесары 1 | 2026-06-20 10:00"
+    const dateTime = [date, time].filter(Boolean).join(" ");
+    const description = [
+      serviceType && `Тип: ${serviceType}`,
+      area && `Площадь: ${area}м²`,
+      totalPrice && `Сумма: ${Number(totalPrice).toLocaleString("ru-RU")}₸`,
+      extras && `Доп: ${extras}`,
+    ]
+      .filter(Boolean)
+      .join(", ");
 
     const crmResponse = await fetch(QAZCRM_FORM_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        standard_name: enrichedName,
+        standard_name: name,
         standard_phone: phone,
+        custom_1782: description,
+        custom_2255: address || "",
+        custom_2256: dateTime || "",
+        custom_2257: extras || "",
+        custom_2254: Number(area) || 0,
+        custom_2253: serviceType || "",
+        website_url: "",
       }),
     });
 
