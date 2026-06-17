@@ -1,13 +1,8 @@
 import { lazy, Suspense } from "react";
 import { HeroSection } from "../components/landing/HeroSection";
 import { ServicesSection } from "../components/landing/ServicesSection";
+import { BenefitsSection } from "../components/landing/BenefitsSection";
 
-const BenefitsSection = lazy(() =>
-  import("../components/landing/BenefitsSection").then((m) => ({ default: m.BenefitsSection })),
-);
-const BookingCalculator = lazy(() =>
-  import("../components/BookingCalculator").then((m) => ({ default: m.BookingCalculator })),
-);
 const ProcessSection = lazy(() =>
   import("../components/landing/ProcessSection").then((m) => ({ default: m.ProcessSection })),
 );
@@ -18,15 +13,16 @@ const ReviewsSection = lazy(() =>
   import("../components/landing/ReviewsSection").then((m) => ({ default: m.ReviewsSection })),
 );
 const FAQ = lazy(() => import("../components/FAQ").then((m) => ({ default: m.FAQ })));
+const BookingCalculator = lazy(() =>
+  import("../components/BookingCalculator").then((m) => ({ default: m.BookingCalculator })),
+);
 
 export function Home() {
   return (
     <>
       <HeroSection />
       <ServicesSection />
-      <Suspense fallback={<div className="h-32" />}>
-        <BenefitsSection />
-      </Suspense>
+      <BenefitsSection />
 
       <section
         id="calculator"
