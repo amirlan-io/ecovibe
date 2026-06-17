@@ -21,8 +21,8 @@ export default async function handler(req, res) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name,
-        phone,
+        standard_name: name,
+        standard_phone: phone,
         amount,
       }),
     });
