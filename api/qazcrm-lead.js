@@ -40,6 +40,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         standard_name: name,
         standard_phone: phone,
+        amount: Number(totalPrice) || 0,
         custom_1782: description,
         custom_2255: address || "",
         custom_2256: dateTime || "",
