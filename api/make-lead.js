@@ -9,9 +9,7 @@ function formatClientPhone(phone) {
 
 function isValidBooking(body) {
   const clientPhone = formatClientPhone(body.client_phone);
-  const address = String(body.address ?? "").trim();
   const cleaningType = String(body.cleaning_type ?? "").trim();
-  const dateTime = String(body.date_time ?? "").trim();
   const area = Number(body.area);
   const calculatedPrice = Number(body.calculated_price);
   const phoneDigits = clientPhone.replace(/\D/g, "");
@@ -20,15 +18,11 @@ function isValidBooking(body) {
     : phoneDigits;
 
   return (
-    address.length >= 3 &&
     cleaningType.length > 0 &&
-    dateTime.length > 0 &&
     Number.isFinite(area) &&
     area > 0 &&
     Number.isFinite(calculatedPrice) &&
     calculatedPrice > 0 &&
-    Number(body.current_step) === 7 &&
-    String(body.status ?? "") === "confirmed" &&
     phoneDigits.length >= 11 &&
     !/^7+$/.test(localDigits)
   );
@@ -57,14 +51,11 @@ export default async function handler(req, res) {
 
   const payload = {
     client_phone: formatClientPhone(body.client_phone),
-    current_step: 7,
     cleaning_type: String(body.cleaning_type).trim(),
     area: Number(body.area),
-    address: String(body.address).trim(),
-    date_time: String(body.date_time).trim(),
-    extras: String(body.extras ?? "").trim(),
     calculated_price: Number(body.calculated_price),
-    status: "confirmed",
+    extras: String(body.extras ?? "").trim(),
+    status: String(body.status ?? "new"),
   };
 
   try {
