@@ -6,9 +6,17 @@ export const QAZCRM_FORM_URL = `https://crm.tennet.kz/api/public/forms/${QAZCRM_
 export const QAZCRM_SUBMIT_URL = "/api/qazcrm-lead";
 
 /**
+ * Документированный эндпоинт QazCRM для заметок к лиду.
+ * В браузере вызывается через QAZCRM_ADD_NOTE_SUBMIT_URL (serverless-прокси).
+ */
+export const getQazCrmAddNoteUrl = (leadId: string | number) =>
+  `https://crm.tennet.kz/api/v1/leads/${leadId}/add_note`;
+
+/** Прокси → POST /api/v1/leads/{lead_id}/add_note */
+export const QAZCRM_ADD_NOTE_SUBMIT_URL = "/api/qazcrm-lead-note";
+
+/**
  * Ключи кастомных полей — должны совпадать с `name` из GET /api/public/forms/{id}/.
- * Сейчас в форме только standard_name и standard_phone; остальные ключи CRM не сохраняет,
- * пока поля не добавят в конструкторе лид-формы QazCRM.
  */
 export const QAZCRM_CUSTOM_FIELDS = {
   cleaning_type: "cleaning_type",
@@ -65,6 +73,13 @@ export interface QazCrmLeadPayload {
   cleaning_type?: string;
   /** @deprecated используйте date + time */
   date_time?: string;
+}
+
+export interface QazCrmLeadResponse {
+  id?: number | string;
+  message?: string;
+  redirect_url?: string;
+  [key: string]: unknown;
 }
 
 export async function parseQazCrmError(response: Response): Promise<string> {
@@ -127,18 +142,12 @@ function toApiBody(payload: QazCrmLeadPayload) {
     body.address = payload.address.trim();
   }
 
-  const orderDetails = buildOrderDetailsComment(payload);
-  if (orderDetails) {
-    body.comments = orderDetails;
-    body.comment = orderDetails;
-    body.standard_comments = orderDetails;
-    body.description = orderDetails;
-  }
-
   return body;
 }
 
-export async function submitLeadToQazCrm(payload: QazCrmLeadPayload) {
+export async function submitLeadToQazCrm(
+  payload: QazCrmLeadPayload,
+): Promise<QazCrmLeadResponse | null> {
   let response: Response;
 
   try {
@@ -157,9 +166,39 @@ export async function submitLeadToQazCrm(payload: QazCrmLeadPayload) {
     throw new Error(await parseQazCrmError(response));
   }
 
+  let leadData: QazCrmLeadResponse | null = null;
+
   try {
-    return await response.json();
+    leadData = (await response.json()) as QazCrmLeadResponse;
   } catch {
     return null;
   }
+
+  const leadId = leadData?.id;
+  const noteContent = buildOrderDetailsComment(payload);
+
+  if (leadId && noteContent) {
+    try {
+      const noteResponse = await fetch(QAZCRM_ADD_NOTE_SUBMIT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          leadId,
+          content: noteContent,
+        }),
+      });
+
+      if (!noteResponse.ok) {
+        console.error(
+          "QazCRM add_note failed:",
+          noteResponse.status,
+          await noteResponse.text(),
+        );
+      }
+    } catch (error) {
+      console.error("QazCRM add_note error:", error);
+    }
+  }
+
+  return leadData;
 }
