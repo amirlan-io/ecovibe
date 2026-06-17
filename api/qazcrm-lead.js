@@ -15,10 +15,16 @@ export default async function handler(req, res) {
   }
 
   try {
+    const { name, phone, amount } = req.body || {};
+
     const crmResponse = await fetch(QAZCRM_FORM_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(req.body),
+      body: JSON.stringify({
+        name,
+        phone,
+        amount,
+      }),
     });
 
     const text = await crmResponse.text();

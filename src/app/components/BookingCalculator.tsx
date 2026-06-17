@@ -11,7 +11,7 @@ import {
   formatClientPhoneForSheets,
   submitBookingToMakeBackup,
 } from "../utils/makeWebhook";
-import { submitLeadToQazCrm } from "../utils/qazcrm";
+import { buildCRMPayload, submitLeadToQazCrm } from "../utils/qazcrm";
 import { Checkbox } from "./ui/checkbox";
 import { cn } from "./ui/utils";
 import { PrivacyPolicyLink } from "./PrivacyPolicyLink";
@@ -170,19 +170,15 @@ export function BookingCalculator() {
 
     const sendToCrm = async () => {
       try {
-        await submitLeadToQazCrm({
+        const crmPayload = buildCRMPayload({
           name: formData.name,
           phone,
-          price: totalPrice,
-          cleaningType: formData.cleaningType,
-          area: formData.area,
-          rooms: state.rooms,
-          bathrooms: state.bathrooms,
-          address: formData.address,
-          date: formData.date,
-          time: formData.time,
-          extras: extrasText,
+          serviceType: formData.cleaningType,
+          area: Number(formData.area),
+          extras: selectedExtras,
+          totalPrice,
         });
+        await submitLeadToQazCrm(crmPayload);
         return true;
       } catch (error) {
         console.error("QazCRM submit failed:", error);

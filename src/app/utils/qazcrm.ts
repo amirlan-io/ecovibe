@@ -5,64 +5,19 @@ export const QAZCRM_FORM_URL = `https://crm.tennet.kz/api/public/forms/${QAZCRM_
 /** Прокси на том же домене — обход CORS в браузере */
 export const QAZCRM_SUBMIT_URL = "/api/qazcrm-lead";
 
-/**
- * Ключи кастомных полей — должны совпадать с `name` из GET /api/public/forms/{id}/.
- */
-export const QAZCRM_CUSTOM_FIELDS = {
-  cleaning_type: "cleaning_type",
-  area: "area",
-  extras: "extras",
-  address: "address",
-  date_time: "date_time",
-} as const;
-
-function buildOrderDetailsComment(payload: QazCrmLeadPayload): string {
-  const parts: string[] = [];
-  const cleaningType = payload.cleaningType ?? payload.cleaning_type;
-
-  if (cleaningType) {
-    parts.push(`Тип уборки: ${cleaningType}`);
-  }
-  if (payload.area != null && payload.area !== "") {
-    parts.push(`Площадь: ${payload.area}м²`);
-  }
-  if (payload.rooms != null || payload.bathrooms != null) {
-    parts.push(`Комнат: ${payload.rooms ?? "—"}, Санузлов: ${payload.bathrooms ?? "—"}`);
-  }
-  if (payload.address) {
-    parts.push(`Адрес: ${payload.address}`);
-  }
-  if (payload.date && payload.time) {
-    parts.push(`Время: ${payload.date} в ${payload.time}`);
-  } else if (payload.date_time) {
-    parts.push(`Время: ${payload.date_time}`);
-  }
-  if (payload.extras) {
-    parts.push(`Допы: ${payload.extras}`);
-  }
-  if (payload.price != null && !Number.isNaN(Number(payload.price))) {
-    parts.push(`Расчётная сумма: ${Number(payload.price).toLocaleString("ru-RU")} ₸`);
-  }
-
-  return parts.join("\n");
+export interface BuildCrmPayloadInput {
+  name: string;
+  phone: string;
+  serviceType: string;
+  area: number;
+  extras: string[];
+  totalPrice: number;
 }
 
 export interface QazCrmLeadPayload {
   name: string;
   phone: string;
-  price?: number;
-  cleaningType?: string;
-  area?: number | string;
-  rooms?: number | string;
-  bathrooms?: number | string;
-  address?: string;
-  date?: string;
-  time?: string;
-  extras?: string;
-  /** @deprecated используйте cleaningType */
-  cleaning_type?: string;
-  /** @deprecated используйте date + time */
-  date_time?: string;
+  amount?: number;
 }
 
 export interface QazCrmLeadResponse {
@@ -101,49 +56,28 @@ function toApiBody(payload: QazCrmLeadPayload) {
     standard_phone: payload.phone,
   };
 
-  if (payload.price != null) {
-    const price = Number(payload.price);
-    if (!Number.isNaN(price) && price > 0) {
-      body.price = price;
-      body.amount = price;
-      body.standard_budget = price;
-      body.standard_amount = price;
+  if (payload.amount != null) {
+    const amount = Number(payload.amount);
+    if (!Number.isNaN(amount) && amount > 0) {
+      body.amount = amount;
+      body.price = amount;
+      body.standard_amount = amount;
+      body.standard_budget = amount;
     }
   }
 
-  const cleaningType = payload.cleaningType ?? payload.cleaning_type;
-  const dateTime =
-    payload.date && payload.time
-      ? `${payload.date} ${payload.time}`.trim()
-      : payload.date_time;
-
-  const customFields: [keyof typeof QAZCRM_CUSTOM_FIELDS, string | number | undefined][] = [
-    ["cleaning_type", cleaningType],
-    ["area", payload.area],
-    ["extras", payload.extras],
-    ["address", payload.address],
-    ["date_time", dateTime],
-  ];
-
-  for (const [field, value] of customFields) {
-    if (value == null || value === "") continue;
-    const apiKey = QAZCRM_CUSTOM_FIELDS[field];
-    body[apiKey] = typeof value === "number" ? value : String(value);
-  }
-
-  if (payload.address?.trim()) {
-    body.standard_address = payload.address.trim();
-    body.address = payload.address.trim();
-  }
-
-  const orderDetails = buildOrderDetailsComment(payload);
-  if (orderDetails) {
-    body.description = orderDetails;
-    body.comment = orderDetails;
-    body.comments = orderDetails;
-  }
-
   return body;
+}
+
+export function buildCRMPayload(data: BuildCrmPayloadInput): QazCrmLeadPayload {
+  const extrasText = data.extras.length > 0 ? `, доп: ${data.extras.join(" + ")}` : "";
+  const enrichedName = `${data.name} | ${data.serviceType} ${data.area}м² | ${data.totalPrice}₸${extrasText}`;
+
+  return {
+    name: enrichedName,
+    phone: data.phone,
+    amount: data.totalPrice,
+  };
 }
 
 export async function submitLeadToQazCrm(
