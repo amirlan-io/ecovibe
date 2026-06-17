@@ -6,16 +6,6 @@ export const QAZCRM_FORM_URL = `https://crm.tennet.kz/api/public/forms/${QAZCRM_
 export const QAZCRM_SUBMIT_URL = "/api/qazcrm-lead";
 
 /**
- * Документированный эндпоинт QazCRM для заметок к лиду.
- * В браузере вызывается через QAZCRM_ADD_NOTE_SUBMIT_URL (serverless-прокси).
- */
-export const getQazCrmAddNoteUrl = (leadId: string | number) =>
-  `https://crm.tennet.kz/api/v1/leads/${leadId}/add_note`;
-
-/** Прокси → POST /api/v1/leads/{lead_id}/add_note */
-export const QAZCRM_ADD_NOTE_SUBMIT_URL = "/api/qazcrm-lead-note";
-
-/**
  * Ключи кастомных полей — должны совпадать с `name` из GET /api/public/forms/{id}/.
  */
 export const QAZCRM_CUSTOM_FIELDS = {
@@ -146,6 +136,13 @@ function toApiBody(payload: QazCrmLeadPayload) {
     body.address = payload.address.trim();
   }
 
+  const orderDetails = buildOrderDetailsComment(payload);
+  if (orderDetails) {
+    body.description = orderDetails;
+    body.comment = orderDetails;
+    body.comments = orderDetails;
+  }
+
   return body;
 }
 
@@ -170,39 +167,9 @@ export async function submitLeadToQazCrm(
     throw new Error(await parseQazCrmError(response));
   }
 
-  let leadData: QazCrmLeadResponse | null = null;
-
   try {
-    leadData = (await response.json()) as QazCrmLeadResponse;
+    return (await response.json()) as QazCrmLeadResponse;
   } catch {
     return null;
   }
-
-  const leadId = leadData.data?.id;
-  const noteContent = buildOrderDetailsComment(payload);
-
-  if (leadId && noteContent) {
-    try {
-      const noteResponse = await fetch(QAZCRM_ADD_NOTE_SUBMIT_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          leadId,
-          content: noteContent,
-        }),
-      });
-
-      if (!noteResponse.ok) {
-        console.error(
-          "QazCRM add_note failed:",
-          noteResponse.status,
-          await noteResponse.text(),
-        );
-      }
-    } catch (error) {
-      console.error("QazCRM add_note error:", error);
-    }
-  }
-
-  return leadData;
 }
