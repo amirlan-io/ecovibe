@@ -15,7 +15,15 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { name, phone, amount } = req.body || {};
+    const { name, phone, amount, serviceType, area, extras } = req.body || {};
+
+    const descriptionParts = [
+      serviceType && `Тип: ${serviceType}`,
+      area && `Площадь: ${area}м²`,
+      extras && `Доп: ${extras}`,
+    ].filter(Boolean);
+
+    const description = descriptionParts.join(", ");
 
     const crmResponse = await fetch(QAZCRM_FORM_URL, {
       method: "POST",
@@ -23,7 +31,8 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         standard_name: name,
         standard_phone: phone,
-        amount,
+        amount: Number(amount) || 0,
+        description,
       }),
     });
 

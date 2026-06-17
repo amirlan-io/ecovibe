@@ -14,12 +14,6 @@ export interface BuildCrmPayloadInput {
   totalPrice: number;
 }
 
-export interface QazCrmLeadPayload {
-  name: string;
-  phone: string;
-  amount?: number;
-}
-
 export interface QazCrmLeadResponse {
   id?: number | string;
   data?: {
@@ -48,48 +42,34 @@ export async function parseQazCrmError(response: Response): Promise<string> {
   return "Не удалось отправить заявку. Попробуйте ещё раз или свяжитесь с нами по телефону.";
 }
 
-function toApiBody(payload: QazCrmLeadPayload) {
-  const body: Record<string, string | number> = {
-    name: payload.name,
-    phone: payload.phone,
-    standard_name: payload.name,
-    standard_phone: payload.phone,
-  };
-
-  if (payload.amount != null) {
-    const amount = Number(payload.amount);
-    if (!Number.isNaN(amount) && amount > 0) {
-      body.amount = amount;
-      body.price = amount;
-      body.standard_amount = amount;
-      body.standard_budget = amount;
-    }
-  }
-
-  return body;
-}
-
-export function buildCRMPayload(data: BuildCrmPayloadInput): QazCrmLeadPayload {
-  const extrasText = data.extras.length > 0 ? `, доп: ${data.extras.join(" + ")}` : "";
-  const enrichedName = `${data.name} | ${data.serviceType} ${data.area}м² | ${data.totalPrice}₸${extrasText}`;
-
+export function buildCRMPayload(data: {
+  name: string;
+  phone: string;
+  serviceType: string;
+  area: number;
+  extras: string[];
+  totalPrice: number;
+}) {
   return {
-    name: enrichedName,
+    name: data.name,
     phone: data.phone,
     amount: data.totalPrice,
+    serviceType: data.serviceType,
+    area: data.area,
+    extras: data.extras.join(", "),
   };
 }
 
 export async function submitLeadToQazCrm(
-  payload: QazCrmLeadPayload,
-): Promise<QazCrmLeadResponse | null> {
+  payload: ReturnType<typeof buildCRMPayload>,
+): Promise<QazCrmLeadResponse> {
   let response: Response;
 
   try {
     response = await fetch(QAZCRM_SUBMIT_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(toApiBody(payload)),
+      body: JSON.stringify(payload),
     });
   } catch {
     throw new Error(
@@ -101,9 +81,5 @@ export async function submitLeadToQazCrm(
     throw new Error(await parseQazCrmError(response));
   }
 
-  try {
-    return (await response.json()) as QazCrmLeadResponse;
-  } catch {
-    return null;
-  }
+  return response.json();
 }
