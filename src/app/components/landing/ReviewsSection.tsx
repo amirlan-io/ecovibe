@@ -144,6 +144,29 @@ export function ReviewsSection() {
             </button>
           </div>
         </div>
+
+        <div className="mt-10">
+          <h3 className="text-center text-lg font-semibold text-gray-800 mb-6">
+            Реальные отзывы клиентов из WhatsApp
+          </h3>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {[
+              "/images/reviews/review-1.png",
+              "/images/reviews/review-2.png",
+              "/images/reviews/review-3.png",
+              "/images/reviews/review-4.png",
+            ].map((src, i) => (
+              <div key={i} className="overflow-hidden rounded-2xl shadow-md">
+                <img
+                  src={src}
+                  alt={`Отзыв клиента EcoVibe ${i + 1}`}
+                  className="w-full h-auto object-cover"
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
