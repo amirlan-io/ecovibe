@@ -47,7 +47,7 @@ export function BeforeAfterSlider({
   return (
     <div
       ref={containerRef}
-      className="relative aspect-[16/10] w-full max-h-[200px] overflow-hidden rounded-xl select-none shadow-lg sm:max-h-[240px] md:max-h-[280px] lg:max-h-[300px]"
+      className="relative aspect-[16/10] w-full max-h-[280px] overflow-hidden rounded-xl select-none shadow-lg sm:max-h-[320px] md:max-h-[380px] lg:max-h-[420px]"
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
@@ -57,7 +57,7 @@ export function BeforeAfterSlider({
       <img
         src={afterSrc}
         alt={afterLabel}
-        className="absolute inset-0 h-full w-full object-cover"
+        className="absolute inset-0 h-full w-full object-cover object-center"
         loading="lazy"
         draggable={false}
       />
@@ -70,7 +70,7 @@ export function BeforeAfterSlider({
         <img
           src={beforeSrc}
           alt={beforeLabel}
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover object-center"
           loading="lazy"
           draggable={false}
         />
