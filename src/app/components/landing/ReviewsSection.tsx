@@ -67,7 +67,12 @@ export function ReviewsSection() {
         </p>
 
         <div className="mx-auto mt-8 flex w-full max-w-xs justify-center sm:max-w-sm md:mt-10 md:max-w-md lg:max-w-lg">
-          <BeforeAfterSlider />
+          <BeforeAfterSlider
+            beforeSrc="/images/before-room.jpg"
+            afterSrc="/images/after-room.jpg"
+            beforeLabel="До уборки"
+            afterLabel="После уборки"
+          />
         </div>
 
         <div className="relative mt-14">
