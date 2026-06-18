@@ -8,7 +8,7 @@ const WHATSAPP_REVIEWS = [
 export function ReviewsSection() {
   return (
     <section id="reviews" className="section-mobile scroll-mt-20 bg-gradient-to-br from-green-50 to-emerald-50">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <h2 className="landing-h2 mb-3 text-center font-bold">
           Отзывы наших клиентов
         </h2>
@@ -16,13 +16,16 @@ export function ReviewsSection() {
           Реальные отзывы из WhatsApp от клиентов в Астане
         </p>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">
           {WHATSAPP_REVIEWS.map((src, i) => (
-            <div key={src} className="overflow-hidden rounded-2xl shadow-md">
+            <div 
+              key={src} 
+              className="overflow-hidden rounded-xl shadow-md"
+            >
               <img
                 src={src}
                 alt={`Отзыв клиента EcoVibe ${i + 1}`}
-                className="w-full h-auto max-h-[500px] object-contain bg-white"
+                className="w-full h-auto object-contain"
                 loading="lazy"
               />
             </div>
