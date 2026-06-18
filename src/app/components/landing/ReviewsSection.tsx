@@ -1,5 +1,5 @@
 import useEmblaCarousel from "embla-carousel-react";
-import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { BeforeAfterSlider } from "./BeforeAfterSlider";
 
@@ -8,6 +8,7 @@ const REVIEWS = [
     name: "Асель К.",
     source: "WhatsApp",
     time: "14:32",
+    rating: 5,
     text: "Отличная команда! Квартира сияет. Особенно приятно, что используют безопасные средства 🌿",
     service: "Генеральная уборка",
   },
@@ -21,6 +22,7 @@ const REVIEWS = [
   {
     name: "Гульнара С.",
     source: "Instagram",
+    rating: 5,
     text: "Очень довольна социальной миссией компании. Качество работы на высоте! Рекомендую 💚",
     service: "Генеральная уборка",
   },
@@ -28,6 +30,7 @@ const REVIEWS = [
     name: "Ерлан Т.",
     source: "WhatsApp",
     time: "09:15",
+    rating: 5,
     text: "Заказали уборку после ремонта — убрали всю пыль, окна блестят. Спасибо EcoVibe!",
     service: "После ремонта",
   },
@@ -94,6 +97,13 @@ export function ReviewsSection() {
                           <p className="text-xs text-gray-600">{review.time}</p>
                         </div>
                       </div>
+                      <div className="mb-2 flex gap-0.5">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <span key={star} className="text-sm text-yellow-400">
+                            ★
+                          </span>
+                        ))}
+                      </div>
                       <div className="rounded-lg rounded-tl-none bg-white px-3 py-2 text-sm text-gray-800 shadow-sm">
                         {review.text}
                       </div>
@@ -107,13 +117,13 @@ export function ReviewsSection() {
                           {review.source}
                         </span>
                       </div>
-                      {review.rating && (
-                        <div className="mb-3 flex gap-0.5">
-                          {Array.from({ length: review.rating }).map((_, i) => (
-                            <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                          ))}
-                        </div>
-                      )}
+                      <div className="mb-2 flex gap-0.5">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <span key={star} className="text-sm text-yellow-400">
+                            ★
+                          </span>
+                        ))}
+                      </div>
                       <p className="text-sm leading-relaxed text-gray-700">{review.text}</p>
                       <p className="mt-3 text-xs text-gray-500">{review.service}</p>
                     </div>
