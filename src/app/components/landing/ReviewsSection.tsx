@@ -22,7 +22,7 @@ export function ReviewsSection() {
               <img
                 src={src}
                 alt={`Отзыв клиента EcoVibe ${i + 1}`}
-                className="w-full h-[280px] object-cover object-top"
+                className="w-full h-auto max-h-[500px] object-contain bg-white"
                 loading="lazy"
               />
             </div>
