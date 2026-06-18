@@ -12,6 +12,9 @@ const PricesSection = lazy(() =>
 const ReviewsSection = lazy(() =>
   import("../components/landing/ReviewsSection").then((m) => ({ default: m.ReviewsSection })),
 );
+const BeforeAfterSection = lazy(() =>
+  import("../components/landing/BeforeAfterSection").then((m) => ({ default: m.BeforeAfterSection })),
+);
 const FAQ = lazy(() => import("../components/FAQ").then((m) => ({ default: m.FAQ })));
 const BookingCalculator = lazy(() =>
   import("../components/BookingCalculator").then((m) => ({ default: m.BookingCalculator })),
@@ -45,6 +48,7 @@ export function Home() {
       <Suspense fallback={<div className="h-32" />}>
         <ProcessSection />
         <PricesSection />
+        <BeforeAfterSection />
         <ReviewsSection />
         <FAQ />
       </Suspense>
