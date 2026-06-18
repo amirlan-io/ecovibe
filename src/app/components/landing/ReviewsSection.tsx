@@ -16,13 +16,13 @@ export function ReviewsSection() {
           Реальные отзывы из WhatsApp от клиентов в Астане
         </p>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
           {WHATSAPP_REVIEWS.map((src, i) => (
             <div key={src} className="overflow-hidden rounded-2xl shadow-md">
               <img
                 src={src}
                 alt={`Отзыв клиента EcoVibe ${i + 1}`}
-                className="h-auto w-full object-cover"
+                className="h-[300px] w-full object-cover object-top"
                 loading="lazy"
               />
             </div>
