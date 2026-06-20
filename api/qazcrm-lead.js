@@ -1,5 +1,13 @@
+import { checkRateLimit, getClientIp } from "./lib/rateLimit.js";
+
 const QAZCRM_FORM_URL =
   "https://crm.tennet.kz/api/public/forms/69cbec2a-1fe8-4f9a-b037-1e4767023765/";
+
+function isValidPhone(phone) {
+  if (typeof phone !== "string") return false;
+  const digits = phone.replace(/[\s\-()]/g, "");
+  return /^\+?[0-9]{10,15}$/.test(digits);
+}
 
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -11,17 +19,38 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
+  const ip = getClientIp(req);
+  if (!checkRateLimit(ip)) {
+    return res.status(429).json({ error: "Слишком много запросов" });
+  }
+
+  const { name, phone, totalPrice } = req.body || {};
+
+  if (!name || typeof name !== "string" || name.length > 100) {
+    return res.status(400).json({ error: "Неверное имя" });
+  }
+
+  if (!phone || !isValidPhone(phone)) {
+    return res.status(400).json({ error: "Неверный телефон" });
+  }
+
+  if (
+    totalPrice == null ||
+    typeof totalPrice !== "number" ||
+    totalPrice < 0 ||
+    totalPrice > 10000000
+  ) {
+    return res.status(400).json({ error: "Неверная сумма" });
+  }
+
   try {
     const {
-      name,
-      phone,
       serviceType,
       area,
       extras,
       address,
       date,
       time,
-      totalPrice,
     } = req.body || {};
 
     const dateTime = [date, time].filter(Boolean).join(" ");
@@ -38,7 +67,7 @@ export default async function handler(req, res) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        standard_name: name,
+        standard_name: name.trim(),
         standard_phone: phone,
         amount: Number(totalPrice) || 0,
         custom_1782: description,

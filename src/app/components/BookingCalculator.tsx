@@ -33,6 +33,7 @@ interface BookingState {
   address: string;
   date: string;
   time: string;
+  honeypot: string;
 }
 
 const WINDOW_PRICE = 4000;
@@ -93,6 +94,7 @@ export function BookingCalculator() {
     address: "",
     date: "",
     time: "",
+    honeypot: "",
   });
 
   const selectService = (service: ServiceType) => {
@@ -138,6 +140,10 @@ export function BookingCalculator() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isSubmitting) return;
+
+    if (state.honeypot) {
+      return;
+    }
 
     const address = state.address.trim();
     const phoneRaw = state.phone.trim();
@@ -249,6 +255,18 @@ export function BookingCalculator() {
   return (
     <div className="overflow-hidden rounded-2xl bg-white shadow-xl">
       <form onSubmit={handleSubmit} className="grid gap-0 md:grid-cols-2">
+        <input
+          type="text"
+          name="website"
+          value={state.honeypot}
+          onChange={(e) =>
+            setState((prev) => ({ ...prev, honeypot: e.target.value }))
+          }
+          style={{ display: "none" }}
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden
+        />
         {/* Left Column - Calculator */}
         <div className="p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6 border-b md:border-b-0 md:border-r border-gray-200">
         {/* Step 1: Service Selection */}
