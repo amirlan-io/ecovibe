@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 
 const WHATSAPP_REVIEWS = [
-  "/images/reviews/review-1.png",
-  "/images/reviews/review-2.png",
-  "/images/reviews/review-3.png",
-  "/images/reviews/review-4.png",
+  "/images/reviews/review-1.webp",
+  "/images/reviews/review-2.webp",
+  "/images/reviews/review-3.webp",
+  "/images/reviews/review-4.webp",
 ];
 
 export function ReviewsSection() {
