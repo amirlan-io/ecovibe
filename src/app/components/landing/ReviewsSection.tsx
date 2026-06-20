@@ -67,6 +67,8 @@ export function ReviewsSection() {
                 <img
                   src={src}
                   alt={`Отзыв клиента EcoVibe ${i + 1}`}
+                  width={400}
+                  height={600}
                   className="h-auto w-full rounded-xl object-contain shadow-md"
                   loading="lazy"
                 />
@@ -97,6 +99,8 @@ export function ReviewsSection() {
               <img
                 src={src}
                 alt={`Отзыв клиента EcoVibe ${i + 1}`}
+                width={400}
+                height={600}
                 className="h-auto w-full rounded-xl object-contain shadow-md"
                 loading="lazy"
               />
