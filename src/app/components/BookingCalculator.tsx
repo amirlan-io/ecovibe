@@ -1,6 +1,5 @@
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, CheckCircle2, Loader2, Send } from "lucide-react";
 import { useState } from "react";
-import { CheckCircle2, Loader2, Send } from "lucide-react";
 import { toast } from "sonner";
 import {
   formatPhoneNumber,
