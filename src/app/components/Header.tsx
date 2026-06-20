@@ -73,7 +73,7 @@ export function Header() {
               </span>
               <AnchorLink
                 sectionId={SECTIONS.calculator}
-                className="btn inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-lg bg-green-600 px-4 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:bg-green-700"
+                className="btn inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-lg bg-green-700 px-4 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:bg-green-700"
               >
                 Заказать
               </AnchorLink>
@@ -132,7 +132,7 @@ export function Header() {
                 <AnchorLink
                   sectionId={SECTIONS.calculator}
                   onClick={closeMobileMenu}
-                  className="btn btn-touch flex min-h-11 items-center justify-center rounded-lg bg-green-600 px-3 py-3 text-center font-medium text-white transition-colors hover:bg-green-700"
+                  className="btn btn-touch flex min-h-11 items-center justify-center rounded-lg bg-green-700 px-3 py-3 text-center font-medium text-white transition-colors hover:bg-green-700"
                 >
                   Заказать уборку
                 </AnchorLink>

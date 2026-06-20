@@ -97,7 +97,7 @@ export function ServicesSection() {
               className={cn(
                 "btn-touch rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300",
                 active === tab.id
-                  ? "bg-green-600 text-white shadow-md"
+                  ? "bg-green-700 text-white shadow-md"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200",
               )}
             >

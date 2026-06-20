@@ -23,7 +23,7 @@ export function BottomNav() {
         <button
           type="button"
           onClick={handleHome}
-          className="flex min-h-12 flex-col items-center justify-center gap-1 text-green-600 transition-colors"
+          className="flex min-h-12 flex-col items-center justify-center gap-1 text-green-800 transition-colors"
         >
           <Home className="h-5 w-5" />
           <span className="text-xs">Главная</span>
@@ -41,7 +41,7 @@ export function BottomNav() {
         <a
           href={PHONE_TEL}
           aria-label="Позвонить"
-          className="flex min-h-12 min-w-[44px] flex-col items-center justify-center gap-1 font-medium text-green-600 transition-colors hover:text-green-700"
+          className="flex min-h-12 min-w-[44px] flex-col items-center justify-center gap-1 font-medium text-green-800 transition-colors hover:text-green-700"
         >
           <Phone className="h-5 w-5" />
           <span className="text-xs">Позвонить</span>
@@ -52,7 +52,7 @@ export function BottomNav() {
         href={ORDER_WHATSAPP_LINK}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex h-11 shrink-0 items-center justify-center gap-1 rounded-lg bg-green-600 px-2.5 text-xs font-semibold text-white transition-all hover:bg-green-700 active:scale-95 active:bg-green-700 sm:gap-1.5 sm:px-3"
+        className="flex h-11 shrink-0 items-center justify-center gap-1 rounded-lg bg-green-700 px-2.5 text-xs font-semibold text-white transition-all hover:bg-green-700 active:scale-95 active:bg-green-700 sm:gap-1.5 sm:px-3"
       >
         <span className="whitespace-nowrap">Заказать</span>
         <svg

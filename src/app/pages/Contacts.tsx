@@ -217,7 +217,7 @@ export function Contacts() {
 
               <p className="text-center text-xs text-gray-500">
                 Нажимая кнопку, вы соглашаетесь с{" "}
-                <PrivacyPolicyLink className="text-green-600 hover:text-green-700">
+                <PrivacyPolicyLink className="text-green-800 hover:text-green-700">
                   политикой конфиденциальности
                 </PrivacyPolicyLink>
               </p>
