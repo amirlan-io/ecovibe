@@ -181,7 +181,27 @@ export function BookingCalculator() {
           date: formData.date,
           time: formData.time,
         });
-        await submitLeadToQazCrm(crmPayload);
+        const crmResponse = await submitLeadToQazCrm(crmPayload);
+
+        const leadId =
+          crmResponse.id ?? crmResponse.data?.id ?? (crmResponse as { id?: number | string }).id;
+
+        if (leadId != null) {
+          try {
+            const updateResponse = await fetch("/api/update-lead", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ leadId, amount: totalPrice }),
+            });
+
+            if (!updateResponse.ok) {
+              console.error("Update lead amount failed:", await updateResponse.text());
+            }
+          } catch (error) {
+            console.error("Update lead amount failed:", error);
+          }
+        }
+
         return true;
       } catch (error) {
         console.error("QazCRM submit failed:", error);
