@@ -1,8 +1,12 @@
 import { lazy, Suspense } from "react";
 import { HeroSection } from "../components/landing/HeroSection";
-import { ServicesSection } from "../components/landing/ServicesSection";
-import { BenefitsSection } from "../components/landing/BenefitsSection";
 
+const ServicesSection = lazy(() =>
+  import("../components/landing/ServicesSection").then((m) => ({ default: m.ServicesSection })),
+);
+const BenefitsSection = lazy(() =>
+  import("../components/landing/BenefitsSection").then((m) => ({ default: m.BenefitsSection })),
+);
 const ProcessSection = lazy(() =>
   import("../components/landing/ProcessSection").then((m) => ({ default: m.ProcessSection })),
 );
@@ -20,12 +24,22 @@ const BookingCalculator = lazy(() =>
   import("../components/BookingCalculator").then((m) => ({ default: m.BookingCalculator })),
 );
 
+const sectionFallback = (
+  <div className="h-96 animate-pulse rounded-xl bg-gray-100" />
+);
+
 export function Home() {
   return (
     <>
       <HeroSection />
-      <ServicesSection />
-      <BenefitsSection />
+
+      <Suspense fallback={sectionFallback}>
+        <ServicesSection />
+      </Suspense>
+
+      <Suspense fallback={sectionFallback}>
+        <BenefitsSection />
+      </Suspense>
 
       <section
         id="calculator"
@@ -39,17 +53,29 @@ export function Home() {
           <p className="landing-body mx-auto mb-10 max-w-2xl text-center text-gray-600">
             Выберите тип уборки, площадь и дополнительные услуги — цена обновится мгновенно
           </p>
-          <Suspense fallback={<div className="h-64 animate-pulse rounded-2xl bg-gray-100" />}>
+          <Suspense fallback={sectionFallback}>
             <BookingCalculator />
           </Suspense>
         </div>
       </section>
 
-      <Suspense fallback={<div className="h-32" />}>
+      <Suspense fallback={sectionFallback}>
         <ProcessSection />
+      </Suspense>
+
+      <Suspense fallback={sectionFallback}>
         <PricesSection />
+      </Suspense>
+
+      <Suspense fallback={sectionFallback}>
         <BeforeAfterSection />
+      </Suspense>
+
+      <Suspense fallback={sectionFallback}>
         <ReviewsSection />
+      </Suspense>
+
+      <Suspense fallback={sectionFallback}>
         <FAQ />
       </Suspense>
     </>
