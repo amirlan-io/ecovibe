@@ -1,5 +1,5 @@
 import { Minus, Plus, CheckCircle2, Loader2, Send } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import {
   formatPhoneNumber,
@@ -74,7 +74,6 @@ function buildSelectedExtrasLabels(state: BookingState): string[] {
 }
 
 export function BookingCalculator() {
-  const [isReady, setIsReady] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [state, setState] = useState<BookingState>({
@@ -95,12 +94,6 @@ export function BookingCalculator() {
     date: "",
     time: "",
   });
-
-  useEffect(() => {
-    requestAnimationFrame(() => {
-      setIsReady(true);
-    });
-  }, []);
 
   const selectService = (service: ServiceType) => {
     setState((prev) => ({ ...prev, service }));
@@ -252,12 +245,6 @@ export function BookingCalculator() {
 
     setIsSubmitting(false);
   };
-
-  if (!isReady) {
-    return (
-      <div className="h-96 animate-pulse rounded-2xl bg-gray-100" aria-hidden />
-    );
-  }
 
   return (
     <div className="overflow-hidden rounded-2xl bg-white shadow-xl">

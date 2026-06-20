@@ -24,20 +24,16 @@ const BookingCalculator = lazy(() =>
   import("../components/BookingCalculator").then((m) => ({ default: m.BookingCalculator })),
 );
 
-const sectionFallback = (
-  <div className="h-96 animate-pulse rounded-xl bg-gray-100" />
-);
-
 export function Home() {
   return (
     <>
       <HeroSection />
 
-      <Suspense fallback={sectionFallback}>
+      <Suspense fallback={null}>
         <ServicesSection />
       </Suspense>
 
-      <Suspense fallback={sectionFallback}>
+      <Suspense fallback={null}>
         <BenefitsSection />
       </Suspense>
 
@@ -53,29 +49,31 @@ export function Home() {
           <p className="landing-body mx-auto mb-10 max-w-2xl text-center text-gray-600">
             Выберите тип уборки, площадь и дополнительные услуги — цена обновится мгновенно
           </p>
-          <Suspense fallback={sectionFallback}>
-            <BookingCalculator />
-          </Suspense>
+          <div className="min-h-[720px]">
+            <Suspense fallback={null}>
+              <BookingCalculator />
+            </Suspense>
+          </div>
         </div>
       </section>
 
-      <Suspense fallback={sectionFallback}>
+      <Suspense fallback={null}>
         <ProcessSection />
       </Suspense>
 
-      <Suspense fallback={sectionFallback}>
+      <Suspense fallback={null}>
         <PricesSection />
       </Suspense>
 
-      <Suspense fallback={sectionFallback}>
+      <Suspense fallback={null}>
         <BeforeAfterSection />
       </Suspense>
 
-      <Suspense fallback={sectionFallback}>
+      <Suspense fallback={null}>
         <ReviewsSection />
       </Suspense>
 
-      <Suspense fallback={sectionFallback}>
+      <Suspense fallback={null}>
         <FAQ />
       </Suspense>
     </>

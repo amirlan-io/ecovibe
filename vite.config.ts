@@ -35,6 +35,21 @@ function asyncCssPreload() {
           /<link rel="preload" href="\/assets\/index\.css" as="style" onload="this\.onload=null;this\.rel='stylesheet'">\s*<noscript><link rel="stylesheet" href="\/assets\/index\.css"><\/noscript>/,
           `<link rel="preload" href="${href}" as="style" onload="this.onload=null;this.rel='stylesheet'">\n<noscript><link rel="stylesheet" crossorigin href="${href}"></noscript>`,
         )
+
+        const preloads = result.match(/<link rel="modulepreload"[^>]*>/g) ?? []
+        if (preloads.length > 0) {
+          result = result.replace(/<link rel="modulepreload"[^>]*>\n?/g, '')
+          const scriptTag =
+            result.match(/<script type="module" crossorigin src="\/assets\/[^"]+\.js"><\/script>/)?.[0] ??
+            result.match(/<script type="module" crossorigin src="[^"]+"><\/script>/)?.[0]
+          if (scriptTag) {
+            result = result.replace(
+              scriptTag,
+              `${preloads.join('\n')}\n      ${scriptTag}`,
+            )
+          }
+        }
+
         return result
       },
     },
