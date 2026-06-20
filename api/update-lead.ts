@@ -11,6 +11,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const { leadId, amount } = req.body;
 
   try {
+    console.log("leadId:", leadId);
+    console.log("amount:", amount);
+    console.log("token exists:", !!process.env.QAZCRM_API_TOKEN);
+    console.log("url:", `https://crm.tennet.kz/api/v1/leads/${leadId}/`);
+
     const response = await fetch(`https://crm.tennet.kz/api/v1/leads/${leadId}/`, {
       method: "PATCH",
       headers: {
@@ -20,8 +25,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       body: JSON.stringify({ amount }),
     });
 
-    const data = await response.json();
-    return res.status(200).json({ success: true, data });
+    const responseText = await response.text();
+    console.log("QazCRM response status:", response.status);
+    console.log("QazCRM response body:", responseText);
+
+    return res.status(200).json({ success: true, raw: responseText });
   } catch (error) {
     return res.status(500).json({ success: false, error: String(error) });
   }
