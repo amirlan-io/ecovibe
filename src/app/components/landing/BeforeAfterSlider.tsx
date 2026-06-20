@@ -65,8 +65,9 @@ export function BeforeAfterSlider({
       <img
         src={afterSrc}
         alt={afterLabel}
-        width={320}
-        height={427}
+        width={512}
+        height={320}
+        sizes="(min-width: 1024px) 512px, (min-width: 768px) 448px, 100vw"
         className="absolute inset-0 h-full w-full object-cover object-center"
         loading="lazy"
         draggable={false}
@@ -80,8 +81,9 @@ export function BeforeAfterSlider({
         <img
           src={beforeSrc}
           alt={beforeLabel}
-          width={320}
-          height={427}
+          width={512}
+          height={320}
+          sizes="(min-width: 1024px) 512px, (min-width: 768px) 448px, 100vw"
           className="absolute inset-0 h-full w-full object-cover object-center"
           loading="lazy"
           draggable={false}

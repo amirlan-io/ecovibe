@@ -61,7 +61,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="mb-4 font-medium text-white">Меню</h4>
+            <h3 className="mb-4 font-medium text-white">Меню</h3>
             <ul className="space-y-2 text-sm">
               {NAV_ITEMS.map((item) => (
                 <li key={item.id}>
@@ -77,7 +77,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="mb-4 font-medium text-white">Контакты</h4>
+            <h3 className="mb-4 font-medium text-white">Контакты</h3>
             <ul className="space-y-3 text-sm">
               <li>
                 <a
@@ -142,7 +142,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="mb-4 font-medium text-white">Юридическая информация</h4>
+            <h3 className="mb-4 font-medium text-white">Юридическая информация</h3>
             <ul className="space-y-2 text-sm text-gray-300">
               <li>ТОО «EcoVibe»</li>
               <li>Республика Казахстан, г. Астана</li>

@@ -42,7 +42,9 @@ export function BenefitsSection() {
                   <Icon className="h-5 w-5 md:h-6 md:w-6" />
                 </div>
                 <h3 className="text-sm font-semibold leading-tight md:text-base">{item.title}</h3>
-                <p className="hidden text-sm leading-relaxed text-gray-600 md:block">{item.desc}</p>
+                <p className="hidden min-h-[4.5rem] text-sm leading-relaxed text-gray-600 md:block">
+                  {item.desc}
+                </p>
               </article>
             );
           })}

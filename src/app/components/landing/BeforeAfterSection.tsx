@@ -11,8 +11,8 @@ export function BeforeAfterSection() {
 
         <div className="mx-auto mt-8 flex w-full max-w-xs justify-center sm:max-w-sm md:mt-10 md:max-w-md lg:max-w-lg">
           <BeforeAfterSlider
-            beforeSrc="/images/before-bathroom.webp"
-            afterSrc="/images/after-bathroom.webp"
+            beforeSrc="/images/before-bathroom-512.webp"
+            afterSrc="/images/after-bathroom-512.webp"
             beforeLabel="До уборки"
             afterLabel="После уборки"
           />

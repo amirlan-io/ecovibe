@@ -37,6 +37,19 @@ function asyncCssPreload() {
         )
 
         const preloads = result.match(/<link rel="modulepreload"[^>]*>/g) ?? []
+        const earlyLazyChunks = Object.keys(ctx.bundle ?? {}).filter(
+          (file) =>
+            file.endsWith('.js') &&
+            (file.includes('HomeBelowFold') || file.includes('AppToaster')),
+        )
+
+        for (const chunk of earlyLazyChunks) {
+          const tag = `<link rel="modulepreload" crossorigin href="/${chunk}">`
+          if (!preloads.includes(tag)) {
+            preloads.push(tag)
+          }
+        }
+
         if (preloads.length > 0) {
           result = result.replace(/<link rel="modulepreload"[^>]*>\n?/g, '')
           const scriptTag =
@@ -45,7 +58,7 @@ function asyncCssPreload() {
           if (scriptTag) {
             result = result.replace(
               scriptTag,
-              `${preloads.join('\n')}\n      ${scriptTag}`,
+              `${[...new Set(preloads)].join('\n')}\n      ${scriptTag}`,
             )
           }
         }
