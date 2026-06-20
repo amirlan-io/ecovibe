@@ -184,7 +184,7 @@ export function BookingCalculator() {
         const crmResponse = await submitLeadToQazCrm(crmPayload);
 
         const leadId =
-          crmResponse.id ?? crmResponse.data?.id ?? (crmResponse as { id?: number | string }).id;
+          crmResponse.lead_id ?? crmResponse.id ?? crmResponse.data?.id;
 
         if (leadId != null) {
           try {

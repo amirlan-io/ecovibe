@@ -19,6 +19,7 @@ export interface BuildCrmPayloadInput {
 
 export interface QazCrmLeadResponse {
   id?: number | string;
+  lead_id?: number | string;
   data?: {
     id?: number | string;
     [key: string]: unknown;
