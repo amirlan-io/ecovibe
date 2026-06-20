@@ -1,9 +1,4 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "./ui/accordion";
+import { ChevronDown } from "lucide-react";
 
 const faqItems = [
   {
@@ -42,22 +37,20 @@ export function FAQ() {
         <p className="landing-body mt-3 text-center text-gray-600">
           Ответы на главные вопросы о нашей работе
         </p>
-        <Accordion
-          type="single"
-          collapsible
-          className="mt-10 rounded-2xl border border-gray-200 bg-white px-4 shadow-sm sm:px-6"
-        >
+        <div className="mt-10 rounded-2xl border border-gray-200 bg-white px-4 shadow-sm sm:px-6">
           {faqItems.map((item) => (
-            <AccordionItem key={item.id} value={item.id}>
-              <AccordionTrigger className="btn-touch py-5 text-left text-base font-medium hover:no-underline">
+            <details
+              key={item.id}
+              className="group border-b border-gray-200 last:border-b-0"
+            >
+              <summary className="btn-touch flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-left text-base font-medium [&::-webkit-details-marker]:hidden">
                 {item.question}
-              </AccordionTrigger>
-              <AccordionContent className="pb-5 text-base leading-relaxed text-gray-600">
-                {item.answer}
-              </AccordionContent>
-            </AccordionItem>
+                <ChevronDown className="size-4 shrink-0 text-gray-500 transition-transform duration-200 group-open:rotate-180" />
+              </summary>
+              <p className="pb-5 text-base leading-relaxed text-gray-600">{item.answer}</p>
+            </details>
           ))}
-        </Accordion>
+        </div>
       </div>
     </section>
   );

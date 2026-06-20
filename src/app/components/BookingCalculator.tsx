@@ -345,7 +345,7 @@ export function BookingCalculator() {
               aria-label="Точная площадь квартиры"
               className="w-full min-w-0 flex-1 h-2 cursor-pointer accent-green-600"
             />
-            <span className="font-medium shrink-0 text-green-600 sm:min-w-[58px] sm:text-right">
+            <span className="font-medium shrink-0 text-green-800 sm:min-w-[58px] sm:text-right">
               {state.area} м²
             </span>
           </div>
