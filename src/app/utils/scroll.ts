@@ -1,8 +1,6 @@
 export const CALCULATOR_ID = "calculator";
 export const CALCULATOR_HASH = `#${CALCULATOR_ID}`;
 
-const HEADER_OFFSET_PX = 72;
-
 export function scrollToTop(instant = true) {
   window.scrollTo({
     top: 0,
@@ -22,10 +20,9 @@ export function scrollToElementById(
   const element = document.getElementById(id);
   if (!element) return false;
 
-  const top =
-    element.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET_PX;
-
-  window.scrollTo({ top: Math.max(0, top), left: 0, behavior });
+  requestAnimationFrame(() => {
+    element.scrollIntoView({ behavior, block: "start" });
+  });
   return true;
 }
 

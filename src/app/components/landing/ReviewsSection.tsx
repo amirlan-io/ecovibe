@@ -15,26 +15,34 @@ export function ReviewsSection() {
     const container = scrollRef.current;
     if (!container) return;
 
+    let frame = 0;
+
     const handleScroll = () => {
-      const center = container.scrollLeft + container.clientWidth / 2;
-      let bestIndex = 0;
-      let bestDistance = Infinity;
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const center = container.scrollLeft + container.clientWidth / 2;
+        let bestIndex = 0;
+        let bestDistance = Infinity;
 
-      Array.from(container.children).forEach((child, i) => {
-        const el = child as HTMLElement;
-        const childCenter = el.offsetLeft + el.offsetWidth / 2;
-        const distance = Math.abs(center - childCenter);
-        if (distance < bestDistance) {
-          bestDistance = distance;
-          bestIndex = i;
-        }
+        Array.from(container.children).forEach((child, i) => {
+          const el = child as HTMLElement;
+          const childCenter = el.offsetLeft + el.offsetWidth / 2;
+          const distance = Math.abs(center - childCenter);
+          if (distance < bestDistance) {
+            bestDistance = distance;
+            bestIndex = i;
+          }
+        });
+
+        setActiveSlide(bestIndex);
       });
-
-      setActiveSlide(bestIndex);
     };
 
     container.addEventListener("scroll", handleScroll, { passive: true });
-    return () => container.removeEventListener("scroll", handleScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      container.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   const scrollToSlide = (index: number) => {
@@ -42,8 +50,11 @@ export function ReviewsSection() {
     if (!container) return;
     const child = container.children[index] as HTMLElement | undefined;
     if (!child) return;
-    container.scrollTo({ left: child.offsetLeft, behavior: "smooth" });
-    setActiveSlide(index);
+
+    requestAnimationFrame(() => {
+      container.scrollTo({ left: child.offsetLeft, behavior: "smooth" });
+      setActiveSlide(index);
+    });
   };
 
   return (

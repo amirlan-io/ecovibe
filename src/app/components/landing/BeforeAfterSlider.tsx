@@ -17,21 +17,29 @@ export function BeforeAfterSlider({
   afterSrc = DEFAULT_AFTER_SRC,
 }: BeforeAfterSliderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const boundsRef = useRef<DOMRect | null>(null);
   const [position, setPosition] = useState(50);
   const dragging = useRef(false);
 
   const updatePosition = useCallback((clientX: number) => {
-    const el = containerRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
+    const rect = boundsRef.current;
+    if (!rect) return;
     const x = Math.min(Math.max(clientX - rect.left, 0), rect.width);
     setPosition((x / rect.width) * 100);
+  }, []);
+
+  const refreshBounds = useCallback(() => {
+    const el = containerRef.current;
+    boundsRef.current = el ? el.getBoundingClientRect() : null;
   }, []);
 
   const onPointerDown = (e: React.PointerEvent) => {
     dragging.current = true;
     containerRef.current?.setPointerCapture(e.pointerId);
-    updatePosition(e.clientX);
+    requestAnimationFrame(() => {
+      refreshBounds();
+      updatePosition(e.clientX);
+    });
   };
 
   const onPointerMove = (e: React.PointerEvent) => {

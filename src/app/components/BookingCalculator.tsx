@@ -88,6 +88,7 @@ export function BookingCalculator() {
       balcony: false,
     },
     extraWindowCount: 3,
+    chairCount: 0,
     name: "",
     phone: "",
     address: "",

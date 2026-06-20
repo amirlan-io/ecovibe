@@ -79,9 +79,12 @@ export default defineConfig({
         moduleSideEffects: false,
       },
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          ui: ['lucide-react'],
+        manualChunks(id) {
+          if (!id.includes('node_modules')) return;
+          if (id.includes('react-dom') || /\/react\//.test(id)) return 'vendor';
+          if (id.includes('react-router')) return 'router';
+          if (id.includes('lucide-react')) return 'ui';
+          if (id.includes('sonner')) return 'sonner';
         },
       },
     },
