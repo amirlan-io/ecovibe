@@ -1,29 +1,20 @@
 import { AnchorLink } from "../AnchorLink";
 import { CalculatorLink } from "../CalculatorLink";
-import { OptimizedPicture } from "../OptimizedPicture";
 import { SECTIONS } from "../../utils/sections";
 import { Check } from "lucide-react";
-
-const HERO = {
-  avif: "/images/hero.avif",
-  webp: "/images/hero.webp",
-  jpg: "/images/hero.jpg",
-};
 
 function HeroImage() {
   return (
     <div className="hero-image-arch relative mx-auto w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
-      <OptimizedPicture
-        avifSrc={HERO.avif}
-        webpSrc={HERO.webp}
-        fallbackSrc={HERO.jpg}
+      <img
+        src="/images/hero.webp"
         alt="Клинер EcoVibe — профессиональная уборка в Астане"
         className="h-full w-full object-cover object-top"
         loading="eager"
         fetchPriority="high"
         width={600}
         height={800}
-        sizes="(min-width: 768px) 50vw, 80vw"
+        decoding="sync"
       />
     </div>
   );
