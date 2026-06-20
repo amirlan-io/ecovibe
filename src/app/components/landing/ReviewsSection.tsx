@@ -84,10 +84,14 @@ export function ReviewsSection() {
                 onClick={() => scrollToSlide(i)}
                 aria-label={`Отзыв ${i + 1}`}
                 aria-current={activeSlide === i ? "true" : undefined}
-                className={`h-2 w-2 rounded-full transition-colors ${
-                  activeSlide === i ? "bg-green-600" : "bg-gray-300"
-                }`}
-              />
+                className="flex items-center justify-center p-2"
+              >
+                <span
+                  className={`h-3 w-3 rounded-full transition-colors ${
+                    activeSlide === i ? "bg-green-600" : "bg-gray-300"
+                  }`}
+                />
+              </button>
             ))}
           </div>
         </div>
