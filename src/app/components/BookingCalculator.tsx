@@ -391,6 +391,8 @@ export function BookingCalculator() {
                 type="number"
                 min="1"
                 max="30"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 aria-label="Количество окон"
                 value={state.extraWindowCount}
                 onChange={(e) =>
@@ -464,7 +466,7 @@ export function BookingCalculator() {
                   onChange={(e) =>
                     setState((prev) => ({ ...prev, name: e.target.value }))
                   }
-                  className="form-input-mobile w-full rounded-lg border border-gray-300 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
+                  className="form-input-mobile w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
                   placeholder="Как вас зовут?"
                 />
               </div>
@@ -490,7 +492,7 @@ export function BookingCalculator() {
                     }))
                   }
                   className="form-input-mobile w-full rounded-lg border border-gray-300 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
-                  placeholder="+7 (___) ___-__-__"
+                  placeholder="+7 (700) 000-00-00"
                 />
               </div>
 
@@ -510,7 +512,7 @@ export function BookingCalculator() {
                   onChange={(e) =>
                     setState((prev) => ({ ...prev, address: e.target.value }))
                   }
-                  className="form-input-mobile w-full rounded-lg border border-gray-300 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
+                  className="form-input-mobile w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
                   placeholder="Улица, дом, квартира"
                 />
               </div>
