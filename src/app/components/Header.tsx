@@ -31,12 +31,16 @@ export function Header() {
     <>
       <header
         className={cn(
-          "fixed inset-x-0 top-0 transition-all duration-300",
+          "fixed inset-x-0 top-0",
           mobileMenuOpen ? "z-[10001]" : "z-50",
-          scrolled
-            ? "border-b border-gray-200/60 bg-white/85 shadow-sm backdrop-blur-md"
-            : "border-b border-transparent bg-white/90 backdrop-blur-sm",
-          mobileMenuOpen ? "bg-white backdrop-blur-none" : "",
+          mobileMenuOpen
+            ? "border-b border-gray-200 bg-white"
+            : cn(
+                "transition-all duration-300",
+                scrolled
+                  ? "border-b border-gray-200/60 bg-white/85 shadow-sm backdrop-blur-md"
+                  : "border-b border-transparent bg-white/90 backdrop-blur-sm",
+              ),
         )}
       >
         <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Основная навигация">
