@@ -12,8 +12,8 @@ function HeroImage() {
         className="h-full w-full object-cover object-top"
         loading="eager"
         fetchPriority="high"
-        width={600}
-        height={800}
+        width={351}
+        height={427}
         decoding="sync"
       />
     </div>
