@@ -14,9 +14,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.log("leadId:", leadId);
     console.log("amount:", amount);
     console.log("token exists:", !!process.env.QAZCRM_API_TOKEN);
-    console.log("url:", `https://crm.tennet.kz/api/v1/leads/${leadId}/`);
+    console.log("url:", `https://crm.tennet.kz/api/auth/leads/${leadId}/`);
 
-    const response = await fetch(`https://crm.tennet.kz/api/v1/leads/${leadId}/`, {
+    const response = await fetch(`https://crm.tennet.kz/api/auth/leads/${leadId}/`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
