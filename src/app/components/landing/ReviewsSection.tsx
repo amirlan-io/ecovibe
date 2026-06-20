@@ -63,7 +63,7 @@ export function ReviewsSection() {
             className="flex gap-3 overflow-x-auto snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {WHATSAPP_REVIEWS.map((src, i) => (
-              <div key={src} className="w-[85%] shrink-0 snap-start">
+              <div key={src} className="min-w-full w-full shrink-0 snap-start">
                 <img
                   src={src}
                   alt={`Отзыв клиента EcoVibe ${i + 1}`}
