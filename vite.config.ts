@@ -16,6 +16,31 @@ function figmaAssetResolver() {
   }
 }
 
+function asyncCssPreload() {
+  return {
+    name: 'async-css-preload',
+    apply: 'build',
+    transformIndexHtml: {
+      order: 'post',
+      handler(html: string, ctx) {
+        const cssFile = Object.keys(ctx.bundle ?? {}).find((file) => file.endsWith('.css'))
+        if (!cssFile) return html
+
+        const href = `/${cssFile}`
+        let result = html.replace(
+          /<link rel="stylesheet" crossorigin href="\/assets\/[^"]+\.css">\n?/,
+          '',
+        )
+        result = result.replace(
+          /<link rel="preload" href="\/assets\/index\.css" as="style" onload="this\.onload=null;this\.rel='stylesheet'">\s*<noscript><link rel="stylesheet" href="\/assets\/index\.css"><\/noscript>/,
+          `<link rel="preload" href="${href}" as="style" onload="this.onload=null;this.rel='stylesheet'">\n<noscript><link rel="stylesheet" crossorigin href="${href}"></noscript>`,
+        )
+        return result
+      },
+    },
+  }
+}
+
 export default defineConfig({
   plugins: [
     figmaAssetResolver(),
@@ -23,6 +48,7 @@ export default defineConfig({
     // Tailwind is not being actively used – do not remove them
     react(),
     tailwindcss(),
+    asyncCssPreload(),
   ],
   resolve: {
     alias: {
@@ -47,6 +73,7 @@ export default defineConfig({
     },
   },
   build: {
+    cssCodeSplit: true,
     rollupOptions: {
       treeshake: {
         moduleSideEffects: false,

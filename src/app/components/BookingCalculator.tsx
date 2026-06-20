@@ -1,5 +1,5 @@
 import { Minus, Plus, CheckCircle2, Loader2, Send } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   formatPhoneNumber,
@@ -11,7 +11,6 @@ import {
   submitBookingToMakeBackup,
 } from "../utils/makeWebhook";
 import { buildCRMPayload, submitLeadToQazCrm } from "../utils/qazcrm";
-import { Checkbox } from "./ui/checkbox";
 import { cn } from "./ui/utils";
 import { PrivacyPolicyLink } from "./PrivacyPolicyLink";
 
@@ -75,6 +74,7 @@ function buildSelectedExtrasLabels(state: BookingState): string[] {
 }
 
 export function BookingCalculator() {
+  const [isReady, setIsReady] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [state, setState] = useState<BookingState>({
@@ -94,6 +94,12 @@ export function BookingCalculator() {
     date: "",
     time: "",
   });
+
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      setIsReady(true);
+    });
+  }, []);
 
   const selectService = (service: ServiceType) => {
     setState((prev) => ({ ...prev, service }));
@@ -246,6 +252,12 @@ export function BookingCalculator() {
     setIsSubmitting(false);
   };
 
+  if (!isReady) {
+    return (
+      <div className="h-96 animate-pulse rounded-2xl bg-gray-100" aria-hidden />
+    );
+  }
+
   return (
     <div className="overflow-hidden rounded-2xl bg-white shadow-xl">
       <form onSubmit={handleSubmit} className="grid gap-0 md:grid-cols-2">
@@ -370,18 +382,19 @@ export function BookingCalculator() {
                       : "bg-white border-gray-200 hover:border-green-300",
                   )}
                 >
-                  <Checkbox
+                  <input
+                    type="checkbox"
                     checked={checked}
-                    onCheckedChange={(value) =>
+                    onChange={(e) =>
                       setState((prev) => ({
                         ...prev,
                         extras: {
                           ...prev.extras,
-                          [option.key]: value === true,
+                          [option.key]: e.target.checked,
                         },
                       }))
                     }
-                    className="size-5 shrink-0 border-green-300 bg-white data-[state=checked]:bg-green-600 data-[state=checked]:border-green-600 data-[state=checked]:text-white"
+                    className="size-5 shrink-0 rounded border-green-300 accent-green-700"
                   />
                   <div className="flex-1 text-left min-w-0">
                     <div
