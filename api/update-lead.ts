@@ -12,7 +12,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const response = await fetch(`https://crm.tennet.kz/api/v1/leads/${leadId}/`, {
-      method: "POST",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Token ${process.env.QAZCRM_API_TOKEN}`,
