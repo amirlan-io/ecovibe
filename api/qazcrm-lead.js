@@ -44,7 +44,7 @@ export default async function handler(req, res) {
         custom_1782: description,
         custom_2255: address || "",
         custom_2256: dateTime || "",
-        custom_2257: extras || "",
+        custom_2257: extras || "Без доп. услуг",
         custom_2254: Number(area) || 0,
         custom_2253: serviceType || "",
         website_url: "",
