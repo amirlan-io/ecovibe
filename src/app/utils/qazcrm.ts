@@ -15,6 +15,7 @@ export interface BuildCrmPayloadInput {
   address?: string;
   date?: string;
   time?: string;
+  website?: string;
 }
 
 export interface QazCrmLeadResponse {
@@ -56,6 +57,7 @@ export function buildCRMPayload(data: {
   address?: string;
   date?: string;
   time?: string;
+  website?: string;
 }) {
   return {
     name: data.name,
@@ -67,6 +69,7 @@ export function buildCRMPayload(data: {
     address: data.address ?? "",
     date: data.date ?? "",
     time: data.time ?? "",
+    website: data.website ?? "",
   };
 }
 

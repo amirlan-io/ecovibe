@@ -91,7 +91,7 @@ export default defineConfig({
         target: "https://crm.tennet.kz",
         changeOrigin: true,
         rewrite: () =>
-          "/api/public/forms/84be7530-2d6a-4066-b548-06748a90aada/",
+          "/api/public/forms/69cbec2a-1fe8-4f9a-b037-1e4767023765/",
       },
       "/api/make-lead": {
         target: "https://hook.eu1.make.com",

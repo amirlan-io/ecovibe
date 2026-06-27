@@ -185,26 +185,14 @@ export function BookingCalculator() {
           address: formData.address,
           date: formData.date,
           time: formData.time,
+          website: state.honeypot,
         });
         const crmResponse = await submitLeadToQazCrm(crmPayload);
 
         const leadId =
           crmResponse.lead_id ?? crmResponse.id ?? crmResponse.data?.id;
-
-        if (leadId != null) {
-          try {
-            const updateResponse = await fetch("/api/update-lead", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ leadId, amount: totalPrice }),
-            });
-
-            if (!updateResponse.ok) {
-              console.error("Update lead amount failed:", await updateResponse.text());
-            }
-          } catch (error) {
-            console.error("Update lead amount failed:", error);
-          }
+        if (leadId == null) {
+          console.error("QazCRM response missing lead id");
         }
 
         return true;

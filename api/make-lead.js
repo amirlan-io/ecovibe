@@ -1,5 +1,14 @@
-const MAKE_WEBHOOK_URL =
-  "https://hook.eu1.make.com/ndmetggq64xyt12hi2we1w9bs8ami5fx";
+import { checkRateLimit, getClientIp } from "./lib/rateLimit.js";
+import {
+  applyCors,
+  isBodyTooLarge,
+  isHoneypotTriggered,
+  isValidPhone,
+  rejectDisallowed,
+  sanitizeText,
+} from "./lib/security.js";
+
+const MAKE_WEBHOOK_URL = process.env.MAKE_WEBHOOK_URL;
 
 function formatClientPhone(phone) {
   return String(phone ?? "")
@@ -9,7 +18,7 @@ function formatClientPhone(phone) {
 
 function isValidBooking(body) {
   const clientPhone = formatClientPhone(body.client_phone);
-  const cleaningType = String(body.cleaning_type ?? "").trim();
+  const cleaningType = sanitizeText(body.cleaning_type, 100);
   const area = Number(body.area);
   const calculatedPrice = Number(body.calculated_price);
   const phoneDigits = clientPhone.replace(/\D/g, "");
@@ -21,17 +30,18 @@ function isValidBooking(body) {
     cleaningType.length > 0 &&
     Number.isFinite(area) &&
     area > 0 &&
+    area <= 10_000 &&
     Number.isFinite(calculatedPrice) &&
     calculatedPrice > 0 &&
+    calculatedPrice <= 10_000_000 &&
+    isValidPhone(clientPhone) &&
     phoneDigits.length >= 11 &&
     !/^7+$/.test(localDigits)
   );
 }
 
 export default async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  applyCors(req, res);
 
   if (req.method === "OPTIONS") {
     return res.status(200).end();
@@ -41,7 +51,25 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
+  if (rejectDisallowed(req, res)) return;
+  if (isBodyTooLarge(req)) {
+    return res.status(413).json({ error: "Payload too large" });
+  }
+
+  const ip = getClientIp(req);
+  if (!checkRateLimit(ip, "make")) {
+    return res.status(429).json({ error: "Слишком много запросов" });
+  }
+
   const body = req.body ?? {};
+
+  if (isHoneypotTriggered(body)) {
+    return res.status(200).json({ ok: true });
+  }
+
+  if (!MAKE_WEBHOOK_URL) {
+    return res.status(503).json({ error: "Backup channel is not configured" });
+  }
 
   if (!isValidBooking(body)) {
     return res.status(400).json({
@@ -51,11 +79,11 @@ export default async function handler(req, res) {
 
   const payload = {
     client_phone: formatClientPhone(body.client_phone),
-    cleaning_type: String(body.cleaning_type).trim(),
+    cleaning_type: sanitizeText(body.cleaning_type, 100),
     area: Number(body.area),
     calculated_price: Number(body.calculated_price),
-    extras: String(body.extras ?? "").trim(),
-    status: String(body.status ?? "new"),
+    extras: sanitizeText(body.extras, 500),
+    status: "new",
   };
 
   try {
@@ -65,12 +93,11 @@ export default async function handler(req, res) {
       body: JSON.stringify(payload),
     });
 
-    const text = await makeResponse.text();
+    if (!makeResponse.ok) {
+      return res.status(502).json({ error: "Backup channel rejected request" });
+    }
 
-    return res.status(makeResponse.ok ? 200 : makeResponse.status).json({
-      ok: makeResponse.ok,
-      message: text || "Accepted",
-    });
+    return res.status(200).json({ ok: true });
   } catch (error) {
     console.error("Make webhook proxy error:", error);
     return res.status(500).json({
