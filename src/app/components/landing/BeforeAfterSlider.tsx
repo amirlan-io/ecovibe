@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const DEFAULT_BEFORE_SRC = "https://placehold.co/600x400/5c4033/ffffff";
 const DEFAULT_AFTER_SRC = "https://placehold.co/600x400/e8f5e9/2d7a3a";
@@ -16,50 +16,60 @@ export function BeforeAfterSlider({
   beforeSrc = DEFAULT_BEFORE_SRC,
   afterSrc = DEFAULT_AFTER_SRC,
 }: BeforeAfterSliderProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const boundsRef = useRef<DOMRect | null>(null);
+  const sliderRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState(50);
-  const dragging = useRef(false);
+  const [isDragging, setIsDragging] = useState(false);
 
-  const updatePosition = useCallback((clientX: number) => {
-    const rect = boundsRef.current;
+  const getPosition = (clientX: number) => {
+    const rect = sliderRef.current?.getBoundingClientRect();
     if (!rect) return;
-    const x = Math.min(Math.max(clientX - rect.left, 0), rect.width);
-    setPosition((x / rect.width) * 100);
+    const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+    setPosition(Math.round((x / rect.width) * 100));
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+    getPosition(e.clientX);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    getPosition(e.clientX);
+  };
+
+  const handleMouseUp = () => setIsDragging(false);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setIsDragging(true);
+    getPosition(e.touches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+    getPosition(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = () => setIsDragging(false);
+
+  useEffect(() => {
+    const onMouseUp = () => setIsDragging(false);
+    window.addEventListener("mouseup", onMouseUp);
+    return () => window.removeEventListener("mouseup", onMouseUp);
   }, []);
-
-  const refreshBounds = useCallback(() => {
-    const el = containerRef.current;
-    boundsRef.current = el ? el.getBoundingClientRect() : null;
-  }, []);
-
-  const onPointerDown = (e: React.PointerEvent) => {
-    dragging.current = true;
-    containerRef.current?.setPointerCapture(e.pointerId);
-    requestAnimationFrame(() => {
-      refreshBounds();
-      updatePosition(e.clientX);
-    });
-  };
-
-  const onPointerMove = (e: React.PointerEvent) => {
-    if (!dragging.current) return;
-    updatePosition(e.clientX);
-  };
-
-  const onPointerUp = (e: React.PointerEvent) => {
-    dragging.current = false;
-    containerRef.current?.releasePointerCapture(e.pointerId);
-  };
 
   return (
     <div
-      ref={containerRef}
-      className="relative aspect-[16/10] w-full max-h-[280px] overflow-hidden rounded-xl select-none shadow-lg sm:max-h-[320px] md:max-h-[380px] lg:max-h-[420px]"
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerCancel={onPointerUp}
+      ref={sliderRef}
+      className="relative aspect-[16/10] w-full max-h-[280px] cursor-col-resize overflow-hidden rounded-xl select-none shadow-lg sm:max-h-[320px] md:max-h-[380px] lg:max-h-[420px]"
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
       {/* After (clean) — base layer */}
       <img
