@@ -1,8 +1,16 @@
 import { Link } from "react-router";
 import { Check, ChevronRight, Home, Package, Building, Sparkles } from "lucide-react";
 import { motion } from "motion/react";
+import { useDocumentMeta } from "../utils/useDocumentMeta";
 
 export function GeneralCleaning() {
+  useDocumentMeta({
+    title: "Генеральная уборка квартиры в Астане от 15 000 ₸ | EcoVibe.kz",
+    description:
+      "Генеральная уборка квартиры в Астане: кухня, санузел, окна, труднодоступные места. От 15 000 ₸, выезд мастера в день заявки. Рассчитайте стоимость онлайн.",
+    path: "/generalnaya-uborka",
+  });
+
   const included = [
     "Глубокая очистка всех поверхностей",
     "Подоконники и оконные рамы",
@@ -68,7 +76,7 @@ export function GeneralCleaning() {
               Глубокая очистка · Кухня, санузел, балкон
             </p>
             <Link
-              to="/contacts"
+              to="/kontakty"
               className="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
             >
               Заказать сейчас
@@ -145,7 +153,7 @@ export function GeneralCleaning() {
         </div>
         <div className="text-center mt-8">
           <Link
-            to="/prices"
+            to="/#prices"
             className="inline-flex items-center gap-2 text-amber-600 hover:text-amber-700"
           >
             Посмотреть все цены
@@ -184,7 +192,7 @@ export function GeneralCleaning() {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
-              to="/contacts"
+              to="/kontakty"
               className="px-8 py-3 bg-white text-amber-600 rounded-lg hover:bg-gray-100 transition-colors font-medium"
             >
               Оставить заявку

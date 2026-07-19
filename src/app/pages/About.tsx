@@ -1,7 +1,15 @@
 import { Leaf, Users, Award, Heart, Star, CheckCircle } from "lucide-react";
 import { motion } from "motion/react";
+import { useDocumentMeta } from "../utils/useDocumentMeta";
 
 export function About() {
+  useDocumentMeta({
+    title: "О компании EcoVibe | Клининг с социальной миссией в Астане",
+    description:
+      "EcoVibe — клининговая компания в Астане с социальной миссией: трудоустраиваем глухих и слабослышащих специалистов. Узнайте больше о нашей команде и принципах работы.",
+    path: "/o-nas",
+  });
+
   const stats = [
     { number: "500+", label: "Довольных клиентов" },
     { number: "3", label: "Года на рынке Астаны" },

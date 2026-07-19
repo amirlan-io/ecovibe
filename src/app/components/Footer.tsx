@@ -1,8 +1,9 @@
 import { AtSign, Mail, MapPin, Phone } from "lucide-react";
+import { Link } from "react-router";
 import { Logo } from "./Logo";
 import { AnchorLink } from "./AnchorLink";
 import { PrivacyPolicyLink } from "./PrivacyPolicyLink";
-import { NAV_ITEMS } from "../utils/sections";
+import { NAV_ITEMS, PAGE_LINKS } from "../utils/sections";
 import { PHONE_DISPLAY, PHONE_TEL } from "../utils/phone";
 import { WHATSAPP_LINK } from "../utils/whatsapp";
 
@@ -71,6 +72,16 @@ export function Footer() {
                   >
                     {item.label}
                   </AnchorLink>
+                </li>
+              ))}
+              {PAGE_LINKS.map((item) => (
+                <li key={item.to}>
+                  <Link
+                    to={item.to}
+                    className="text-gray-300 transition-colors duration-300 hover:text-green-400"
+                  >
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>

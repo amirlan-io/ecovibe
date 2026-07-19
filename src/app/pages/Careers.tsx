@@ -16,8 +16,16 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { formatPhoneNumber } from "../utils/phoneFormat";
+import { useDocumentMeta } from "../utils/useDocumentMeta";
 
 export function Careers() {
+  useDocumentMeta({
+    title: "Вакансии клинера в Астане | Работа в EcoVibe.kz",
+    description:
+      "EcoVibe ищет клинеров в Астане, в том числе трудоустраивает глухих и слабослышащих специалистов. Стабильный доход, обучение, поддержка. Оставьте заявку на вакансию.",
+    path: "/vakansii",
+  });
+
   const [formData, setFormData] = useState({
     name: "",
     phone: "",

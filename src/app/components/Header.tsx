@@ -1,8 +1,9 @@
 import { MapPin, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Link } from "react-router";
 import { Logo } from "./Logo";
 import { AnchorLink } from "./AnchorLink";
-import { NAV_ITEMS, SECTIONS } from "../utils/sections";
+import { NAV_ITEMS, SECTIONS, PAGE_LINKS } from "../utils/sections";
 import { WHATSAPP_LINK } from "../utils/whatsapp";
 import { cn } from "./ui/utils";
 
@@ -125,6 +126,24 @@ export function Header() {
                   </AnchorLink>
                 ))}
               </nav>
+
+              <div className="mt-4 border-t border-gray-100 pt-4">
+                <p className="mb-1 px-3 text-xs font-medium uppercase tracking-wide text-gray-400">
+                  Страницы сайта
+                </p>
+                <nav className="space-y-1">
+                  {PAGE_LINKS.map((item) => (
+                    <Link
+                      key={item.to}
+                      to={item.to}
+                      onClick={closeMobileMenu}
+                      className="btn-touch block rounded-lg px-3 py-3.5 text-base font-medium text-gray-800 transition-colors hover:bg-green-50 hover:text-green-700"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </nav>
+              </div>
             </div>
 
             <div className="border-t border-gray-100 p-4">

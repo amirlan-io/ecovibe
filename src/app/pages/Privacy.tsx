@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { ArrowLeft } from "lucide-react";
 import { motion } from "motion/react";
+import { useDocumentMeta } from "../utils/useDocumentMeta";
 
 const sections = [
   {
@@ -70,6 +71,13 @@ const sections = [
 ];
 
 export function Privacy() {
+  useDocumentMeta({
+    title: "Политика конфиденциальности | EcoVibe.kz",
+    description:
+      "Политика конфиденциальности и обработки персональных данных клинингового сервиса EcoVibe.kz в Астане.",
+    path: "/privacy",
+  });
+
   return (
     <div id="privacy-top">
       <section className="bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 py-16 md:py-20">

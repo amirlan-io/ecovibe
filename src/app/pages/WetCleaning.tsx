@@ -2,8 +2,16 @@ import { Link } from "react-router";
 import { Check, ChevronRight, Home, Users, Calendar, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { motion } from "motion/react";
+import { useDocumentMeta } from "../utils/useDocumentMeta";
 
 export function WetCleaning() {
+  useDocumentMeta({
+    title: "Влажная уборка квартиры в Астане от 7 000 ₸ | EcoVibe.kz",
+    description:
+      "Влажная уборка квартиры в Астане: полы, пыль, санузел, кухня. Цена от 7 000 ₸, выезд мастера в день заявки. Рассчитайте стоимость по числу комнат онлайн.",
+    path: "/vlazhnaya-uborka",
+  });
+
   const [rooms, setRooms] = useState<string>("2");
 
   const included = [
@@ -72,7 +80,7 @@ export function WetCleaning() {
               Профессиональная поддерживающая уборка для вашего комфорта
             </p>
             <Link
-              to="/contacts"
+              to="/kontakty"
               className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors"
             >
               Заказать сейчас
@@ -157,7 +165,7 @@ export function WetCleaning() {
               </div>
             </div>
             <Link
-              to="/contacts"
+              to="/kontakty"
               className="block w-full text-center py-3 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors font-medium"
             >
               Заказать за {selectedPrice.price.toLocaleString()} тг
@@ -194,7 +202,7 @@ export function WetCleaning() {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
-              to="/contacts"
+              to="/kontakty"
               className="px-8 py-3 bg-white text-cyan-600 rounded-lg hover:bg-gray-100 transition-colors font-medium"
             >
               Оставить заявку

@@ -13,3 +13,12 @@ export const NAV_ITEMS = [
   { label: "Отзывы", id: SECTIONS.reviews },
   { label: "Контакты", id: SECTIONS.contacts },
 ] as const;
+
+/** Отдельные страницы сайта (не якоря на главной) — для навигации и внутренней перелинковки. */
+export const PAGE_LINKS = [
+  { label: "Генеральная уборка", to: "/generalnaya-uborka" },
+  { label: "Влажная уборка", to: "/vlazhnaya-uborka" },
+  { label: "О нас", to: "/o-nas" },
+  { label: "Вакансии", to: "/vakansii" },
+  { label: "Страница контактов", to: "/kontakty" },
+] as const;

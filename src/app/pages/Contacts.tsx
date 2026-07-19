@@ -3,6 +3,7 @@ import { useState } from "react";
 import { motion } from "motion/react";
 import { formatPhoneNumber } from "../utils/phoneFormat";
 import { PrivacyPolicyLink } from "../components/PrivacyPolicyLink";
+import { useDocumentMeta } from "../utils/useDocumentMeta";
 
 const ThreadsIcon = () => (
   <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
@@ -11,6 +12,13 @@ const ThreadsIcon = () => (
 );
 
 export function Contacts() {
+  useDocumentMeta({
+    title: "Контакты EcoVibe.kz | Клининг в Астане",
+    description:
+      "Свяжитесь с EcoVibe.kz: телефон, WhatsApp, адрес и зона обслуживания клининговой компании в Астане. Оставьте заявку на уборку онлайн.",
+    path: "/kontakty",
+  });
+
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
