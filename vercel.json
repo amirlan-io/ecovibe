@@ -3,6 +3,12 @@
   "outputDirectory": "dist",
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/generalnaya-uborka", "destination": "/generalnaya-uborka/index.html" },
+    { "source": "/vlazhnaya-uborka", "destination": "/vlazhnaya-uborka/index.html" },
+    { "source": "/o-nas", "destination": "/o-nas/index.html" },
+    { "source": "/vakansii", "destination": "/vakansii/index.html" },
+    { "source": "/kontakty", "destination": "/kontakty/index.html" },
+    { "source": "/privacy", "destination": "/privacy/index.html" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ],
   "headers": [
