@@ -53,6 +53,23 @@ export function BeforeAfterSlider({
 
   const handleTouchEnd = () => setIsDragging(false);
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    const step = e.shiftKey ? 10 : 5;
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      setPosition((p) => Math.max(0, p - step));
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      setPosition((p) => Math.min(100, p + step));
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      setPosition(0);
+    } else if (e.key === "End") {
+      e.preventDefault();
+      setPosition(100);
+    }
+  };
+
   useEffect(() => {
     const onMouseUp = () => setIsDragging(false);
     window.addEventListener("mouseup", onMouseUp);
@@ -108,15 +125,22 @@ export function BeforeAfterSlider({
         После
       </span>
 
-      {/* Drag handle */}
+      {/* Drag handle — keyboard-operable: focus it and use ←/→ (Home/End for extremes) */}
       <div
         className="absolute inset-y-0 z-10 w-1 cursor-ew-resize bg-white shadow-lg"
         style={{ left: `${position}%`, transform: "translateX(-50%)" }}
-        aria-hidden
       >
         <div
           data-handle
-          className="absolute top-1/2 left-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-white bg-green-600 text-xs font-bold text-white shadow-md md:h-11 md:w-11"
+          role="slider"
+          tabIndex={0}
+          aria-label="Сравнение до и после уборки"
+          aria-valuenow={position}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuetext={`${position}% после уборки`}
+          onKeyDown={handleKeyDown}
+          className="absolute top-1/2 left-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-white bg-green-600 text-xs font-bold text-white shadow-md focus:outline-none focus-visible:ring-4 focus-visible:ring-green-300 md:h-11 md:w-11"
         >
           ↔
         </div>
