@@ -106,7 +106,7 @@ export function Contacts() {
                 >
                   <Icon className="w-6 h-6 text-white" />
                 </div>
-                <h4 className="mb-2">{contact.title}</h4>
+                <h2 className="mb-2">{contact.title}</h2>
                 <p className="text-sm text-gray-600">{contact.value}</p>
               </motion.div>
             );
@@ -238,7 +238,7 @@ export function Contacts() {
               <h2 className="mb-6">Зона обслуживания</h2>
               <div className="bg-gradient-to-br from-rose-100 to-orange-100 rounded-xl p-6 mb-4">
                 <MapPin className="w-8 h-8 text-rose-600 mb-4" />
-                <h4 className="mb-2">Вся Астана</h4>
+                <h3 className="mb-2">Вся Астана</h3>
                 <p className="text-sm text-gray-700">
                   Мы работаем во всех районах города. Выезд мастера — бесплатно.
                 </p>
@@ -267,7 +267,7 @@ export function Contacts() {
                     <Instagram className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h4 className="text-sm">Instagram</h4>
+                    <h3 className="text-sm">Instagram</h3>
                     <p className="text-xs text-gray-500">Кейсы до/после</p>
                   </div>
                 </a>
@@ -281,7 +281,7 @@ export function Contacts() {
                     <ThreadsIcon />
                   </div>
                   <div>
-                    <h4 className="text-sm">Threads</h4>
+                    <h3 className="text-sm">Threads</h3>
                     <p className="text-xs text-gray-500">Новости и обновления</p>
                   </div>
                 </a>
@@ -295,7 +295,7 @@ export function Contacts() {
                     <MessageCircle className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h4 className="text-sm">WhatsApp Business</h4>
+                    <h3 className="text-sm">WhatsApp Business</h3>
                     <p className="text-xs text-gray-500">Быстрые ответы</p>
                   </div>
                 </a>

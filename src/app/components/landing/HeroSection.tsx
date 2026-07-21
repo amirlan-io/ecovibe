@@ -20,12 +20,27 @@ function HeroImage() {
   );
 }
 
-function HeroCopy({ className }: { className?: string }) {
+function HeroCopy({
+  className,
+  headingTag: Heading = "h1",
+}: {
+  className?: string;
+  /** Only one visual copy of the hero should be an <h1> — the responsive
+   * duplicate (hidden via CSS at the other breakpoint) must not be, or the
+   * page ends up with two H1s in the static/prerendered markup. */
+  headingTag?: "h1" | "p";
+}) {
+  const headingA11yProps =
+    Heading === "p" ? { role: "heading" as const, "aria-level": 1 } : {};
+
   return (
     <div className={className}>
-      <h1 className="landing-h1 font-bold text-gray-900 md:text-4xl md:leading-tight lg:text-5xl xl:text-[3.25rem]">
+      <Heading
+        className="landing-h1 font-bold text-gray-900 md:text-4xl md:leading-tight lg:text-5xl xl:text-[3.25rem]"
+        {...headingA11yProps}
+      >
         Профессиональный эко-клининг в Астане
-      </h1>
+      </Heading>
       <p className="mt-2 text-2xl font-bold text-green-700 md:mt-4 md:text-3xl lg:text-4xl">
         от 15 000 ₸
       </p>
@@ -66,14 +81,14 @@ export function HeroSection() {
     <section className="hero relative overflow-hidden bg-[#f1faf5]">
       {/* Mobile */}
       <div className="flex flex-col gap-8 px-4 pb-10 pt-28 sm:px-6 md:hidden">
-        <HeroCopy className="max-w-2xl" />
+        <HeroCopy className="max-w-2xl" headingTag="h1" />
         <HeroImage />
       </div>
 
       {/* Desktop */}
       <div className="hero-desktop hidden min-h-[620px] md:flex md:items-center">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-2 items-center gap-12 px-6 py-16 lg:gap-16 lg:px-8 lg:py-20">
-          <HeroCopy className="max-w-xl" />
+          <HeroCopy className="max-w-xl" headingTag="p" />
           <div className="flex items-end justify-center">
             <HeroImage />
           </div>

@@ -143,7 +143,7 @@ export function About() {
             <div className="w-32 h-32 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full mx-auto mb-4 flex items-center justify-center">
               <Users className="w-16 h-16 text-white" />
             </div>
-            <h4 className="mb-2">Проверенные специалисты</h4>
+            <h3 className="mb-2">Проверенные специалисты</h3>
             <p className="text-sm text-gray-600">
               Каждый мастер проходит тщательный отбор и проверку
             </p>
@@ -152,7 +152,7 @@ export function About() {
             <div className="w-32 h-32 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full mx-auto mb-4 flex items-center justify-center">
               <Award className="w-16 h-16 text-white" />
             </div>
-            <h4 className="mb-2">Обучение</h4>
+            <h3 className="mb-2">Обучение</h3>
             <p className="text-sm text-gray-600">
               Регулярные тренинги по клинингу и работе с eco-средствами
             </p>
@@ -161,7 +161,7 @@ export function About() {
             <div className="w-32 h-32 bg-gradient-to-br from-green-400 to-emerald-400 rounded-full mx-auto mb-4 flex items-center justify-center">
               <Star className="w-16 h-16 text-white" />
             </div>
-            <h4 className="mb-2">Форма и бейдж</h4>
+            <h3 className="mb-2">Форма и бейдж</h3>
             <p className="text-sm text-gray-600">
               Единая форма и идентификационные бейджи для каждого сотрудника
             </p>
@@ -192,7 +192,7 @@ export function About() {
                 className="bg-white p-6 rounded-xl"
               >
                 <CheckCircle className="w-10 h-10 text-green-600 mb-4" />
-                <h4 className="mb-2">{feature.title}</h4>
+                <h3 className="mb-2">{feature.title}</h3>
                 <p className="text-sm text-gray-600">{feature.desc}</p>
               </motion.div>
             ))}

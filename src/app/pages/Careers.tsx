@@ -282,10 +282,10 @@ export function Careers() {
               ))}
             </ul>
             <div className="mt-8 p-6 bg-purple-50 rounded-xl border border-purple-200">
-              <h4 className="mb-3 flex items-center gap-2">
+              <h3 className="mb-3 flex items-center gap-2">
                 <Award className="w-5 h-5 text-purple-600" />
                 Опыт работы не обязателен
-              </h4>
+              </h3>
               <p className="text-sm text-gray-700">
                 Мы обучим вас всему необходимому! Главное — желание работать и
                 развиваться. Предоставляем полное обучение работе с eco-средствами и
@@ -298,25 +298,25 @@ export function Careers() {
             <h2 className="mb-6">Что входит в обучение?</h2>
             <div className="space-y-4">
               <div className="bg-white border border-gray-200 rounded-lg p-4">
-                <h4 className="mb-2">Техника уборки</h4>
+                <h3 className="mb-2">Техника уборки</h3>
                 <p className="text-sm text-gray-600">
                   Правильные методы уборки разных типов помещений и поверхностей
                 </p>
               </div>
               <div className="bg-white border border-gray-200 rounded-lg p-4">
-                <h4 className="mb-2">Работа с eco-средствами</h4>
+                <h3 className="mb-2">Работа с eco-средствами</h3>
                 <p className="text-sm text-gray-600">
                   Безопасное использование профессиональных чистящих средств
                 </p>
               </div>
               <div className="bg-white border border-gray-200 rounded-lg p-4">
-                <h4 className="mb-2">Использование оборудования</h4>
+                <h3 className="mb-2">Использование оборудования</h3>
                 <p className="text-sm text-gray-600">
                   Работа с пылесосами, пароочистителями и другой техникой
                 </p>
               </div>
               <div className="bg-white border border-gray-200 rounded-lg p-4">
-                <h4 className="mb-2">Стандарты качества</h4>
+                <h3 className="mb-2">Стандарты качества</h3>
                 <p className="text-sm text-gray-600">
                   Контроль качества работы и общение с клиентами
                 </p>
