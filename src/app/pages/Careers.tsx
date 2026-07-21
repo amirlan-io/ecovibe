@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { formatPhoneNumber } from "../utils/phoneFormat";
 import { useDocumentMeta } from "../utils/useDocumentMeta";
+import { Breadcrumbs } from "../components/Breadcrumbs";
 
 export function Careers() {
   useDocumentMeta({
@@ -142,6 +143,7 @@ export function Careers() {
 
   return (
     <div>
+      <Breadcrumbs items={[{ label: "Вакансии" }]} />
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -460,7 +462,7 @@ export function Careers() {
 
                 <p className="text-center text-xs text-gray-500">
                   Нажимая кнопку, вы соглашаетесь с{" "}
-                  <PrivacyPolicyLink className="text-green-800 hover:text-green-700">
+                  <PrivacyPolicyLink className="text-green-800 underline underline-offset-2 hover:text-green-700">
                     политикой конфиденциальности
                   </PrivacyPolicyLink>
                 </p>

@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import { ArrowLeft } from "lucide-react";
 import { motion } from "motion/react";
 import { useDocumentMeta } from "../utils/useDocumentMeta";
+import { Breadcrumbs } from "../components/Breadcrumbs";
 
 const sections = [
   {
@@ -80,6 +81,7 @@ export function Privacy() {
 
   return (
     <div id="privacy-top">
+      <Breadcrumbs items={[{ label: "Политика конфиденциальности" }]} />
       <section className="bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 py-16 md:py-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div

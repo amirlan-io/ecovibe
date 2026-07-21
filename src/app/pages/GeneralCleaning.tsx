@@ -2,13 +2,25 @@ import { Link } from "react-router";
 import { Check, ChevronRight, Home, Package, Building, Sparkles } from "lucide-react";
 import { motion } from "motion/react";
 import { useDocumentMeta } from "../utils/useDocumentMeta";
+import { Breadcrumbs } from "../components/Breadcrumbs";
+import { buildServiceSchema } from "../utils/serviceSchema";
+
+const TITLE = "Генеральная уборка квартиры в Астане от 15 000 ₸ | EcoVibe.kz";
+const DESCRIPTION =
+  "Генеральная уборка квартиры в Астане: кухня, санузел, окна, труднодоступные места. От 15 000 ₸, выезд мастера в день заявки. Рассчитайте стоимость онлайн.";
 
 export function GeneralCleaning() {
   useDocumentMeta({
-    title: "Генеральная уборка квартиры в Астане от 15 000 ₸ | EcoVibe.kz",
-    description:
-      "Генеральная уборка квартиры в Астане: кухня, санузел, окна, труднодоступные места. От 15 000 ₸, выезд мастера в день заявки. Рассчитайте стоимость онлайн.",
+    title: TITLE,
+    description: DESCRIPTION,
     path: "/generalnaya-uborka",
+  });
+
+  const schema = buildServiceSchema({
+    name: "Генеральная уборка квартиры в Астане",
+    description: DESCRIPTION,
+    path: "/generalnaya-uborka",
+    priceFrom: 15000,
   });
 
   const included = [
@@ -37,7 +49,7 @@ export function GeneralCleaning() {
     { feature: "Санузел", wet: "Стандартная", general: "Плитка + фуги" },
     { feature: "Окна", wet: "Не входит", general: "Рамы + подоконники" },
     { feature: "Время", wet: "2-4 часа", general: "4-8 часов" },
-    { feature: "Цена", wet: "от 8 000 тг", general: "от 15 000 тг" },
+    { feature: "Цена", wet: "от 7 000 тг", general: "от 15 000 тг" },
   ];
 
   const faqs = [
@@ -61,6 +73,7 @@ export function GeneralCleaning() {
 
   return (
     <div>
+      <Breadcrumbs items={[{ label: "Генеральная уборка" }]} />
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -151,12 +164,26 @@ export function GeneralCleaning() {
             </tbody>
           </table>
         </div>
-        <div className="text-center mt-8">
+        <div className="text-center mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2">
           <Link
             to="/#prices"
             className="inline-flex items-center gap-2 text-amber-600 hover:text-amber-700"
           >
             Посмотреть все цены
+            <ChevronRight className="w-4 h-4" />
+          </Link>
+          <Link
+            to="/uborka-posle-remonta-astana"
+            className="inline-flex items-center gap-2 text-amber-600 hover:text-amber-700"
+          >
+            Уборка после ремонта
+            <ChevronRight className="w-4 h-4" />
+          </Link>
+          <Link
+            to="/uborka-kvartir-astana"
+            className="inline-flex items-center gap-2 text-amber-600 hover:text-amber-700"
+          >
+            Все виды уборки квартир
             <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
@@ -206,6 +233,11 @@ export function GeneralCleaning() {
           </div>
         </div>
       </section>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
     </div>
   );
 }

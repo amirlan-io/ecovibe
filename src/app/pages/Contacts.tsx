@@ -1,9 +1,19 @@
-import { Phone, Mail, Clock, MapPin, Instagram, MessageCircle } from "lucide-react";
+import { Phone, Mail, Clock, MapPin, Instagram, MessageCircle, Loader2, Send, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 import { motion } from "motion/react";
-import { formatPhoneNumber } from "../utils/phoneFormat";
+import { toast } from "sonner";
+import { formatPhoneNumber, isPhoneComplete, phoneForSubmit } from "../utils/phoneFormat";
+import { formatClientPhoneForSheets, submitBookingToMakeBackup } from "../utils/makeWebhook";
+import { buildCRMPayload, submitLeadToQazCrm } from "../utils/qazcrm";
 import { PrivacyPolicyLink } from "../components/PrivacyPolicyLink";
 import { useDocumentMeta } from "../utils/useDocumentMeta";
+import { Breadcrumbs } from "../components/Breadcrumbs";
+import { trackGoal } from "../utils/analytics";
+
+const SERVICE_LABELS: Record<string, string> = {
+  wet: "Влажная уборка",
+  general: "Генеральная уборка",
+};
 
 const ThreadsIcon = () => (
   <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
@@ -25,13 +35,88 @@ export function Contacts() {
     service: "wet",
     date: "",
     comment: "",
+    honeypot: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    alert("Спасибо! Мы свяжемся с вами в ближайшее время.");
-    setFormData({ name: "", phone: "", service: "wet", date: "", comment: "" });
+    if (isSubmitting) return;
+    if (formData.honeypot) return;
+
+    if (!formData.name.trim()) {
+      toast.error("Укажите ваше имя.");
+      return;
+    }
+
+    const phoneRaw = formData.phone.trim();
+    if (!phoneRaw) {
+      toast.error("Укажите номер телефона.");
+      return;
+    }
+    if (!isPhoneComplete(phoneRaw)) {
+      toast.error("Номер телефона неполный — проверьте, что указаны все цифры после +7.");
+      return;
+    }
+
+    const phone = phoneForSubmit(phoneRaw);
+    const serviceType = SERVICE_LABELS[formData.service] ?? formData.service;
+    const comment = [formData.date && `Желаемая дата: ${formData.date}`, formData.comment.trim()]
+      .filter(Boolean)
+      .join(". ");
+
+    setIsSubmitting(true);
+
+    const sendToCrm = async () => {
+      try {
+        const payload = buildCRMPayload({
+          name: formData.name.trim(),
+          phone,
+          serviceType,
+          area: 0,
+          extras: [],
+          totalPrice: 0,
+          date: formData.date,
+          address: comment,
+          website: formData.honeypot,
+        });
+        await submitLeadToQazCrm(payload);
+        return true;
+      } catch (error) {
+        console.error("QazCRM submit failed:", error);
+        return false;
+      }
+    };
+
+    const sendToMake = async () => {
+      try {
+        await submitBookingToMakeBackup({
+          client_phone: formatClientPhoneForSheets(phone),
+          cleaning_type: serviceType,
+          area: 1,
+          calculated_price: 1,
+          extras: comment,
+          status: "new",
+        });
+        return true;
+      } catch (error) {
+        console.error("Make webhook submit failed:", error);
+        return false;
+      }
+    };
+
+    const [crmOk, makeOk] = await Promise.all([sendToCrm(), sendToMake()]);
+
+    if (crmOk || makeOk) {
+      setIsSuccess(true);
+      trackGoal("form_submit", { form: "contacts_page", serviceType });
+      setFormData({ name: "", phone: "", service: "wet", date: "", comment: "", honeypot: "" });
+    } else {
+      toast.error("Не удалось отправить заявку. Попробуйте ещё раз или напишите нам в WhatsApp.");
+    }
+
+    setIsSubmitting(false);
   };
 
   const handleChange = (
@@ -72,6 +157,7 @@ export function Contacts() {
 
   return (
     <div>
+      <Breadcrumbs items={[{ label: "Контакты" }]} />
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-rose-50 via-pink-50 to-orange-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -130,7 +216,31 @@ export function Contacts() {
           {/* Contact Form */}
           <div>
             <h2 className="mb-6">Оставить заявку</h2>
+            {isSuccess ? (
+              <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-sm">
+                <CheckCircle2 className="h-12 w-12 text-rose-600" />
+                <p className="font-semibold text-gray-900">Заявка отправлена!</p>
+                <p className="text-sm text-gray-600">Мы свяжемся с вами в ближайшее время.</p>
+                <button
+                  type="button"
+                  onClick={() => setIsSuccess(false)}
+                  className="mt-2 text-sm text-rose-700 underline underline-offset-2 hover:text-rose-800"
+                >
+                  Отправить ещё одну заявку
+                </button>
+              </div>
+            ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
+              <input
+                type="text"
+                name="honeypot"
+                value={formData.honeypot}
+                onChange={handleChange}
+                style={{ display: "none" }}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden
+              />
               <div>
                 <label htmlFor="name" className="block mb-2 text-sm">
                   Ваше имя *
@@ -141,9 +251,10 @@ export function Contacts() {
                   name="name"
                   aria-label="Ваше имя"
                   required
+                  disabled={isSubmitting}
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500 disabled:opacity-60"
                   placeholder="Как вас зовут?"
                 />
               </div>
@@ -218,18 +329,30 @@ export function Contacts() {
 
               <button
                 type="submit"
-                className="w-full py-3 bg-gradient-to-r from-rose-600 to-pink-600 text-white rounded-lg hover:from-rose-700 hover:to-pink-700 transition-colors font-medium"
+                disabled={isSubmitting}
+                className="flex w-full items-center justify-center gap-2 py-3 bg-gradient-to-r from-rose-600 to-pink-600 text-white rounded-lg hover:from-rose-700 hover:to-pink-700 transition-colors font-medium disabled:opacity-70"
               >
-                Отправить заявку
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    Отправляем...
+                  </>
+                ) : (
+                  <>
+                    <Send className="h-5 w-5" />
+                    Отправить заявку
+                  </>
+                )}
               </button>
 
               <p className="text-center text-xs text-gray-500">
                 Нажимая кнопку, вы соглашаетесь с{" "}
-                <PrivacyPolicyLink className="text-green-800 hover:text-green-700">
+                <PrivacyPolicyLink className="text-green-800 underline underline-offset-2 hover:text-green-700">
                   политикой конфиденциальности
                 </PrivacyPolicyLink>
               </p>
             </form>
+            )}
           </div>
 
           {/* Service Area & Socials */}
@@ -249,6 +372,7 @@ export function Contacts() {
                   width="100%"
                   height="100%"
                   frameBorder="0"
+                  loading="lazy"
                   title="Карта Астаны"
                 ></iframe>
               </div>

@@ -28,6 +28,19 @@ const faqItems = [
 ];
 
 export function FAQ() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  };
+
   return (
     <section className="section-mobile bg-white">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
@@ -52,6 +65,10 @@ export function FAQ() {
           ))}
         </div>
       </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
     </section>
   );
 }

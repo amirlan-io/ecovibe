@@ -1,6 +1,7 @@
 import { Leaf, Users, Award, Heart, Star, CheckCircle } from "lucide-react";
 import { motion } from "motion/react";
 import { useDocumentMeta } from "../utils/useDocumentMeta";
+import { Breadcrumbs } from "../components/Breadcrumbs";
 
 export function About() {
   useDocumentMeta({
@@ -38,6 +39,7 @@ export function About() {
 
   return (
     <div>
+      <Breadcrumbs items={[{ label: "О компании" }]} />
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

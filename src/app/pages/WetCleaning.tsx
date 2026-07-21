@@ -3,13 +3,25 @@ import { Check, ChevronRight, Home, Users, Calendar, Sparkles } from "lucide-rea
 import { useState } from "react";
 import { motion } from "motion/react";
 import { useDocumentMeta } from "../utils/useDocumentMeta";
+import { Breadcrumbs } from "../components/Breadcrumbs";
+import { buildServiceSchema } from "../utils/serviceSchema";
+
+const TITLE = "Влажная уборка квартиры в Астане от 7 000 ₸ | EcoVibe.kz";
+const DESCRIPTION =
+  "Влажная уборка квартиры в Астане: полы, пыль, санузел, кухня. Цена от 7 000 ₸, выезд мастера в день заявки. Рассчитайте стоимость по числу комнат онлайн.";
 
 export function WetCleaning() {
   useDocumentMeta({
-    title: "Влажная уборка квартиры в Астане от 7 000 ₸ | EcoVibe.kz",
-    description:
-      "Влажная уборка квартиры в Астане: полы, пыль, санузел, кухня. Цена от 7 000 ₸, выезд мастера в день заявки. Рассчитайте стоимость по числу комнат онлайн.",
+    title: TITLE,
+    description: DESCRIPTION,
     path: "/vlazhnaya-uborka",
+  });
+
+  const schema = buildServiceSchema({
+    name: "Влажная уборка квартиры в Астане",
+    description: DESCRIPTION,
+    path: "/vlazhnaya-uborka",
+    priceFrom: 7000,
   });
 
   const [rooms, setRooms] = useState<string>("2");
@@ -62,6 +74,7 @@ export function WetCleaning() {
 
   return (
     <div>
+      <Breadcrumbs items={[{ label: "Влажная уборка" }]} />
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-cyan-50 via-blue-50 to-teal-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -74,7 +87,7 @@ export function WetCleaning() {
               Влажная уборка квартиры в Астане
             </h1>
             <p className="text-lg text-gray-600 mb-2">
-              Цена от 8 000 тг | Приедем сегодня
+              Цена от 7 000 ₸ | Приедем сегодня
             </p>
             <p className="text-gray-600 mb-8">
               Профессиональная поддерживающая уборка для вашего комфорта
@@ -174,6 +187,26 @@ export function WetCleaning() {
         </div>
       </section>
 
+      {/* Related services */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center flex flex-wrap justify-center gap-x-6 gap-y-2">
+          <Link
+            to="/uborka-kvartir-astana"
+            className="inline-flex items-center gap-2 text-cyan-600 hover:text-cyan-700"
+          >
+            Все виды уборки квартир
+            <ChevronRight className="w-4 h-4" />
+          </Link>
+          <Link
+            to="/himchistka-mebeli-astana"
+            className="inline-flex items-center gap-2 text-cyan-600 hover:text-cyan-700"
+          >
+            Химчистка мебели
+            <ChevronRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </section>
+
       {/* FAQ Section */}
       <section className="py-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-center mb-12">Часто задаваемые вопросы</h2>
@@ -216,6 +249,11 @@ export function WetCleaning() {
           </div>
         </div>
       </section>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
     </div>
   );
 }
