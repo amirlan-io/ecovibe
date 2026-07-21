@@ -13,7 +13,7 @@
 // The client still hydrates normally on load (see src/main.tsx), so this is
 // static content for crawlers, not a replacement for the SPA.
 
-import { chromium } from "playwright";
+import { chromium as playwrightChromium } from "playwright-core";
 import { createServer } from "node:http";
 import { readFileSync, writeFileSync, existsSync, statSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -68,11 +68,28 @@ function targetFileFor(routePath) {
   return path.join(distDir, routePath.replace(/^\//, ""), "index.html");
 }
 
+async function launchBrowser() {
+  // Build servers (Vercel included) run Linux without the shared libs a
+  // plain downloaded Chromium needs (libnspr4.so etc.) and without apt/root
+  // to install them. @sparticuz/chromium ships a Linux build with those libs
+  // bundled in, so use it there. Locally (Windows/macOS dev), fall back to
+  // whatever Chromium `npx playwright install chromium` already cached.
+  if (process.platform === "linux") {
+    const sparticuzChromium = (await import("@sparticuz/chromium")).default;
+    return playwrightChromium.launch({
+      args: sparticuzChromium.args,
+      executablePath: await sparticuzChromium.executablePath(),
+      headless: true,
+    });
+  }
+  return playwrightChromium.launch();
+}
+
 async function main() {
   const routes = JSON.parse(readFileSync(routeMetaPath, "utf-8")).map((r) => r.path);
   const port = 4173 + Math.floor(Math.random() * 1000);
   const server = await serveStatic(port);
-  const browser = await chromium.launch();
+  const browser = await launchBrowser();
 
   try {
     const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
