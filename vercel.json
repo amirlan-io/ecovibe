@@ -5,6 +5,10 @@
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/generalnaya-uborka", "destination": "/generalnaya-uborka/index.html" },
     { "source": "/vlazhnaya-uborka", "destination": "/vlazhnaya-uborka/index.html" },
+    { "source": "/uborka-kvartir-astana", "destination": "/uborka-kvartir-astana/index.html" },
+    { "source": "/uborka-ofisov-astana", "destination": "/uborka-ofisov-astana/index.html" },
+    { "source": "/uborka-posle-remonta-astana", "destination": "/uborka-posle-remonta-astana/index.html" },
+    { "source": "/himchistka-mebeli-astana", "destination": "/himchistka-mebeli-astana/index.html" },
     { "source": "/o-nas", "destination": "/o-nas/index.html" },
     { "source": "/vakansii", "destination": "/vakansii/index.html" },
     { "source": "/kontakty", "destination": "/kontakty/index.html" },
@@ -29,8 +33,20 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://www.ecovibe.kz https://ecovibe.kz; connect-src 'self'"
+          "value": "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://mc.yandex.ru; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://www.ecovibe.kz https://ecovibe.kz https://mc.yandex.ru; frame-src https://yandex.ru; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://mc.yandex.ru https://*.mc.yandex.ru"
         }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/images/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" }
       ]
     }
   ]

@@ -18,6 +18,10 @@ export const NAV_ITEMS = [
 export const PAGE_LINKS = [
   { label: "Генеральная уборка", to: "/generalnaya-uborka" },
   { label: "Влажная уборка", to: "/vlazhnaya-uborka" },
+  { label: "Уборка квартир", to: "/uborka-kvartir-astana" },
+  { label: "Уборка офисов", to: "/uborka-ofisov-astana" },
+  { label: "Уборка после ремонта", to: "/uborka-posle-remonta-astana" },
+  { label: "Химчистка мебели", to: "/himchistka-mebeli-astana" },
   { label: "О нас", to: "/o-nas" },
   { label: "Вакансии", to: "/vakansii" },
   { label: "Страница контактов", to: "/kontakty" },

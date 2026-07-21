@@ -38,6 +38,30 @@ const router = createBrowserRouter([
         lazy: () =>
           import("./pages/WetCleaning").then((m) => ({ Component: m.WetCleaning })),
       },
+      {
+        path: "uborka-kvartir-astana",
+        lazy: () =>
+          import("./pages/UborkaKvartirAstana").then((m) => ({ Component: m.UborkaKvartirAstana })),
+      },
+      {
+        path: "uborka-ofisov-astana",
+        lazy: () =>
+          import("./pages/UborkaOfisovAstana").then((m) => ({ Component: m.UborkaOfisovAstana })),
+      },
+      {
+        path: "uborka-posle-remonta-astana",
+        lazy: () =>
+          import("./pages/UborkaPosleRemontaAstana").then((m) => ({
+            Component: m.UborkaPosleRemontaAstana,
+          })),
+      },
+      {
+        path: "himchistka-mebeli-astana",
+        lazy: () =>
+          import("./pages/HimchistkaMebeliAstana").then((m) => ({
+            Component: m.HimchistkaMebeliAstana,
+          })),
+      },
       { path: "*", element: <Navigate to="/" replace /> },
     ],
   },
