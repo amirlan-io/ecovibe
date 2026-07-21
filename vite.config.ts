@@ -16,25 +16,21 @@ function figmaAssetResolver() {
   }
 }
 
-function asyncCssPreload() {
+// Formerly also deferred the stylesheet via <link rel="preload"
+// onload="...rel='stylesheet'">, trading a faster First Contentful Paint
+// for a flash of unstyled content once the CSS actually applied — that
+// FOUC was the direct cause of a 0.175 Cumulative Layout Shift in real
+// PageSpeed Insights runs. CSS now loads as a normal blocking
+// <link rel="stylesheet"> (Vite's default), which is what this plugin no
+// longer strips. Only the JS modulepreload reordering remains.
+function jsModulePreloadReorder() {
   return {
-    name: 'async-css-preload',
+    name: 'js-modulepreload-reorder',
     apply: 'build',
     transformIndexHtml: {
       order: 'post',
       handler(html: string, ctx) {
-        const cssFile = Object.keys(ctx.bundle ?? {}).find((file) => file.endsWith('.css'))
-        if (!cssFile) return html
-
-        const href = `/${cssFile}`
-        let result = html.replace(
-          /<link rel="stylesheet" crossorigin href="\/assets\/[^"]+\.css">\n?/,
-          '',
-        )
-        result = result.replace(
-          /<link rel="preload" href="\/assets\/index\.css" as="style" onload="this\.onload=null;this\.rel='stylesheet'">\s*<noscript><link rel="stylesheet" href="\/assets\/index\.css"><\/noscript>/,
-          `<link rel="preload" href="${href}" as="style" onload="this.onload=null;this.rel='stylesheet'">\n<noscript><link rel="stylesheet" crossorigin href="${href}"></noscript>`,
-        )
+        let result = html
 
         const preloads = result.match(/<link rel="modulepreload"[^>]*>/g) ?? []
         const earlyLazyChunks = Object.keys(ctx.bundle ?? {}).filter(
@@ -76,7 +72,7 @@ export default defineConfig({
     // Tailwind is not being actively used – do not remove them
     react(),
     tailwindcss(),
-    asyncCssPreload(),
+    jsModulePreloadReorder(),
   ],
   resolve: {
     alias: {
