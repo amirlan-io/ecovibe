@@ -1,10 +1,36 @@
 import { useEffect, useRef, useState } from "react";
+import { Star } from "lucide-react";
 
-const WHATSAPP_REVIEWS = [
-  "/images/reviews/review-1.webp",
-  "/images/reviews/review-2.webp",
-  "/images/reviews/review-3.webp",
-  "/images/reviews/review-4.webp",
+interface ReviewItem {
+  image: string;
+  author: string;
+  text: string;
+}
+
+// Тексты — расшифровка реальных скриншотов переписки в WhatsApp (те же
+// файлы, что показаны на картинке). Имена клиентов не публикуем без
+// отдельного согласия, кроме случаев, где клиент сам представился в чате.
+const REVIEWS: ReviewItem[] = [
+  {
+    image: "/images/reviews/review-1.webp",
+    author: "Клиент EcoVibe",
+    text: "Добрый вечер. Хотела сказать большое спасибо вашим сотрудницам. Очень тщательно убрали. И приятный аромат у ваших чистящих средств. Очень рада, что нашла вас 😊",
+  },
+  {
+    image: "/images/reviews/review-2.webp",
+    author: "Клиент EcoVibe",
+    text: "Добрый вечер! Спасибо большое за отличную химчистку! Даже не ожидала, что диван станет таким чистым и свежим. Всё сделали быстро, аккуратно и без лишнего шума. Теперь буду обращаться только к вам!",
+  },
+  {
+    image: "/images/reviews/review-3.webp",
+    author: "Armel",
+    text: "Все очень чисто, аккуратно, передайте ей мои благодарности.",
+  },
+  {
+    image: "/images/reviews/review-4.webp",
+    author: "Клиент EcoVibe",
+    text: "Хочу поблагодарить ещё раз за проделанную работу! Я просто в шоке! Все убрано, вымыто, разложено!!! 🌺🌺",
+  },
 ];
 
 export function ReviewsSection() {
@@ -57,8 +83,35 @@ export function ReviewsSection() {
     });
   };
 
+  const reviewSchema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    // Same @id as the LocalBusiness block in index.html <head> — this adds
+    // review/rating properties to that entity instead of declaring a second,
+    // ambiguous "duplicate" LocalBusiness on the page.
+    "@id": "https://www.ecovibe.kz/#business",
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "5.0",
+      reviewCount: REVIEWS.length,
+    },
+    review: REVIEWS.map((r) => ({
+      "@type": "Review",
+      author: { "@type": "Person", name: r.author },
+      reviewBody: r.text,
+      reviewRating: {
+        "@type": "Rating",
+        ratingValue: "5",
+        bestRating: "5",
+      },
+    })),
+  };
+
   return (
-    <section id="reviews" className="section-mobile scroll-mt-20 bg-gradient-to-br from-green-50 to-emerald-50">
+    <section
+      id="reviews"
+      className="section-mobile scroll-mt-20 bg-gradient-to-br from-green-50 to-emerald-50"
+    >
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <h2 className="landing-h2 mb-3 text-center font-bold">
           Отзывы наших клиентов
@@ -67,62 +120,61 @@ export function ReviewsSection() {
           Реальные отзывы из WhatsApp от клиентов в Астане
         </p>
 
-        {/* Mobile carousel */}
-        <div className="sm:hidden">
-          <div
-            ref={scrollRef}
-            className="flex gap-3 overflow-x-auto snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          >
-            {WHATSAPP_REVIEWS.map((src, i) => (
-              <div key={src} className="min-w-full w-full shrink-0 snap-start">
-                <img
-                  src={src}
-                  alt={`Отзыв клиента EcoVibe ${i + 1}`}
-                  width={400}
-                  height={600}
-                  className="h-auto w-full rounded-xl object-contain shadow-md"
-                  loading="lazy"
-                />
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-4 flex justify-center gap-2">
-            {WHATSAPP_REVIEWS.map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                onClick={() => scrollToSlide(i)}
-                aria-label={`Отзыв ${i + 1}`}
-                aria-current={activeSlide === i ? "true" : undefined}
-                className="flex items-center justify-center p-2"
-              >
-                <span
-                  className={`h-3 w-3 rounded-full transition-colors ${
-                    activeSlide === i ? "bg-green-600" : "bg-gray-300"
-                  }`}
-                />
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Desktop grid */}
-        <div className="hidden grid-cols-2 gap-3 sm:grid sm:gap-4">
-          {WHATSAPP_REVIEWS.map((src, i) => (
-            <div key={src}>
+        {/* Единый горизонтальный carousel — одна и та же разметка для мобильных
+            и десктопа, ширина карточки регулируется только CSS (snap-scroll) */}
+        <div
+          ref={scrollRef}
+          className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {REVIEWS.map((review, i) => (
+            <article
+              key={review.image}
+              className="w-[85%] shrink-0 snap-start overflow-hidden rounded-xl bg-white shadow-md sm:w-[calc(50%-0.5rem)]"
+            >
               <img
-                src={src}
-                alt={`Отзыв клиента EcoVibe ${i + 1}`}
+                src={review.image}
+                alt={`Скриншот отзыва от ${review.author} в WhatsApp`}
                 width={400}
                 height={600}
-                className="h-auto w-full rounded-xl object-contain shadow-md"
+                className="h-auto w-full object-contain"
                 loading="lazy"
               />
-            </div>
+              <div className="p-4">
+                <div className="mb-1 flex items-center gap-1" aria-hidden>
+                  {Array.from({ length: 5 }).map((_, star) => (
+                    <Star key={star} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+                <p className="text-sm text-gray-700">{review.text}</p>
+                <p className="mt-2 text-xs font-medium text-gray-500">— {review.author}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div className="mt-4 flex justify-center gap-2">
+          {REVIEWS.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => scrollToSlide(i)}
+              aria-label={`Отзыв ${i + 1}`}
+              aria-current={activeSlide === i ? "true" : undefined}
+              className="flex items-center justify-center p-2"
+            >
+              <span
+                className={`h-3 w-3 rounded-full transition-colors ${
+                  activeSlide === i ? "bg-green-600" : "bg-gray-300"
+                }`}
+              />
+            </button>
           ))}
         </div>
       </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }}
+      />
     </section>
   );
 }
