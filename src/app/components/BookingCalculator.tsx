@@ -1,5 +1,5 @@
 import { Minus, Plus, CheckCircle2, Loader2, Send } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { toast } from "sonner";
 import {
   formatPhoneNumber,
@@ -13,6 +13,7 @@ import {
 import { buildCRMPayload, submitLeadToQazCrm } from "../utils/qazcrm";
 import { cn } from "./ui/utils";
 import { PrivacyPolicyLink } from "./PrivacyPolicyLink";
+import { trackGoal } from "../utils/analytics";
 
 type ServiceType = "wet" | "general" | "renovation";
 
@@ -77,6 +78,13 @@ function buildSelectedExtrasLabels(state: BookingState): string[] {
 export function BookingCalculator() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const hasTrackedUsage = useRef(false);
+
+  const trackCalculatorUsageOnce = () => {
+    if (hasTrackedUsage.current) return;
+    hasTrackedUsage.current = true;
+    trackGoal("calculator_used");
+  };
   const [state, setState] = useState<BookingState>({
     service: "wet",
     area: 60,
@@ -98,14 +106,17 @@ export function BookingCalculator() {
   });
 
   const selectService = (service: ServiceType) => {
+    trackCalculatorUsageOnce();
     setState((prev) => ({ ...prev, service }));
   };
 
   const selectRoom = (area: number) => {
+    trackCalculatorUsageOnce();
     setState((prev) => ({ ...prev, area }));
   };
 
   const setArea = (area: number) => {
+    trackCalculatorUsageOnce();
     setState((prev) => ({ ...prev, area }));
   };
 
@@ -148,13 +159,18 @@ export function BookingCalculator() {
     const address = state.address.trim();
     const phoneRaw = state.phone.trim();
 
-    if (!state.name.trim() || !phoneRaw || !address || !state.date || !state.time) {
-      toast.error("Заполните все обязательные поля перед отправкой.");
+    if (!state.name.trim()) {
+      toast.error("Укажите ваше имя.");
+      return;
+    }
+
+    if (!phoneRaw) {
+      toast.error("Укажите номер телефона.");
       return;
     }
 
     if (!isPhoneComplete(phoneRaw)) {
-      toast.error("Укажите полный номер телефона.");
+      toast.error("Номер телефона неполный — проверьте, что указаны все цифры после +7.");
       return;
     }
 
@@ -226,6 +242,7 @@ export function BookingCalculator() {
 
     if (crmOk || makeOk) {
       setIsSuccess(true);
+      trackGoal("form_submit", { form: "booking_calculator", serviceType: NAMES[state.service] });
       if (!crmOk || !makeOk) {
         toast.warning(
           "Заявка принята, но один из каналов недоступен. Мы всё равно свяжемся с вами.",
@@ -524,7 +541,7 @@ export function BookingCalculator() {
 
               <div>
                 <label htmlFor="address" className="mb-2 block text-sm font-medium">
-                  Адрес *
+                  Адрес <span className="font-normal text-gray-600">(необязательно)</span>
                 </label>
                 <input
                   type="text"
@@ -532,7 +549,6 @@ export function BookingCalculator() {
                   name="address"
                   aria-label="Адрес"
                   autoComplete="street-address"
-                  required
                   disabled={isSubmitting}
                   value={state.address}
                   onChange={(e) =>
@@ -546,14 +562,13 @@ export function BookingCalculator() {
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label htmlFor="date" className="mb-2 block text-sm font-medium">
-                    Дата уборки *
+                    Дата уборки <span className="font-normal text-gray-600">(необязательно)</span>
                   </label>
                   <input
                     type="date"
                     id="date"
                     name="date"
                     aria-label="Дата уборки"
-                    required
                     disabled={isSubmitting}
                     min={new Date().toISOString().split("T")[0]}
                     value={state.date}
@@ -565,14 +580,13 @@ export function BookingCalculator() {
                 </div>
                 <div>
                   <label htmlFor="time" className="mb-2 block text-sm font-medium">
-                    Время *
+                    Время <span className="font-normal text-gray-600">(необязательно)</span>
                   </label>
                   <input
                     type="time"
                     id="time"
                     name="time"
                     aria-label="Время уборки"
-                    required
                     disabled={isSubmitting}
                     value={state.time}
                     onChange={(e) =>
