@@ -3,6 +3,16 @@ import { useEffect, useRef, useState } from "react";
 const DEFAULT_BEFORE_SRC = "https://placehold.co/600x400/5c4033/ffffff";
 const DEFAULT_AFTER_SRC = "https://placehold.co/600x400/e8f5e9/2d7a3a";
 
+/** "/images/foo-512.webp" -> a 340w srcset entry alongside the 512w original,
+ * so mobile (displayed as small as 320px) doesn't download the full 512px
+ * image. Only applies to our own "-512.webp" assets — the placeholder.co
+ * defaults and any other src pass through untouched. */
+function buildSrcSet(src: string): string | undefined {
+  if (!src.includes("-512.webp")) return undefined;
+  const small = src.replace("-512.webp", "-340.webp");
+  return `${small} 340w, ${src} 512w`;
+}
+
 type BeforeAfterSliderProps = {
   beforeLabel?: string;
   afterLabel?: string;
@@ -91,6 +101,7 @@ export function BeforeAfterSlider({
       {/* After (clean) — base layer */}
       <img
         src={afterSrc}
+        srcSet={buildSrcSet(afterSrc)}
         alt={afterLabel}
         width={512}
         height={320}
@@ -107,6 +118,7 @@ export function BeforeAfterSlider({
       >
         <img
           src={beforeSrc}
+          srcSet={buildSrcSet(beforeSrc)}
           alt={beforeLabel}
           width={512}
           height={320}

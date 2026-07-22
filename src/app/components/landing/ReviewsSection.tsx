@@ -133,6 +133,8 @@ export function ReviewsSection() {
             >
               <img
                 src={review.image}
+                srcSet={`${review.image.replace(".webp", "-340.webp")} 340w, ${review.image} 400w`}
+                sizes="(min-width: 640px) 340px, 85vw"
                 alt={`Скриншот отзыва от ${review.author} в WhatsApp`}
                 width={400}
                 height={600}
