@@ -65,6 +65,35 @@ function jsModulePreloadReorder() {
   }
 }
 
+// Inlines the built CSS directly into <head> as a <style> tag instead of a
+// <link rel="stylesheet"> network request. The stylesheet is small enough
+// (~20 KiB gzipped) that this removes a full render-blocking round trip
+// (and a hop in the critical request chain) while still applying styles
+// synchronously before first paint — no FOUC/CLS risk either way, unlike
+// the old async-preload approach this replaced.
+function inlineCss() {
+  return {
+    name: 'inline-css',
+    apply: 'build' as const,
+    transformIndexHtml: {
+      order: 'post' as const,
+      handler(html: string, ctx: { bundle?: Record<string, { source?: string | Uint8Array }> }) {
+        const cssEntry = Object.entries(ctx.bundle ?? {}).find(([file]) => file.endsWith('.css'))
+        if (!cssEntry) return html
+        const [, asset] = cssEntry
+        const source = asset.source
+        if (source == null) return html
+        const cssText = typeof source === 'string' ? source : Buffer.from(source).toString('utf-8')
+
+        return html.replace(
+          /<link rel="stylesheet" crossorigin href="\/assets\/[^"]+\.css">\n?/,
+          `<style>${cssText}</style>\n`,
+        )
+      },
+    },
+  }
+}
+
 export default defineConfig({
   plugins: [
     figmaAssetResolver(),
@@ -73,6 +102,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     jsModulePreloadReorder(),
+    inlineCss(),
   ],
   resolve: {
     alias: {
