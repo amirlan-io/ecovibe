@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { HeroSection } from "../components/landing/HeroSection";
 import { ServicesSection } from "../components/landing/ServicesSection";
 import { BenefitsSection } from "../components/landing/BenefitsSection";
+import { MissionSection } from "../components/landing/MissionSection";
 import { BookingCalculator } from "../components/BookingCalculator";
 
 const BelowFoldSections = lazy(() =>
@@ -14,6 +15,7 @@ export function Home() {
       <HeroSection />
       <ServicesSection />
       <BenefitsSection />
+      <MissionSection />
 
       <section
         id="calculator"
